@@ -14,27 +14,44 @@
         <h1>Kosmo Level Store</h1>
         <div class="search-container">
             <input type="text" id="pack-search" placeholder="Поиск версий..." onkeyup="searchPacks()">
-            <span class="search-icon">🔍</span>
         </div>
+        <button class="open-review-btn" onclick="openReviewModal()">✍️ Оставить отзыв</button>
     </header>
 
     <div class="market-grid" id="market-grid">
         <div class="pack-card" id="pack-30822">
-            <div class="pack-icon-wrapper">
-                <img src="unnamed (2).png" class="pack-icon" alt="KL Preview 30822">
-                <svg class="loading-ring" viewBox="0 0 36 36">
-                    <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <path class="ring-progress" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                </svg>
+            <div class="card-banner">
+                <img src="unnamed (2).png" class="banner-img">
+                <div class="pack-icon-overlay">
+                    <img src="unnamed (2).png" class="mini-icon">
+                    <svg class="loading-ring" viewBox="0 0 36 36">
+                        <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="ring-progress" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    </svg>
+                </div>
             </div>
-            <div class="pack-info">
+            <div class="card-details">
                 <h3>KL Preview 30822</h3>
-                <p>Версия: Preview | .worldpack</p>
+                <div class="rating">
+                    <span class="score">4.9</span>
+                    <span class="stars">★★★★★</span>
+                </div>
                 <button class="install-btn" 
                         data-file="KL Preview 30822.worldpack" 
                         onclick="startInstall('pack-30822')">
                     Установить
                 </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="review-modal" class="modal">
+    <div class="modal-content">
+        <h3>Оставить отзыв</h3>
+        <input type="text" id="reviewer-name" placeholder="Твое имя">
+        <div class="star-rating-input">
+            <span onclick="setRating(1)">★</span><span onclick="setRating(2)">★</span><span onclick="setRating(3)">★</span><span onclick                </button>
             </div>
         </div>
     </div>
