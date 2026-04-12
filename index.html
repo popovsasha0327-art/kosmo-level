@@ -3,46 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Titan Core - Anti-Square</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            background: #000;
-            font-family: sans-serif;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-        .titan-capsule {
-            background: linear-gradient(145deg, #1e1e1e, #111);
-            border: 2px solid #32d74b;
-            /* ВОТ ОНИ — ОГРОМНЫЕ СКРУГЛЕНИЯ */
-            border-radius: 0px; 
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(50, 215, 75, 0.3);
-            width: 85%;
-        }
-        .miui-warning {
-            color: #ff3b30;
-            font-size: 14px;
-            margin-top: 20px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-    </style>
+    <title>Мой адаптивный сайт</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="titan-capsule">
-        <h1 style="color: #32d74b;">TITAN ONLINE</h1>
-        <p>Агент Саша в системе</p>
-        <div class="miui-warning">
-            Падаждите Пажалуста... <br> Нэ понэл? 🤣🤣🤣
-        </div>
+
+    <div class="container">
+        <h1>Привет! Посмотри на кнопку ниже:</h1>
+        <button id="magic-button" class="base-button">Я меняюсь!</button>
+        <p id="device-info"></p>
     </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
