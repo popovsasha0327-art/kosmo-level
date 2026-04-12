@@ -1,4 +1,4 @@
-// Поиск
+// Поиск паков
 function searchPacks() {
     let input = document.getElementById('pack-search').value.toLowerCase();
     let cards = document.getElementsByClassName('pack-card');
@@ -9,11 +9,12 @@ function searchPacks() {
     }
 }
 
-// Анимация установки
+// Установка с анимацией
 function startInstall(cardId) {
     const card = document.getElementById(cardId);
     const btn = card.querySelector('.install-btn');
     const progress = card.querySelector('.ring-progress');
+    const fileUrl = btn.getAttribute('data-file');
 
     card.classList.add('installing');
     btn.textContent = "Загрузка...";
@@ -26,12 +27,28 @@ function startInstall(cardId) {
 
         if (percent >= 100) {
             clearInterval(interval);
+            
+            // Запуск скачивания файла .worldpack
+            const link = document.createElement('a');
+            link.href = fileUrl;
+            link.download = '';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
             setTimeout(() => {
                 card.classList.remove('installing');
-                btn.textContent = "Открыть";
+                btn.textContent = "Готово";
+                btn.style.backgroundColor = "#28a745";
                 btn.disabled = false;
-                btn.style.backgroundColor = "#34c759"; // Зеленый цвет
             }, 500);
         }
-    }, 40); // Скорость загрузки
+    }, 40);
+}
+
+// Регистрация Service Worker для PWA
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+        .then(() => console.log("SW готов!"))
+        .catch(err => console.log("Ошибка SW:", err));
 }
