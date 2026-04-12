@@ -1,32 +1,95 @@
+body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Поиск */
+.search-container {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+#pack-search {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 25px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    outline: none;
+}
+
+/* Сетка карточек */
 .market-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 20px;
-    padding: 20px;
 }
 
 .pack-card {
-    background: #ffffff;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-}
-
-.pack-card:hover {
-    transform: translateY(-50px); /* Карточка будет «всплывать» при наведении */
-}
-
-.pack-preview {
-    height: 160px;
-    background-color: #ddd;
-    background-size: cover;
-    background-position: center;
-}
-
-.pack-info {
+    background: white;
     padding: 15px;
-    text-align: left;
+    border-radius: 18px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: 0.3s;
 }
 
-.pack-info h3 { margin: 0 0 10px 0; }
+/* Иконка и анимация круга */
+.pack-icon-wrapper {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 10px;
+}
+
+.pack-icon {
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    object-fit: cover;
+}
+
+.loading-ring {
+    position: absolute;
+    top: -4px; left: -4px;
+    width: 88px; height: 88px;
+    transform: rotate(-90deg);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.ring-bg { fill: none; stroke: #eee; stroke-width: 2; }
+.ring-progress {
+    fill: none;
+    stroke: #007aff;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 100, 100;
+    stroke-dashoffset: 100;
+    transition: stroke-dashoffset 0.1s linear;
+}
+
+.pack-card.installing .loading-ring { opacity: 1; }
+
+/* Кнопка */
+.install-btn {
+    background-color: #007aff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+}
+
+.install-btn:disabled { background-color: #ccc; }
