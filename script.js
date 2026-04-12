@@ -1,15 +1,15 @@
-// Поиск паков
+let currentRating = 0;
+const formID = 'mvzdpwon';
+
 function searchPacks() {
     let input = document.getElementById('pack-search').value.toLowerCase();
     let cards = document.getElementsByClassName('pack-card');
-
     for (let card of cards) {
         let title = card.querySelector('h3').innerText.toLowerCase();
         card.style.display = title.includes(input) ? "" : "none";
     }
 }
 
-// Установка с анимацией
 function startInstall(cardId) {
     const card = document.getElementById(cardId);
     const btn = card.querySelector('.install-btn');
@@ -24,18 +24,48 @@ function startInstall(cardId) {
     const interval = setInterval(() => {
         percent += 2;
         progress.style.strokeDashoffset = 100 - percent;
-
         if (percent >= 100) {
             clearInterval(interval);
-            
-            // Запуск скачивания файла .worldpack
             const link = document.createElement('a');
             link.href = fileUrl;
             link.download = '';
-            document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
+            setTimeout(() => {
+                card.classList.remove('installing');
+                btn.textContent = "Готово";
+                btn.style.background = "#28a745";
+                btn.disabled = false;
+            }, 500);
+        }
+    }, 40);
+}
 
+function openReviewModal() { document.getElementById('review-modal').style.display = 'block'; }
+function closeModal() { document.getElementById('review-modal').style.display = 'none'; }
+
+function setRating(val) {
+    currentRating = val;
+    const stars = document.querySelectorAll('.star-rating-input span');
+    stars.forEach((s, i) => s.style.color = i < val ? '#ffca08' : '#ddd');
+}
+
+function sendReview() {
+    const name = document.getElementById('reviewer-name').value;
+    const text = document.getElementById('review-text').value;
+
+    if(!name || !text || currentRating === 0) {
+        alert("Заполни все поля!"); return;
+    }
+
+    fetch(`https://formspree.io/f/${formID}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ name, rating: currentRating, message: text })
+    }).then(() => {
+        alert("Отзыв отправлен!");
+        closeModal();
+    });
+}            document.body.removeChild(link)
             setTimeout(() => {
                 card.classList.remove('installing');
                 btn.textContent = "Готово";
