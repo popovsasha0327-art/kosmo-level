@@ -1,7 +1,6 @@
 self.addEventListener('install', (e) => {
-  console.log('Service Worker установлен');
+  console.log('SW установлен');
 });
-
 self.addEventListener('fetch', (e) => {
-  // Позволяет приложению открываться
+  return; 
 });
