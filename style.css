@@ -1,39 +1,38 @@
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f0f2f5;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-}
+body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; display: flex; justify-content: center; }
+.container { width: 100%; max-width: 600px; padding: 20px; text-align: center; }
 
-.container {
-    width: 100%;
-    max-width: 600px;
-    padding: 20px;
-    text-align: center;
-}
+/* Поиск и кнопки */
+#pack-search { width: 100%; padding: 12px; border-radius: 20px; border: 1px solid #ddd; margin-bottom: 10px; }
+.open-review-btn { background: none; border: 1px solid #01875f; color: #01875f; padding: 8px 15px; border-radius: 15px; cursor: pointer; margin-bottom: 20px; }
 
-/* Поиск */
-.search-container {
-    position: relative;
-    margin-bottom: 25px;
-}
+/* Сетка карточек */
+.market-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+.pack-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: left; }
 
-#pack-search {
-    width: 100%;
-    padding: 12px 15px;
-    border-radius: 20px;
-    border: 1px solid #ddd;
-    outline: none;
-}
+.card-banner { position: relative; height: 150px; background: #eee; }
+.banner-img { width: 100%; height: 100%; object-fit: cover; }
 
-/* Карточки */
-.market-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-}
+.pack-icon-overlay { position: absolute; bottom: -15px; left: 15px; width: 60px; height: 60px; background: white; padding: 3px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+.mini-icon { width: 100%; height: 100%; border-radius: 10px; }
 
+.card-details { padding: 25px 15px 15px; }
+.rating { color: #01875f; font-size: 14px; margin: 5px 0 15px; }
+
+/* Кнопка установки и анимация */
+.install-btn { background: #01875f; color: white; border: none; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+.loading-ring { position: absolute; top: -4px; left: -4px; width: 68px; height: 68px; transform: rotate(-90deg); opacity: 0; }
+.ring-bg { fill: none; stroke: #f0f0f0; stroke-width: 3; }
+.ring-progress { fill: none; stroke: #01875f; stroke-width: 3; stroke-dasharray: 100, 100; stroke-dashoffset: 100; transition: 0.1s; }
+.pack-card.installing .loading-ring { opacity: 1; }
+
+/* Модальное окно */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+.modal-content { background: white; margin: 20% auto; padding: 20px; width: 85%; border-radius: 20px; text-align: center; }
+.star-rating-input span { font-size: 35px; color: #ddd; cursor: pointer; }
+#review-text { width: 100%; height: 80px; margin-top: 10px; border-radius: 10px; border: 1px solid #ddd; padding: 10px; }
+.modal-btns { display: flex; gap: 10px; margin-top: 15px; }
+.send-btn { background: #01875f; color: white; border: none; flex: 1; padding: 10px; border-radius: 10px; }
+.close-btn { background: #eee; border: none; flex: 1; padding: 10px; border-radius: 10px; }
 .pack-card {
     background: white;
     padding: 15px;
