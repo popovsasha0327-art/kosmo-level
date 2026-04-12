@@ -1,6 +1,6 @@
 body {
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    background-color: #f8f9fa;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f0f2f5;
     margin: 0;
     display: flex;
     justify-content: center;
@@ -8,7 +8,7 @@ body {
 
 .container {
     width: 100%;
-    max-width: 800px;
+    max-width: 600px;
     padding: 20px;
     text-align: center;
 }
@@ -16,58 +16,56 @@ body {
 /* Поиск */
 .search-container {
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 #pack-search {
     width: 100%;
-    padding: 12px 20px;
-    border-radius: 25px;
+    padding: 12px 15px;
+    border-radius: 20px;
     border: 1px solid #ddd;
-    font-size: 16px;
     outline: none;
 }
 
-/* Сетка карточек */
+/* Карточки */
 .market-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
 }
 
 .pack-card {
     background: white;
     padding: 15px;
-    border-radius: 18px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    transition: 0.3s;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* Иконка и анимация круга */
+/* Иконка и анимация */
 .pack-icon-wrapper {
     position: relative;
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     margin: 0 auto 10px;
 }
 
 .pack-icon {
     width: 100%;
     height: 100%;
-    border-radius: 16px;
+    border-radius: 14px;
     object-fit: cover;
 }
 
 .loading-ring {
     position: absolute;
     top: -4px; left: -4px;
-    width: 88px; height: 88px;
+    width: 78px; height: 78px;
     transform: rotate(-90deg);
     opacity: 0;
     transition: opacity 0.3s;
 }
 
-.ring-bg { fill: none; stroke: #eee; stroke-width: 2; }
+.ring-bg { fill: none; stroke: #f0f0f0; stroke-width: 2; }
 .ring-progress {
     fill: none;
     stroke: #007aff;
@@ -80,16 +78,15 @@ body {
 
 .pack-card.installing .loading-ring { opacity: 1; }
 
-/* Кнопка */
 .install-btn {
     background-color: #007aff;
     color: white;
     border: none;
-    padding: 8px 15px;
-    border-radius: 15px;
-    cursor: pointer;
-    font-weight: bold;
+    padding: 8px;
     width: 100%;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .install-btn:disabled { background-color: #ccc; }
