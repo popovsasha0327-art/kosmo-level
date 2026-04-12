@@ -1,62 +1,32 @@
-/* --- Общие стили для всех устройств --- */
-body {
-    background-color: #ffffff; /* Белый фон по умолчанию */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    transition: background-color 0.4s; /* Плавная смена цвета фона */
+.market-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 20px;
 }
 
-.container {
-    text-align: center;
+.pack-card {
+    background: #ffffff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
 }
 
-/* Базовый вид кнопки */
-.base-button {
-    padding: 12px 24px;
-    font-size: 18px;
-    cursor: pointer;
-    border: none;
-    transition: all 0.3s ease;
+.pack-card:hover {
+    transform: translateY(-50px); /* Карточка будет «всплывать» при наведении */
 }
 
-/* --- СТИЛЬ ДЛЯ iOS (Apple) --- */
-.ios-theme body {
-    background-color: #f2f2f7; /* Светло-серый фон как в настройках iPhone */
+.pack-preview {
+    height: 160px;
+    background-color: #ddd;
+    background-size: cover;
+    background-position: center;
 }
 
-.ios-theme .base-button {
-    background-color: #007aff; /* Фирменный синий Apple */
-    color: white;
-    border-radius: 12px; /* Характерные закругленные углы */
-    font-family: -apple-system, BlinkMacSystemFont, "sans-serif";
-    font-weight: 500;
+.pack-info {
+    padding: 15px;
+    text-align: left;
 }
 
-.ios-theme .base-button:active {
-    background-color: #0056b3; /* Затемнение при нажатии */
-}
-
-/* --- СТИЛЬ ДЛЯ ANDROID (Material Design) --- */
-.android-theme body {
-    background-color: #fafafa;
-}
-
-.android-theme .base-button {
-    background-color: #6200ee; /* Фиолетовый цвет Material */
-    color: white;
-    border-radius: 4px; /* Более квадратные кнопки */
-    text-transform: uppercase; /* Текст капсом, как в старом Android */
-    letter-spacing: 1px;
-    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 
-                0 2px 2px 0 rgba(0,0,0,.14), 
-                0 1px 5px 0 rgba(0,0,0,.12); /* Тень кнопки */
-}
-
-.android-theme .base-button:active {
-    background-color: #3700b3;
-    box-shadow: 0 5px 5px -3px rgba(0,0,0,.2);
-}
+.pack-info h3 { margin: 0 0 10px 0; }
