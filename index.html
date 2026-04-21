@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kosmo Store | LMLSH Oracle</title>
+    <title>Kosmo Store</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="mein-prestige.css">
 </head>
 <body>
 
@@ -13,11 +12,9 @@
 
 <nav class="top-nav">
     <div class="site-logo">KOSMO STORE</div>
-    
     <div class="nav-links">
-        <a href="index.html" class="nav-link">ГЛАВНАЯ</a>
+        <a href="#" class="nav-link">ГЛАВНАЯ</a>
         <a href="#" class="nav-link">НОВОВВЕДЕНИЯ</a>
-        
         <div class="ai-trigger-container" onclick="toggleAI()">
             <div class="ai-icon-mini">
                 <div class="dot d1"></div>
@@ -25,29 +22,25 @@
             </div>
             <span class="ai-hint">ОРАКУЛ</span>
         </div>
-        
         <a href="#" class="nav-link">НАСТРОЙКИ</a>
     </div>
 </nav>
 
 <div class="container">
-    <div class="search-container">
+    <div class="search-section">
         <input type="text" id="pack-search" placeholder="Поиск версий..." onkeyup="searchPacks()">
         <div id="ai-hint" class="ai-hint-box"></div>
     </div>
 
-    <div class="market-grid" id="market-grid">
-        <div class="pack-card" onclick="window.location.href='pack.html?id=pack-30822'">
-            <div class="card-banner">
-                <img src="unnamed (2).png" class="banner-img">
-                <div class="pack-icon-overlay">
-                    <img src="unnamed (2).png" class="mini-icon">
-                </div>
+    <div class="market-grid">
+        <div class="pack-card">
+            <div class="card-image-block">
+                <img src="unnamed (2).png" alt="preview" class="main-preview">
             </div>
-            <div class="card-details">
+            <div class="card-info">
                 <h3>KL Preview 30822</h3>
                 <div class="rating">4.9 ★★★★★</div>
-                <button class="install-btn">Установить</button>
+                <button class="install-btn" onclick="window.location.href='pack.html?id=pack-30822'">Установить</button>
             </div>
         </div>
     </div>
@@ -61,10 +54,7 @@
         </div>
         <span class="header-title">LMLSH ORACLE</span>
     </div>
-    
-    <div id="chat-history">
-        </div>
-    
+    <div id="chat-history"></div>
     <div class="input-area">
         <label for="file-input" class="attach-btn">📎</label>
         <input type="file" id="file-input" style="display:none;">
