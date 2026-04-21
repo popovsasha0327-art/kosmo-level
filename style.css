@@ -1,91 +1,32 @@
-body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; display: flex; justify-content: center; }
-.container { width: 100%; max-width: 600px; padding: 20px; text-align: center; }
+:root { --accent: #01875f; --oracle-blue: #007aff; --oracle-purple: #5856d6; }
+body { background: #050505; color: white; font-family: 'Inter', sans-serif; margin: 0; }
 
-/* Поиск и кнопки */
-#pack-search { width: 100%; padding: 12px; border-radius: 20px; border: 1px solid #ddd; margin-bottom: 10px; }
-.open-review-btn { background: none; border: 1px solid #01875f; color: #01875f; padding: 8px 15px; border-radius: 15px; cursor: pointer; margin-bottom: 20px; }
+.search-container { position: relative; width: 100%; max-width: 500px; margin: 20px auto; }
+#pack-search { width: 100%; padding: 15px; border-radius: 25px; border: none; background: rgba(255,255,255,0.1); color: white; backdrop-filter: blur(10px); }
 
-/* Сетка карточек */
-.market-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-.pack-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: left; }
+/* Подсказка спросить Оракула */
+.ai-hint-box {
+    display: none; background: rgba(88, 86, 214, 0.2); border: 1px solid var(--oracle-purple);
+    padding: 10px; border-radius: 15px; margin-top: 10px; cursor: pointer; color: #fff;
+    font-size: 13px; animation: fadeIn 0.3s ease;
+}
+.ai-hint-box.show { display: block; }
 
-.card-banner { position: relative; height: 150px; background: #eee; }
-.banner-img { width: 100%; height: 100%; object-fit: cover; }
-
-.pack-icon-overlay { position: absolute; bottom: -15px; left: 15px; width: 60px; height: 60px; background: white; padding: 3px; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-.mini-icon { width: 100%; height: 100%; border-radius: 10px; }
-
-.card-details { padding: 25px 15px 15px; }
-.rating { color: #01875f; font-size: 14px; margin: 5px 0 15px; }
-
-/* Кнопка установки и анимация */
-.install-btn { background: #01875f; color: white; border: none; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-.loading-ring { position: absolute; top: -4px; left: -4px; width: 68px; height: 68px; transform: rotate(-90deg); opacity: 0; }
-.ring-bg { fill: none; stroke: #f0f0f0; stroke-width: 3; }
-.ring-progress { fill: none; stroke: #01875f; stroke-width: 3; stroke-dasharray: 100, 100; stroke-dashoffset: 100; transition: 0.1s; }
-.pack-card.installing .loading-ring { opacity: 1; }
-
-/* Модальное окно */
-.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
-.modal-content { background: white; margin: 20% auto; padding: 20px; width: 85%; border-radius: 20px; text-align: center; }
-.star-rating-input span { font-size: 35px; color: #ddd; cursor: pointer; }
-#review-text { width: 100%; height: 80px; margin-top: 10px; border-radius: 10px; border: 1px solid #ddd; padding: 10px; }
-.modal-btns { display: flex; gap: 10px; margin-top: 15px; }
-.send-btn { background: #01875f; color: white; border: none; flex: 1; padding: 10px; border-radius: 10px; }
-.close-btn { background: #eee; border: none; flex: 1; padding: 10px; border-radius: 10px; }
-.pack-card {
-    background: white;
-    padding: 15px;
-    border-radius: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+/* Навигация iOS Style */
+.floating-nav {
+    position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+    background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(20px);
+    padding: 12px 30px; border-radius: 40px; display: flex; align-items: center; gap: 35px;
+    border: 0.5px solid rgba(255,255,255,0.1); z-index: 10000; box-shadow: 0 15px 35px rgba(0,0,0,0.5);
 }
 
-/* Иконка и анимация */
-.pack-icon-wrapper {
-    position: relative;
-    width: 70px;
-    height: 70px;
-    margin: 0 auto 10px;
-}
+.ai-icon-mini { position: relative; width: 34px; height: 16px; }
+.dot { position: absolute; width: 12px; height: 12px; border-radius: 50%; transition: 0.4s; }
+.d1 { background: var(--oracle-blue); left: 0; box-shadow: 0 0 10px var(--oracle-blue); }
+.d2 { background: var(--oracle-purple); right: 0; box-shadow: 0 0 10px var(--oracle-purple); }
+.ai-trigger-container:hover .d1 { transform: translateX(18px); }
+.ai-trigger-container:hover .d2 { transform: translateX(-18px); }
 
-.pack-icon {
-    width: 100%;
-    height: 100%;
-    border-radius: 14px;
-    object-fit: cover;
-}
+.nav-ai-label { font-size: 10px; display: block; text-align: center; margin-top: 5px; opacity: 0.7; }
 
-.loading-ring {
-    position: absolute;
-    top: -4px; left: -4px;
-    width: 78px; height: 78px;
-    transform: rotate(-90deg);
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.ring-bg { fill: none; stroke: #f0f0f0; stroke-width: 2; }
-.ring-progress {
-    fill: none;
-    stroke: #007aff;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-dasharray: 100, 100;
-    stroke-dashoffset: 100;
-    transition: stroke-dashoffset 0.1s linear;
-}
-
-.pack-card.installing .loading-ring { opacity: 1; }
-
-.install-btn {
-    background-color: #007aff;
-    color: white;
-    border: none;
-    padding: 8px;
-    width: 100%;
-    border-radius: 12px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.install-btn:disabled { background-color: #ccc; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
