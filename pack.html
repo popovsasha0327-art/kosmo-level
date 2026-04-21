@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка пака</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container" id="pack-content">
+        <h1 id="pack-title">Загрузка...</h1>
+        <img id="pack-image" src="" alt="">
+        <p id="pack-description"></p>
+        <button id="download-btn" class="install-btn">Установить прямо сейчас</button>
+        <br><br>
+        <a href="index.html" style="color: #01875f;">← Назад в магазин</a>
+    </div>
+
+    <script>
+        // База данных паков прямо в коде (можно вынести в отдельный JSON)
+        const packData = {
+            "pack-30822": {
+                title: "KL Preview 30822",
+                img: "unnamed (2).png",
+                desc: "Это превью версия пака с новыми уровнями от Снежинки. Окунитесь в атмосферу космоса!",
+                file: "KL Preview 30822.worldpack"
+            }
+            // Сюда будешь добавлять новые паки
+        };
+
+        // Получаем ID из адресной строки (например, ?id=pack-30822)
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+
+        if (packData[id]) {
+            const pack = packData[id];
+            document.getElementById('pack-title').innerText = pack.title;
+            document.getElementById('pack-image').src = pack.img;
+            document.getElementById('pack-description').innerText = pack.desc;
+            document.getElementById('download-btn').onclick = () => window.location.href = pack.file;
+        } else {
+            document.getElementById('pack-content').innerHTML = "<h1>Пак не найден</h1><a href='index.html'>Вернуться</a>";
+        }
+    </script>
+</body>
+</html>
