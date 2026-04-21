@@ -3,60 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kosmo Level Store</title>
+    <title>Kosmo Level Store | Oracle AI</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="mein-prestige.css">
 </head>
 <body>
 
+<div class="main-bg"></div>
+
 <div class="container">
     <header>
-        <h1>Kosmo Level Store</h1>
+        <h1 class="site-name">KOSMO STORE</h1>
         <div class="search-container">
             <input type="text" id="pack-search" placeholder="Поиск версий..." onkeyup="searchPacks()">
+            <div id="ai-hint" class="ai-hint-box"></div>
         </div>
-        <button class="open-review-btn" onclick="openReviewModal()">✍️ Оставить отзыв</button>
     </header>
 
-    <div class="market-grid" id="market-grid">
+    <div class="market-grid">
         <div class="pack-card" id="pack-30822">
             <div class="card-banner">
                 <img src="unnamed (2).png" class="banner-img">
                 <div class="pack-icon-overlay">
                     <img src="unnamed (2).png" class="mini-icon">
-                    <svg class="loading-ring" viewBox="0 0 36 36">
-                        <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path class="ring-progress" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    </svg>
                 </div>
             </div>
             <div class="card-details">
                 <h3>KL Preview 30822</h3>
-                <div class="rating">
-                    <span class="score">4.9</span>
-                    <span class="stars">★★★★★</span>
-                </div>
-                <button class="install-btn" 
-                        data-file="KL Preview 30822.worldpack" 
-                        onclick="startInstall('pack-30822')">
-                    Установить
-                </button>
+                <div class="rating">4.9 ★★★★★</div>
+                <button class="install-btn" data-file="KL Preview 30822.worldpack" onclick="startInstall('pack-30822')">Установить</button>
             </div>
         </div>
     </div>
 </div>
 
-<div id="review-modal" class="modal">
-    <div class="modal-content">
-        <h3>Оставить отзыв</h3>
-        <input type="text" id="reviewer-name" placeholder="Твое имя">
-        <div class="star-rating-input">
-            <span onclick="setRating(1)">★</span><span onclick="setRating(2)">★</span><span onclick="setRating(3)">★</span><span onclick                </button>
-            </div>
+<div id="ai-interface" class="ai-hidden">
+    <div class="ai-header" id="drag-header">
+        <div class="ai-status-dots">
+            <span class="circle c1"></span>
+            <span class="circle c2"></span>
         </div>
+        <span class="header-title">LMLSH ORACLE</span>
+    </div>
+    <div id="chat-history"></div>
+    <div class="input-area">
+        <input type="text" id="user-input" placeholder="Введите вопрос...">
+        <button id="send-btn">↑</button>
     </div>
 </div>
+
+<nav class="floating-nav" id="main-nav">
+    <div class="nav-item">🏠</div>
+    <div class="ai-trigger-container" onclick="toggleAI()">
+        <div class="ai-icon-mini">
+            <div class="dot d1"></div>
+            <div class="dot d2"></div>
+        </div>
+        <span class="nav-ai-label">ОРАКУЛ</span>
+    </div>
+    <div class="nav-item">⚙️</div>
+</nav>
 
 <script src="script.js"></script>
+<script src="brain.js"></script>
 </body>
 </html>
