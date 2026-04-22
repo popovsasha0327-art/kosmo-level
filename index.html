@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kosmo Level Store v.3.3</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -15,12 +15,20 @@
     <div class="nav-links">
         <a href="#" class="nav-link">ГЛАВНАЯ</a>
         
-        <div class="ai-trigger-container" onclick="toggleAI()">
-            <div class="ultra-neon">
-                <div class="dot d1"></div>
-                <div class="dot d2"></div>
+        <div class="dropdown">
+            <div class="ai-trigger-container" onclick="toggleDropdown()">
+                <div class="ultra-neon">
+                    <div class="dot d1"></div>
+                    <div class="dot d2"></div>
+                </div>
+                <span class="nav-link">ОРАКУЛ <small style="font-size: 8px;">▼</small></span>
             </div>
-            <span class="nav-link">ОРАКУЛ</span>
+            
+            <div id="ai-dropdown-content" class="dropdown-content ios-blur hidden">
+                <a href="#" onclick="toggleAI(); closeDropdown()">🔮 ОРАКУЛ ИИ (NEW)</a>
+                <a href="demo.html">🤖 ДЕМО ПОМОЩНИК</a>
+                <a href="titan.html">📝 ЛМСХ ФОРМА</a>
+            </div>
         </div>
         
         <a href="#" class="nav-link">НАСТРОЙКИ</a>
@@ -32,15 +40,15 @@
         <input type="text" id="pack-search" placeholder="Поиск версий..." onkeyup="searchPacks()">
     </div>
 
-    <div class="market-grid">
-        <div class="pack-card ios-card" onclick="openPack('pack-30822')">
+    <div class="market-grid" id="market-grid">
+        <div class="pack-card ios-card" data-name="kl preview 30822">
             <div class="card-image">
                 <img src="unnamed (2).png" class="main-preview" alt="Pack Preview">
             </div>
             <div class="card-content">
                 <h3>KL Preview 30822</h3>
                 <div class="rating">4.9 ★★★★★</div>
-                <button class="ios-btn-green">Установить</button>
+                <button class="ios-btn-green" onclick="downloadPack('ССЫЛКА_НА_ФАЙЛ_ТУТ', this)">Установить</button>
             </div>
         </div>
     </div>
@@ -52,15 +60,54 @@
             <span class="circle c1"></span>
             <span class="circle c2"></span>
         </div>
-        <span class="header-title">LMLSH ORACLE</span>
+        <span class="header-title">LMSH ORACLE</span>
+        <button class="close-ai" onclick="toggleAI()">✕</button>
     </div>
-    <div id="chat-history"></div>
+    <div id="chat-history">
+        <div class="msg ai">Система 3.3 готова. Оракул на связи. Чем могу помочь?</div>
+    </div>
     <div class="input-area">
-        <input type="text" id="user-input" placeholder="Введите вопрос...">
+        <input type="text" id="user-input" placeholder="Введите вопрос..." onkeypress="handleChatEnter(event)">
         <button id="send-btn" onclick="sendMessage()">↑</button>
     </div>
 </div>
 
 <script src="script.js"></script>
+<script>
+    // Саня, вот логика для кнопки установить и поиска прямо тут, чтоб не потерялась
+    function downloadPack(url, btn) {
+        const originalText = btn.innerText;
+        btn.innerText = "ПОДГОТОВКА...";
+        btn.style.opacity = "0.7";
+        
+        setTimeout(() => {
+            btn.innerText = "ЗАГРУЗКА...";
+            window.open(url, '_blank');
+            
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.opacity = "1";
+            }, 2000);
+        }, 1000);
+    }
+
+    function searchPacks() {
+        let input = document.getElementById('pack-search').value.toLowerCase();
+        let cards = document.getElementsByClassName('pack-card');
+        
+        for (let i = 0; i < cards.length; i++) {
+            let name = cards[i].getAttribute('data-name');
+            if (name.includes(input)) {
+                cards[i].style.display = "block";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+
+    function handleChatEnter(e) {
+        if (e.key === 'Enter') sendMessage();
+    }
+</script>
 </body>
 </html>
