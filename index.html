@@ -35,7 +35,7 @@
             <div class="dot d2"></div>
         </div>
         <h3>ПРИВЕТ, Я ОРАКУЛ</h3>
-        <p>Я твой персональный помощник по сайту. Можешь спросить меня, как работают паки или как скачать уровни!</p>
+        <p>Я твой персональный помощник по сайту. Можешь спросить меня о чем угодно!</p>
         <button class="ios-btn-primary" onclick="closeTutorial()">ОГО, КРУТО!</button>
         <button class="skip-link" onclick="closeTutorial()">Пропустить</button>
     </div>
@@ -58,7 +58,7 @@
                 <button class="ios-btn-green">Установить</button>
             </div>
         </div>
-        </div>
+    </div>
 </div>
 
 <div id="pack-modal" class="pack-overlay hidden ios-blur">
@@ -76,13 +76,14 @@
 
 <div id="ai-interface" class="ai-window hidden ios-blur">
     <div class="ai-header">
-        <div class="ai-status-dots"><span class="circle c1"></span><span class="circle c2"></span></div>
+        <div class="ai-status-dots">
+            <span class="circle c1"></span>
+            <span class="circle c2"></span>
+        </div>
         <span class="header-title">LMLSH ORACLE</span>
     </div>
     <div id="chat-history"></div>
     <div class="input-area">
-        <label for="file-input" class="attach-icon">📎</label>
-        <input type="file" id="file-input" style="display:none;">
         <input type="text" id="user-input" placeholder="Введите вопрос...">
         <button id="send-btn" onclick="sendMessage()">↑</button>
     </div>
