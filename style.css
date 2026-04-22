@@ -185,15 +185,17 @@ body {
 /* ОКНО ОРАКУЛА */
 .ai-window {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 320px;
-    height: 480px;
+    bottom: 10px;
+    right: 10px;
+    width: calc(100% - 20px);
+    max width: 350px;
+    height: 50vh;
     display: flex;
     flex-direction: column;
     border-radius: 24px;
     overflow: hidden;
     box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    z-index: 9999;
 }
 
 .ai-header {
