@@ -1,89 +1,250 @@
+/* ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ iOS */
 :root {
     --ios-blue: #007aff;
     --ios-purple: #5856d6;
+    --ios-green: #34c759;
     --ios-bg: rgba(28, 28, 30, 0.7);
 }
 
+/* ОБЩИЕ НАСТРОЙКИ ТЕЛА */
 body {
-    margin: 0; background: #000; color: white;
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    margin: 0;
+    background: #000;
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     overflow-x: hidden;
 }
 
+/* ФОНОВЫЙ ГРАДИЕНТ */
 .main-bg {
-    position: fixed; inset: 0;
+    position: fixed;
+    inset: 0;
     background: radial-gradient(circle at top right, #1c1c3a, #000);
     z-index: -1;
 }
 
-/* СЛОИ (Z-INDEX) */
+/* СИСТЕМА СЛОЕВ (Z-INDEX) */
 .top-nav { z-index: 10000; position: sticky; top: 0; }
-.ai-window { z-index: 9999; }
+.tutorial-overlay { z-index: 11000; }
+#ai-interface { z-index: 9999; }
 .pack-overlay { z-index: 5000; }
-.tutorial-overlay { z-index: 20000; }
 
-/* ОБЩИЕ СТИЛИ iOS */
-.ios-blur { backdrop-filter: blur(25px) saturate(180%); -webkit-backdrop-filter: blur(25px); }
+/* ЭФФЕКТ МАТОВОГО СТЕКЛА (iOS BLUR) */
+.ios-blur {
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px);
+    background: rgba(30, 30, 30, 0.6);
+}
+
 .ios-card {
     background: rgba(44, 44, 46, 0.6);
     border-radius: 20px;
-    border: 0.5px solid rgba(255,255,255,0.1);
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
 }
 
 /* НАВИГАЦИЯ */
 .top-nav {
-    display: flex; justify-content: space-between; padding: 15px 25px;
-    background: rgba(0,0,0,0.5); border-bottom: 0.5px solid rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: rgba(0, 0, 0, 0.5);
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
 }
-.nav-links { display: flex; align-items: center; gap: 15px; }
-.nav-link { color: #8e8e93; text-decoration: none; font-size: 12px; font-weight: 600; }
 
-/* УЛЬТРА НЕОН */
-.ultra-neon .dot { animation: ultraPulse 2s infinite alternate ease-in-out; }
-.ai-icon-mini { position: relative; width: 34px; height: 14px; cursor: pointer; }
+.site-logo { font-weight: 800; letter-spacing: 1px; }
+
+.nav-links { display: flex; align-items: center; gap: 20px; }
+
+.nav-link {
+    color: #8e8e93;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* УЛЬТРА НЕОН ОРАКУЛА */
+.ai-trigger-container { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+
+.ultra-neon .dot {
+    animation: ultraPulse 2s infinite alternate ease-in-out;
+}
+
+.ai-icon-mini { position: relative; width: 34px; height: 14px; }
+
 .dot { position: absolute; width: 12px; height: 12px; border-radius: 50%; }
 .d1 { background: var(--ios-blue); left: 0; }
 .d2 { background: var(--ios-purple); right: 0; }
 
 @keyframes ultraPulse {
     0% { box-shadow: 0 0 10px var(--ios-blue); transform: scale(0.9); }
-    100% { box-shadow: 0 0 30px var(--ios-blue), 0 0 45px var(--ios-purple); transform: scale(1.15); }
+    100% { box-shadow: 0 0 25px var(--ios-blue), 0 0 40px var(--ios-purple); transform: scale(1.1); }
 }
 
-/* ОКНО ПАКА (Всплывающее) */
-.pack-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-    display: flex; justify-content: center; align-items: flex-end;
-}
-.pack-modal-content {
-    width: 100%; max-width: 500px; height: 85vh;
-    padding: 30px; border-radius: 30px 30px 0 0;
-    animation: slideUp 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-    position: relative; overflow-y: auto;
-}
-.modal-preview { width: 100%; border-radius: 20px; margin-bottom: 20px; }
-.close-modal {
-    position: absolute; top: 15px; right: 20px; background: rgba(255,255,255,0.1);
-    border: none; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer;
+/* КОНТЕЙНЕР И СЕТКА */
+.container { padding: 20px; max-width: 1200px; margin: 0 auto; }
+
+.search-section { margin-bottom: 30px; }
+
+#pack-search {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    outline: none;
 }
 
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.market-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* КАРТОЧКА ПАКА */
+.pack-card {
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.pack-card:hover { transform: scale(1.02); }
+
+.main-preview { width: 100%; display: block; border-radius: 20px 20px 0 0; }
+
+.card-content { padding: 20px; }
+
+.card-content h3 { margin: 0 0 10px 0; font-size: 1.2rem; }
+
+.rating { color: #ffcc00; font-size: 0.9rem; margin-bottom: 15px; }
 
 /* КНОПКИ */
-.ios-btn-green { background: #34c759; color: white; border: none; padding: 12px; width: 100%; border-radius: 14px; font-weight: bold; cursor: pointer; }
-.ios-btn-primary { background: var(--ios-blue); color: white; border: none; padding: 15px; border-radius: 15px; width: 100%; cursor: pointer; }
-
-/* ЧАТ */
-.ai-window {
-    position: fixed; bottom: 20px; right: 20px; width: 320px; height: 450px;
-    display: flex; flex-direction: column; border-radius: 24px; overflow: hidden;
+.ios-btn-green {
+    background: var(--ios-green);
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s;
 }
-#chat-history { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-.msg { padding: 10px 15px; border-radius: 15px; max-width: 80%; font-size: 14px; }
-.msg.ai { background: rgba(255,255,255,0.1); align-self: flex-start; border-bottom-left-radius: 4px; }
+
+.ios-btn-primary {
+    background: var(--ios-blue);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 15px;
+    width: 100%;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* МОДАЛЬНОЕ ОКНО ПАКА (Pop-up) */
+.pack-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.pack-modal-content {
+    width: 100%;
+    max-width: 500px;
+    height: 80vh;
+    padding: 30px;
+    border-radius: 30px 30px 0 0;
+    position: relative;
+    animation: slideUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* ОКНО ОРАКУЛА */
+.ai-window {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 320px;
+    height: 480px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.ai-header {
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+#chat-history {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.msg { padding: 10px 15px; border-radius: 18px; font-size: 14px; line-height: 1.4; max-width: 85%; }
+.msg.ai { background: rgba(255, 255, 255, 0.1); align-self: flex-start; border-bottom-left-radius: 4px; }
 .msg.user { background: var(--ios-blue); align-self: flex-end; border-bottom-right-radius: 4px; }
 
-.input-area { background: rgba(255,255,255,0.05); margin: 10px; padding: 8px 15px; border-radius: 20px; display: flex; align-items: center; gap: 10px; }
-#user-input { background: transparent; border: none; color: white; flex: 1; outline: none; }
+.input-area {
+    padding: 15px;
+    display: flex;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.2);
+}
 
+#user-input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px;
+    color: white;
+    outline: none;
+}
+
+#send-btn {
+    background: white;
+    color: black;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* ВСПОМОГАТЕЛЬНЫЕ КЛАССЫ */
 .hidden { display: none !important; }
