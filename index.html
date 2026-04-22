@@ -7,106 +7,83 @@
     <style>
         :root {
             --bg: #0b0b0d;
-            --nav-bg: rgba(18, 18, 20, 0.8);
+            --nav-bg: rgba(18, 18, 20, 0.85);
             --card-bg: rgba(28, 28, 30, 0.6);
             --accent-cyan: #00f2ff;
             --accent-purple: #bf5af2;
             --accent-green: #34c759;
             --text-main: #ffffff;
-            --text-dim: #8e8e93;
             --ios-blur: blur(20px);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; }
-        body { background: var(--bg); color: var(--text-main); overflow-x: hidden; min-height: 100vh; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
+        body { background: var(--bg); color: var(--text-main); overflow-x: hidden; }
 
-        /* Задний фон с эффектом свечения */
-        .glow { position: fixed; width: 300px; height: 300px; filter: blur(100px); z-index: -1; opacity: 0.15; }
+        /* Фоновое свечение */
+        .glow { position: fixed; width: 300px; height: 300px; filter: blur(100px); z-index: -1; opacity: 0.15; pointer-events: none; }
         .glow-1 { top: -50px; left: -50px; background: var(--accent-cyan); }
         .glow-2 { bottom: -50px; right: -50px; background: var(--accent-purple); }
 
-        /* Навигация (Фикс вылета) */
+        /* НАВИГАЦИЯ */
         nav {
             position: fixed; top: 0; width: 100%; height: 64px;
             background: var(--nav-bg); backdrop-filter: var(--ios-blur); -webkit-backdrop-filter: var(--ios-blur);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 20px; z-index: 1000; border-bottom: 0.5px solid rgba(255,255,255,0.1);
         }
-        .logo { font-size: 18px; font-weight: 700; }
-        .nav-right { display: flex; gap: 15px; align-items: center; }
-        .nav-item { font-size: 13px; font-weight: 600; color: var(--text-dim); text-decoration: none; cursor: pointer; }
 
-        /* Выпадающее меню Оракула */
-        .dropdown { position: relative; display: flex; align-items: center; }
-        .dots { display: flex; gap: 4px; margin-right: 6px; }
-        .dot { width: 6px; height: 6px; border-radius: 50%; }
-        .dot-c { background: var(--accent-cyan); box-shadow: 0 0 8px var(--accent-cyan); }
-        .dot-p { background: var(--accent-purple); box-shadow: 0 0 8px var(--accent-purple); }
-        
-        .dropdown-menu {
-            position: absolute; top: 50px; right: 0; width: 220px;
-            background: rgba(25, 25, 27, 0.98); backdrop-filter: var(--ios-blur);
-            border-radius: 14px; border: 0.5px solid rgba(255,255,255,0.1);
-            padding: 8px; display: none; flex-direction: column; z-index: 1001;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        .nav-left-mobile { display: none; cursor: pointer; font-size: 24px; }
+        .logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+        .nav-links { display: flex; gap: 20px; align-items: center; }
+
+        /* МОБИЛЬНОЕ МЕНЮ (Слева) */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed; top: 0; left: -100%; width: 280px; height: 100vh;
+                background: #121214; flex-direction: column; padding: 80px 20px;
+                transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 999;
+            }
+            .nav-links.active { left: 0; box-shadow: 20px 0 50px rgba(0,0,0,0.8); }
+            .nav-left-mobile { display: block; }
         }
-        .dropdown-menu.show { display: flex; animation: slideIn 0.2s ease-out; }
-        .dropdown-menu a {
-            padding: 12px; color: var(--text-main); text-decoration: none;
-            font-size: 14px; border-radius: 10px; transition: 0.2s;
-        }
-        .dropdown-menu a:hover { background: rgba(255,255,255,0.1); }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-item { font-size: 14px; font-weight: 600; color: #8e8e93; text-decoration: none; cursor: pointer; transition: 0.2s; }
+        .nav-item:hover { color: #fff; }
 
-        /* Контент */
+        /* КАРТОЧКИ И КОНТЕНТ */
         .container { padding: 84px 20px 40px; max-width: 600px; margin: 0 auto; }
-        .search-bar {
-            width: 100%; background: rgba(255,255,255,0.08); border: none;
-            padding: 14px 20px; border-radius: 12px; color: white; font-size: 16px;
-            margin-bottom: 25px; outline: none;
-        }
+        .search-bar { width: 100%; background: rgba(255,255,255,0.08); border: none; padding: 14px; border-radius: 12px; color: white; margin-bottom: 25px; outline: none; }
 
-        /* Карточка Пака */
-        .card {
-            background: var(--card-bg); border-radius: 24px; overflow: hidden;
-            border: 0.5px solid rgba(255,255,255,0.1); margin-bottom: 20px;
-        }
+        .card { background: var(--card-bg); border-radius: 24px; border: 0.5px solid rgba(255,255,255,0.1); margin-bottom: 20px; overflow: hidden; backdrop-filter: var(--ios-blur); }
         .card-img { width: 100%; height: 200px; background: #1c1c1e; }
         .card-img img { width: 100%; height: 100%; object-fit: cover; }
         .card-body { padding: 20px; }
-        .card-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-        .card-meta { color: var(--text-dim); font-size: 13px; margin-bottom: 16px; }
-        
-        .btn-group { display: flex; gap: 10px; }
-        .btn {
-            flex: 1; padding: 14px; border-radius: 14px; border: none;
-            font-weight: 700; cursor: pointer; transition: 0.2s;
-        }
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+        .btn { flex: 1; padding: 12px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; }
         .btn-green { background: var(--accent-green); color: white; }
         .btn-blur { background: rgba(255,255,255,0.1); color: white; }
-        .btn:active { transform: scale(0.97); }
 
-        /* ВСПЛЫВАЮЩЕЕ ОКНО ОТЗЫВОВ (iOS Style) */
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(8px); z-index: 2000;
-            display: none; align-items: flex-end;
+        /* МОДАЛЬНЫЕ ОКНА (ОРАКУЛ, ТИТАН, ДЕМО) */
+        .modal-window {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9);
+            width: 90%; max-width: 380px; background: rgba(20, 20, 25, 0.98);
+            backdrop-filter: blur(25px); border-radius: 25px; z-index: 3000;
+            display: none; flex-direction: column; border: 0.5px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 50px rgba(0,0,0,1);
         }
-        .modal {
-            width: 100%; background: #1c1c1e; border-radius: 24px 24px 0 0;
-            padding: 20px; padding-bottom: 40px;
-            transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.3, 1, 0.4, 1);
-        }
-        .modal.open { transform: translateY(0); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .handle { width: 40px; height: 5px; background: rgba(255,255,255,0.2); border-radius: 3px; margin: 0 auto 15px; }
-        
-        .review-box {
-            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 16px; margin-bottom: 10px;
-        }
-        .rev-user { font-weight: 600; font-size: 14px; color: var(--accent-cyan); }
-        .rev-text { font-size: 14px; margin-top: 4px; opacity: 0.9; }
+        .modal-window.open { display: flex; animation: modalIn 0.3s forwards; }
+        @keyframes modalIn { to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+
+        .modal-header { padding: 18px; border-bottom: 0.5px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .modal-content { padding: 20px; text-align: center; }
+
+        /* ОТЗЫВЫ (BOTTOM SHEET) */
+        .sheet-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 4000; display: none; align-items: flex-end; }
+        .sheet { width: 100%; background: #1c1c1e; border-radius: 24px 24px 0 0; padding: 20px; transform: translateY(100%); transition: 0.4s; }
+        .sheet.open { transform: translateY(0); }
+
+        .hidden { display: none !important; }
+        .ios-input { width: 100%; background: #2a2a2e; border: none; padding: 12px; border-radius: 12px; color: white; margin: 10px 0; outline: none; }
     </style>
 </head>
 <body>
@@ -114,102 +91,93 @@
     <div class="glow glow-2"></div>
 
     <nav>
+        <div class="nav-left-mobile" onclick="toggleMobileMenu()">☰</div>
         <div class="logo">KOSMO STORE</div>
-        <div class="nav-right">
-            <span class="nav-item">ГЛАВНАЯ</span>
-            <div class="dropdown" onclick="toggleMenu(event)">
-                <div class="dots">
-                    <div class="dot dot-c"></div>
-                    <div class="dot dot-p"></div>
-                </div>
-                <span class="nav-item">ОРАКУЛ ▼</span>
-                <div class="dropdown-menu" id="dd-menu">
-                    <a href="#" onclick="alert('Оракул ИИ в разработке')">🔮 ОРАКУЛ ИИ (NEW)</a>
-                    <a href="demo.html">🤖 ДЕМО ПОМОЩНИК</a>
-                    <a href="titan.html">📝 ЛМСХ ФОРМА</a>
-                </div>
-            </div>
+        <div class="nav-links" id="navLinks">
+            <a href="#" class="nav-item" onclick="toggleMobileMenu()">ГЛАВНАЯ</a>
+            <div class="nav-item" onclick="openModal('oracle-win')">🔮 ОРАКУЛ ИИ</div>
+            <div class="nav-item" onclick="openModal('demo-win')">🤖 ДЕМО ПОМОЩНИК</div>
+            <div class="nav-item" onclick="openModal('titan-win')">📝 ЛМСХ ФОРМА</div>
         </div>
+        <div class="nav-item">⚙️</div>
     </nav>
 
     <div class="container">
-        <input type="text" class="search-bar" placeholder="Поиск..." onkeyup="search(this)">
-
-        <div id="grid">
-            <div class="card" data-name="kl preview 30822">
-                <div class="card-img">
-                    <img src="unnamed (2).png" alt="Preview">
-                </div>
-                <div class="card-body">
-                    <div class="card-title">KL Preview 30822</div>
-                    <div class="card-meta">4.9 ★★★★★ • 1.2 GB</div>
-                    <div class="btn-group">
-                        <button class="btn btn-green" onclick="install(this)">УСТАНОВИТЬ</button>
-                        <button class="btn btn-blur" onclick="openReviews('KL Preview 30822')">ОТЗЫВЫ</button>
-                    </div>
+        <input type="text" class="search-bar" placeholder="Поиск паков..." onkeyup="search(this)">
+        <div class="card" data-name="kl preview 30822">
+            <div class="card-img"><img src="unnamed (2).png"></div>
+            <div class="card-body">
+                <h3>KL Preview 30822</h3>
+                <p style="color:#8e8e93; font-size:12px;">4.9 ★★★★★ • 1.2 GB</p>
+                <div class="btn-group">
+                    <button class="btn btn-green" onclick="alert('Загрузка начата...')">УСТАНОВИТЬ</button>
+                    <button class="btn btn-blur" onclick="openSheet('KL Preview 30822')">ОТЗЫВЫ</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="overlay" onclick="closeReviews(event)">
-        <div class="modal" id="modal">
-            <div class="handle"></div>
-            <div class="modal-header">
-                <h2 id="modal-title">Отзывы</h2>
-                <button style="background:none; border:none; color:var(--accent-purple); font-weight:bold;" onclick="closeReviews(null)">Закрыть</button>
+    <div id="oracle-win" class="modal-window">
+        <div class="modal-header" style="color:var(--accent-cyan)"><span>🔮 ORACLE AI</span> <button onclick="closeModal('oracle-win')" style="background:none; border:none; color:white;">✕</button></div>
+        <div class="modal-content">
+            <p>Задайте вопрос Оракулу:</p>
+            <input type="text" class="ios-input" placeholder="Ваш вопрос...">
+            <button class="btn btn-green" style="width:100%">ОТПРАВИТЬ</button>
+        </div>
+    </div>
+
+    <div id="titan-win" class="modal-window">
+        <div class="modal-header" style="color:var(--accent-purple)"><span>📝 TITAN FORM</span> <button onclick="closeModal('titan-win')" style="background:none; border:none; color:white;">✕</button></div>
+        <div class="modal-content">
+            <h2 style="color:red; margin-bottom:10px;">02:59</h2>
+            <input type="password" class="ios-input" placeholder="ПИН-КОД">
+            <button class="btn btn-blur" style="width:100%; border:1px solid var(--accent-purple)">ВОЙТИ</button>
+        </div>
+    </div>
+
+    <div class="sheet-overlay" id="sheetOverlay" onclick="closeSheet(event)">
+        <div class="sheet" id="sheet">
+            <div style="width:40px; height:5px; background:rgba(255,255,255,0.2); border-radius:3px; margin: 0 auto 15px;"></div>
+            <h2 id="sheet-title">Отзывы</h2>
+            <div id="reviews-content" style="margin-top:20px;">
+                <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px; margin-bottom:10px;">
+                    <b style="color:var(--accent-cyan)">Мурзик:</b> Пак просто космос!
+                </div>
             </div>
-            <div id="reviews-list"></div>
         </div>
     </div>
 
     <script>
-        function toggleMenu(e) {
-            e.stopPropagation();
-            document.getElementById('dd-menu').classList.toggle('show');
+        function toggleMobileMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
         }
 
-        window.onclick = () => document.getElementById('dd-menu').classList.remove('show');
+        function openModal(id) {
+            document.getElementById(id).classList.add('open');
+            if(window.innerWidth <= 768) toggleMobileMenu();
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('open');
+        }
+
+        function openSheet(name) {
+            document.getElementById('sheet-title').innerText = name;
+            document.getElementById('sheetOverlay').style.display = 'flex';
+            setTimeout(() => document.getElementById('sheet').classList.add('open'), 10);
+        }
+
+        function closeSheet(e) {
+            if (e && e.target !== document.getElementById('sheetOverlay')) return;
+            document.getElementById('sheet').classList.remove('open');
+            setTimeout(() => document.getElementById('sheetOverlay').style.display = 'none', 400);
+        }
 
         function search(el) {
             let val = el.value.toLowerCase();
             document.querySelectorAll('.card').forEach(c => {
                 c.style.display = c.dataset.name.includes(val) ? 'block' : 'none';
             });
-        }
-
-        function install(btn) {
-            btn.innerText = "ЗАГРУЗКА...";
-            setTimeout(() => { btn.innerText = "УСТАНОВИТЬ"; window.open('#'); }, 2000);
-        }
-
-        // Данные отзывов (можно дополнять)
-        const allReviews = {
-            'KL Preview 30822': [
-                { u: 'Мурзик', t: 'Лучший пак в моей жизни! Блюр просто секс.' },
-                { u: 'Хахми', t: 'На 5 уровне мамонты плачут. Ставлю 5 звезд.' },
-                { u: 'User_404', t: 'А когда выйдет обновление Оракула?' }
-            ]
-        };
-
-        function openReviews(name) {
-            const list = document.getElementById('reviews-list');
-            document.getElementById('modal-title').innerText = name;
-            list.innerHTML = (allReviews[name] || []).map(r => `
-                <div class="review-box">
-                    <div class="rev-user">${r.u}</div>
-                    <div class="rev-text">${r.t}</div>
-                </div>
-            `).join('') || 'Отзывов пока нет...';
-
-            document.getElementById('overlay').style.display = 'flex';
-            setTimeout(() => document.getElementById('modal').classList.add('open'), 10);
-        }
-
-        function closeReviews(e) {
-            if (e && e.target !== document.getElementById('overlay')) return;
-            document.getElementById('modal').classList.remove('open');
-            setTimeout(() => document.getElementById('overlay').style.display = 'none', 400);
         }
     </script>
 </body>
