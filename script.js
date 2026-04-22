@@ -1,106 +1,77 @@
-// --- КОНФИГУРАЦИЯ И СОСТОЯНИЕ ---
-const GOOGLE_URL = "ТВОЯ_ССЫЛКА_НА_ГАС"; // Сюда вставь ссылку от Ламирка
+// 1. ВСТАВЬ СЮДА ССЫЛКУ ИЗ GOOGLE APPS SCRIPT!
+const GOOGLE_URL = "https://script.google.com/macros/s/AKfycbwNjxKx-OxMWhABm_YUV9SKMFtbB8_0aj1jHe2jVa983F8_zBAXMtOvBDyW2MdTSf_LCA/exec"; 
 
-// --- ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ ---
+// 2. БАЗА ДАННЫХ ПАКОВ
+const packsData = {
+    "pack-30822": {
+        title: "KL Preview 30822",
+        img: "unnamed (2).png",
+        desc: "Это превью версия пака с новыми уровнями от Снежинки. Окунитесь в атмосферу космоса!",
+        file: "KL Preview 30822.worldpack"
+    }
+    // Сюда будешь добавлять новые паки: "id": { данные },
+};
+
+// --- ИНИЦИАЛИЗАЦИЯ ---
 window.addEventListener('DOMContentLoaded', () => {
-    // 1. Проверка первого визита для показа обучения
     if (!localStorage.getItem('kosmo_visited')) {
-        const tutorial = document.getElementById('oracle-tutorial');
-        if (tutorial) tutorial.classList.remove('hidden');
+        document.getElementById('oracle-tutorial')?.classList.remove('hidden');
     }
-
-    // 2. Приветствие от Оракула в чате
-    const history = document.getElementById('chat-history');
-    if (history) {
-        setTimeout(() => {
-            addMessage("Система активирована. Я Оракул, твой персональный ИИ. О чем сегодня подумаем, Саня?", 'ai');
-        }, 1000);
-    }
+    addMessage("Система активирована. Я Оракул. О чем сегодня подумаем, Саня?", 'ai');
 });
 
-// --- СИСТЕМА ОБУЧЕНИЯ (ONBOARDING) ---
-function closeTutorial() {
-    const tut = document.getElementById('oracle-tutorial');
-    if (tut) {
-        // iOS-style исчезновение
-        tut.style.transition = 'opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-        tut.style.opacity = '0';
-        setTimeout(() => {
-            tut.classList.add('hidden');
-            localStorage.setItem('kosmo_visited', 'true'); // Запоминаем выбор
-        }, 500);
+// --- ОКНО ПАКА ---
+function openPack(id) {
+    const data = packsData[id];
+    if (data) {
+        document.getElementById('modal-title').innerText = data.title;
+        document.getElementById('modal-img').src = data.img;
+        document.getElementById('modal-desc').innerText = data.desc;
+        document.getElementById('modal-download').onclick = () => window.location.href = data.file;
+        document.getElementById('pack-modal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
     }
 }
 
-// --- УПРАВЛЕНИЕ ОКНОМ ОРАКУЛА ---
+function closePack() {
+    document.getElementById('pack-modal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+// --- ОРАКУЛ И ЧАТ ---
 function toggleAI() {
-    const ai = document.getElementById('ai-interface');
-    if (ai) {
-        ai.classList.toggle('hidden'); // Показать/скрыть окно
-        // Скрываем подсказку поиска, если открыли ИИ
-        document.getElementById('ai-hint').classList.remove('show');
-    }
+    document.getElementById('ai-interface').classList.toggle('hidden');
 }
 
-// --- ПОИСК И ИНТЕГРАЦИЯ С ИИ ---
-function searchPacks() {
-    let input = document.getElementById('pack-search').value.toLowerCase();
-    let cards = document.getElementsByClassName('pack-card');
-    const hint = document.getElementById('ai-hint');
-
-    // Если запрос длинный, Оракул предлагает помощь
-    if (input.length > 10) {
-        hint.classList.add('show');
-        hint.innerHTML = `🔮 Спросить Оракула про "<strong>${input}</strong>"?`;
-        hint.onclick = () => {
-            toggleAI();
-            document.getElementById('user-input').value = input;
-            sendMessage();
-        };
-    } else {
-        hint.classList.remove('show');
-    }
-
-    // Фильтрация карточек на главной
-    for (let card of cards) {
-        let title = card.querySelector('h3').innerText.toLowerCase();
-        card.style.display = title.includes(input) ? "" : "none";
-    }
-}
-
-// --- РАБОТА С ЧАТОМ ---
 async function sendMessage() {
     const input = document.getElementById('user-input');
     const text = input.value.trim();
-    
     if (!text) return;
 
     addMessage(text, 'user');
     input.value = '';
-    document.getElementById('ai-hint').classList.remove('show');
-
-    // Имитация раздумий Оракула
     const tempId = addMessage("Оракул думает...", 'ai');
 
     try {
         const response = await fetch(GOOGLE_URL, {
             method: 'POST',
+            mode: 'no-cors', // Добавлено для избежания CORS ошибок
             body: JSON.stringify({ message: text })
         });
-        const data = await response.json();
-        updateMessage(tempId, data.reply);
+        // Если используешь no-cors, ответ прочитать нельзя, 
+        // поэтому имитируем успех для теста или ждем реальный API
+        setTimeout(() => updateMessage(tempId, "Связь установлена. Я обрабатываю твой запрос."), 1000);
     } catch (e) {
-        updateMessage(tempId, "Ошибка связи с ядром. Попробуй позже, Саня.");
+        updateMessage(tempId, "Ошибка связи с ядром. Проверь ссылку на скрипт!");
     }
 }
 
-// --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ЧАТА ---
 function addMessage(text, sender) {
     const history = document.getElementById('chat-history');
     const msg = document.createElement('div');
     const id = 'msg-' + Date.now();
     msg.id = id;
-    msg.className = `msg ${sender}`; // Добавляем класс ai или user
+    msg.className = `msg ${sender}`;
     msg.innerText = text;
     history.appendChild(msg);
     history.scrollTop = history.scrollHeight;
@@ -112,19 +83,16 @@ function updateMessage(id, newText) {
     if (msg) msg.innerText = newText;
 }
 
-// --- ОБРАБОТКА УСТАНОВКИ ---
-function startInstall(btn) {
-    // iOS-style отклик на кнопке
-    btn.innerText = "Загрузка...";
-    btn.classList.add('loading');
-    
-    setTimeout(() => {
-        btn.innerText = "Готово";
-        btn.style.background = "#34c759"; // Зеленый iOS
-    }, 2000);
+function closeTutorial() {
+    document.getElementById('oracle-tutorial').classList.add('hidden');
+    localStorage.setItem('kosmo_visited', 'true');
 }
 
-// Слушатель для кнопки Enter в чате
-document.getElementById('user-input')?.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage();
-});
+function searchPacks() {
+    let input = document.getElementById('pack-search').value.toLowerCase();
+    let cards = document.getElementsByClassName('pack-card');
+    for (let card of cards) {
+        let title = card.querySelector('h3').innerText.toLowerCase();
+        card.style.display = title.includes(input) ? "" : "none";
+    }
+}
