@@ -1,12 +1,218 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>LMSH TITAN | PRESTIGE iOS</title>
     <style>
-        /* Добавим маленькую правку для кнопки выхода */
-        .exit-btn { position: fixed; top: 20px; left: 20px; font-size: 24px; cursor: pointer; z-index: 100; opacity: 0.5; }
+        :root { 
+            --bg: #000000; --card: #1c1c1e; --accent: #00f2ff; 
+            --text: #ffffff; --input: #2c2c2e; --danger: #ff453a; 
+            --shadow: rgba(0, 242, 255, 0.3);
+            --base-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+        }
+        .light-theme { 
+            --bg: #f2f2f7; --card: #ffffff; --accent: #007aff; 
+            --text: #000000; --input: #e5e5ea; --shadow: rgba(0, 122, 255, 0.15);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--base-font); transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1); -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; display: flex; align-items: center; justify-content: center; -webkit-overflow-scrolling: touch; }
+        
+        body::before { content:''; position:fixed; inset:0; background:radial-gradient(circle at center, rgba(30,30,30,1) 0%, rgba(0,0,0,1) 100%); z-index:-1; filter:blur(20px); opacity:0.8; }
+
+        /* КНОПКА ВОЗВРАТА ДОМОЙ */
+        .home-btn { 
+            position: fixed; top: calc(20px + env(safe-area-inset-top)); left: 20px; 
+            font-size: 24px; cursor: pointer; z-index: 100; opacity: 0.6; 
+            background: rgba(255,255,255,0.1); width: 45px; height: 45px;
+            display: flex; align-items: center; justify-content: center; border-radius: 50%;
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        }
+        .home-btn:active { transform: scale(0.9); }
+
+        .screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 10; padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+        .hidden { opacity: 0; pointer-events: none; transform: scale(0.8) translateY(50px); filter:blur(10px); }
+        .screen:not(.hidden) { animation: iosPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+        @keyframes iosPop { to { opacity: 1; transform: scale(1) translateY(0); filter:blur(0); } }
+
+        .card { 
+            background: var(--card); width: 100%; max-width: 390px; padding: 30px; 
+            border-radius: 35px; backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.06); max-height: 85vh; overflow-y: auto; 
+            text-align: center; box-shadow: 0 15px 50px -10px var(--shadow), 0 0 20px -5px var(--accent);
+            animation: neonGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes neonGlow {
+            0%, 100% { box-shadow: 0 15px 50px -10px var(--shadow), 0 0 20px -5px var(--accent); }
+            50% { box-shadow: 0 15px 60px -5px var(--shadow), 0 0 30px 0px var(--accent); }
+        }
+
+        h1, h2 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 20px; }
+        input, textarea, select { 
+            width: 100%; background: var(--input); border: 1px solid rgba(255,255,255,0.05); 
+            padding: 16px; border-radius: 18px; color: var(--text); 
+            margin-bottom: 12px; font-size: 17px; outline: none;
+        }
+
+        .btn { 
+            width: 100%; padding: 18px; border-radius: 18px; border: none; 
+            background: var(--accent); color: #000; font-weight: 700; 
+            cursor: pointer; margin-top: 10px; font-size: 16px; 
+        }
+        .btn:active { transform: scale(0.96); opacity: 0.9; }
+
+        .settings-btn { position: fixed; top: calc(20px + env(safe-area-inset-top)); right: 20px; font-size: 28px; cursor: pointer; z-index: 100; opacity: 0.5; }
+        #timer { font-size: 54px; color: var(--accent); margin: 20px; font-weight: 800; letter-spacing: -2px; }
+        
+        .card::-webkit-scrollbar { width: 0px; }
     </style>
 </head>
-<body class="dark-theme">
-    <div class="exit-btn" onclick="location.href='index.html'">🔙</div>
-    </body>
+<body>
+
+    <div class="home-btn" onclick="location.href='index.html'">🔙</div>
+    
+    <div class="settings-btn" onclick="showScreen('screen-settings')">⚙️</div>
+
+    <div id="screen-main" class="screen">
+        <div class="card">
+            <h1 data-key="title">TITAN SYSTEM</h1>
+            <div id="timer">01:00</div>
+            <button class="btn" onclick="startSystem()" data-key="btn_activate">АКТИВИРОВАТЬ</button>
+            <button class="btn btn-text" style="background:none; color:var(--accent); margin-top:15px; border:none; cursor:pointer; font-weight:600;" onclick="showScreen('screen-search')" data-key="btn_archive">🔍 АРХИВ ДОНЕСЕНИЙ</button>
+        </div>
+    </div>
+
+    <div id="screen-form" class="screen hidden">
+        <div class="card">
+            <h2 data-key="form_title">ДОНЕСЕНИЕ</h2>
+            <input type="email" id="f-email" placeholder="Email">
+            <input type="text" id="f-sub" data-placeholder="ph_subject">
+            <select id="f-cat">
+                <option value="Обычный">🟢 Обычный</option>
+                <option value="Срочный">🔴 Срочный</option>
+                <option value="Идея">💡 Идея</option>
+                <option value="Отзыв">⭐️ Отзыв</option>
+            </select>
+            <textarea id="f-msg" data-placeholder="ph_msg" rows="3"></textarea>
+            <input type="text" id="f-pin" data-placeholder="ph_pin" maxlength="8" style="text-align:center; font-weight:700; border: 1px dashed var(--danger);">
+            <button class="btn" id="send-btn" onclick="sendData()" data-key="btn_send">ОТПРАВИТЬ</button>
+            <button class="btn" style="background:#3a3a3c; color:#fff; margin-top:10px;" onclick="showScreen('screen-main')" data-key="btn_cancel">ОТМЕНА</button>
+        </div>
+    </div>
+
+    <div id="screen-search" class="screen hidden">
+        <div class="card">
+            <h2 data-key="archive_title">АРХИВ ШТАБА</h2>
+            <input type="email" id="s-email" placeholder="Email">
+            <input type="password" id="s-pin" data-placeholder="ph_pin">
+            <button class="btn" onclick="searchData()" data-key="btn_find">НАЙТИ ОТВЕТЫ</button>
+            <div id="results" style="margin-top:20px;"></div>
+            <button class="btn" style="background:#3a3a3c; color:#fff;" onclick="showScreen('screen-main')" data-key="btn_back">ВЕРНУТЬСЯ</button>
+        </div>
+    </div>
+
+    <div id="screen-settings" class="screen hidden">
+        <div class="card">
+            <h2 data-key="settings_title">НАСТРОЙКИ</h2>
+            <button class="btn" style="background:var(--input); color:var(--text);" onclick="toggleLang()" id="lang-btn">LANGUAGE: RU</button>
+            <button class="btn" style="background:var(--input); color:var(--text);" onclick="toggleTheme()" data-key="btn_theme">СМЕНИТЬ ТЕМУ</button>
+            <button class="btn" style="background:#3a3a3c; color:#fff; margin-top:20px;" onclick="showScreen('screen-main')" data-key="btn_close">ЗАКРЫТЬ</button>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby8YweWa9ZP1nQKbrgvZvPiwVa2DLlaRgM-03xRFUJ5SSTv1WiSXpE9S6mG3aMtZhRahw/exec";
+        let currentLang = 'ru';
+
+        const langData = {
+            ru: {
+                title: "TITAN SYSTEM", btn_activate: "АКТИВИРОВАТЬ СВЯЗЬ", btn_archive: "🔍 АРХИВ ДОНЕСЕНИЙ",
+                form_title: "НОВОЕ ДОНЕСЕНИЕ", ph_subject: "Тема", ph_msg: "Текст сообщения...", ph_pin: "ПИН-КОД (8 знаков)",
+                btn_send: "ОТПРАВИТЬ", btn_cancel: "ОТМЕНА", archive_title: "АРХИВ ШТАБА", btn_find: "НАЙТИ ОТВЕТЫ",
+                btn_back: "ВЕРНУТЬСЯ", settings_title: "НАСТРОЙКИ", btn_theme: "СМЕНИТЬ ТЕМУ", btn_close: "ЗАКРЫТЬ",
+                alert_wait: "СВЯЗЬ...", staff: "ШТАБ: ", re_ph: "Ответ..."
+            },
+            en: {
+                title: "TITAN SYSTEM", btn_activate: "ACTIVATE COMM", btn_archive: "🔍 ARCHIVE",
+                form_title: "REPORT", ph_subject: "Subject", ph_msg: "Message...", ph_pin: "PIN (8 digits)",
+                btn_send: "SEND", btn_cancel: "CANCEL", archive_title: "STAFF ARCHIVE", btn_find: "SEARCH",
+                btn_back: "BACK", settings_title: "SETTINGS", btn_theme: "TOGGLE THEME", btn_close: "CLOSE",
+                alert_wait: "SYNCING...", staff: "STAFF: ", re_ph: "Reply..."
+            }
+        };
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function startSystem() {
+            let t = 60;
+            const timerDiv = document.getElementById('timer');
+            const interval = setInterval(() => {
+                t--;
+                timerDiv.innerText = `00:${t < 10 ? '0'+t : t}`;
+                if(t <= 0) { clearInterval(interval); showScreen('screen-form'); timerDiv.innerText = "01:00"; }
+            }, 10);
+        }
+
+        function applyLang() {
+            const lang = langData[currentLang];
+            document.querySelectorAll('[data-key]').forEach(el => el.innerText = lang[el.getAttribute('data-key')]);
+            document.querySelectorAll('[data-placeholder]').forEach(el => el.placeholder = lang[el.getAttribute('data-placeholder')]);
+        }
+
+        function toggleLang() {
+            currentLang = currentLang === 'ru' ? 'en' : 'ru';
+            document.getElementById('lang-btn').innerText = `LANGUAGE: ${currentLang.toUpperCase()}`;
+            applyLang();
+        }
+
+        function toggleTheme() { document.body.classList.toggle('light-theme'); }
+
+        function sendData() {
+            const btn = document.getElementById('send-btn');
+            const data = {
+                action: 'send', id: Date.now(),
+                email: document.getElementById('f-email').value,
+                sub: document.getElementById('f-sub').value,
+                cat: document.getElementById('f-cat').value,
+                msg: document.getElementById('f-msg').value,
+                pin: document.getElementById('f-pin').value
+            };
+            if(!data.email || !data.pin) return alert("Error: Email/PIN!");
+            btn.innerText = langData[currentLang].alert_wait;
+            btn.disabled = true;
+
+            fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) })
+            .finally(() => {
+                setTimeout(() => { alert("OK!"); location.reload(); }, 800);
+            });
+        }
+
+        async function searchData() {
+            const resDiv = document.getElementById('results');
+            const email = document.getElementById('s-email').value;
+            const pin = document.getElementById('s-pin').value;
+            resDiv.innerHTML = "SEARCHING...";
+
+            try {
+                const resp = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'search', email, pin }) });
+                const list = await resp.json();
+                resDiv.innerHTML = list.length ? "" : "NOT FOUND";
+                list.forEach(item => {
+                    resDiv.innerHTML += `<div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; margin-bottom:10px; text-align:left; border-left:4px solid var(--accent);">
+                        <small style="opacity:0.6">${item.sub}</small><br>
+                        <b>${langData[currentLang].staff}${item.reply}</b>
+                    </div>`;
+                });
+            } catch(e) { resDiv.innerHTML = "ACCESS DENIED"; }
+        }
+
+        applyLang();
+    </script>
+</body>
 </html>
