@@ -28,51 +28,80 @@ body {
     border: 0.5px solid rgba(255, 255, 255, 0.1);
 }
 
-/* НАВИГАЦИЯ И ВЫПАДАЮЩЕЕ МЕНЮ */
+/* НАВИГАЦИЯ */
 .top-nav {
     display: flex; justify-content: space-between; align-items: center;
     padding: 15px 20px; position: sticky; top: 0; z-index: 1000;
 }
 
+.site-logo { font-weight: 800; letter-spacing: 1px; color: white; font-size: 14px; }
 .nav-links { display: flex; align-items: center; gap: 15px; }
-.nav-link { color: #8e8e93; text-decoration: none; font-size: 12px; font-weight: 600; cursor: pointer; }
+.nav-link { color: #8e8e93; text-decoration: none; font-size: 12px; font-weight: 600; text-transform: uppercase; cursor: pointer; transition: 0.2s; }
+.nav-link:hover { color: white; }
 
-.dropdown { position: relative; }
-.dropdown-content {
-    position: absolute; top: 40px; right: 0; width: 200px;
-    border-radius: 15px; padding: 8px; z-index: 2000;
-}
-.dropdown-content a {
-    color: white; padding: 10px; text-decoration: none;
-    display: block; font-size: 13px; border-radius: 10px;
-}
-.dropdown-content a:hover { background: rgba(255,255,255,0.1); }
-
-/* ОКНО ИИ (ИСПРАВЛЕНО ДЛЯ МОБИЛОК) */
-.ai-window {
-    position: fixed; bottom: 15px; right: 15px;
-    width: calc(100% - 30px); max-width: 340px;
-    height: 450px; display: flex; flex-direction: column;
-    border-radius: 24px; z-index: 9999;
+/* ТОЧКИ ОРАКУЛА (ИСПРАВЛЕНО!) */
+.ai-trigger-container {
+    display: flex; align-items: center; gap: 8px; /* Расстояние между точками и текстом */
+    cursor: pointer;
 }
 
-.ai-header { padding: 15px; border-bottom: 0.5px solid rgba(255,255,255,0.1); display: flex; gap: 10px; }
+.ultra-neon {
+    position: relative;
+    width: 25px; /* Общая ширина контейнера для точек */
+    height: 12px; /* Общая высота контейнера для точек */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dot {
+    position: absolute;
+    width: 10px; /* Размер точки */
+    height: 10px; /* Размер точки */
+    border-radius: 50%;
+    filter: blur(1.5px); /* Легкий неон */
+}
+
+.d1 {
+    background: var(--ios-blue);
+    left: 0; /* Привязка строго к левому краю контейнера */
+    animation: ultraPulseBlue 1.8s infinite alternate ease-in-out;
+}
+
+.d2 {
+    background: var(--ios-purple);
+    right: 0; /* Привязка строго к правому краю контейнера */
+    animation: ultraPulsePurple 1.8s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes ultraPulseBlue {
+    0% { box-shadow: 0 0 10px var(--ios-blue); transform: scale(0.9); }
+    100% { box-shadow: 0 0 25px var(--ios-blue); transform: scale(1.1); }
+}
+
+@keyframes ultraPulsePurple {
+    0% { box-shadow: 0 0 10px var(--ios-purple); transform: scale(0.9); }
+    100% { box-shadow: 0 0 25px var(--ios-purple); transform: scale(1.1); }
+}
+
+/* ОКНО ИИ И ПРОЧЕЕ (ОСТАВЛЯЕМ КАК ЕСТЬ, ЧТОБЫ ИСПРАВИТЬ ТОЛЬКО ТОЧКИ) */
+.ai-window { position: fixed; bottom: 15px; right: 15px; width: calc(100% - 30px); max-width: 340px; height: 450px; display: flex; flex-direction: column; border-radius: 24px; z-index: 9999; }
+.ai-header { padding: 15px; border-bottom: 0.5px solid rgba(255,255,255,0.1); display: flex; gap: 10px; align-items: center; }
 #chat-history { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
 .input-area { padding: 15px; display: flex; gap: 10px; }
 #user-input { flex: 1; background: rgba(255,255,255,0.1); border: none; padding: 10px 15px; border-radius: 20px; color: white; outline: none; }
-#send-btn { background: white; border: none; width: 35px; height: 35px; border-radius: 50%; font-weight: bold; cursor: pointer; }
+#send-btn { background: white; border: none; width: 35px; height: 35px; border-radius: 50%; font-weight: bold; cursor: pointer; color: black; font-size: 18px; }
 
-/* КАРТОЧКИ И ПОИСК */
 .container { padding: 20px; }
 #pack-search { width: 100%; padding: 12px; border-radius: 12px; border: none; background: rgba(255,255,255,0.1); color: white; margin-bottom: 20px; }
 .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
 .main-preview { width: 100%; border-radius: 20px 20px 0 0; }
 .card-content { padding: 15px; }
-.ios-btn-green { background: var(--ios-green); color: white; border: none; padding: 10px; width: 100%; border-radius: 12px; font-weight: bold; }
+.ios-btn-green { background: var(--ios-green); color: white; border: none; padding: 10px; width: 100%; border-radius: 12px; font-weight: bold; font-size: 14px; }
+.rating { color: #ffcc00; font-size: 0.9rem; margin-bottom: 10px; }
+
+.msg { padding: 10px; border-radius: 15px; font-size: 13px; max-width: 80%; }
+.msg.user { background: var(--ios-blue); align-self: flex-end; }
+.msg.ai { background: rgba(255,255,255,0.1); align-self: flex-start; }
 
 .hidden { display: none !important; }
-
-/* АНИМАЦИЯ НЕОНА */
-.ultra-neon .dot { width: 10px; height: 10px; border-radius: 50%; position: absolute; }
-.d1 { background: var(--ios-blue); left: 0; box-shadow: 0 0 15px var(--ios-blue); }
-.d2 { background: var(--ios-purple); right: 0; box-shadow: 0 0 15px var(--ios-purple); }
