@@ -14,26 +14,64 @@
     <div class="site-logo">KOSMO STORE</div>
     <div class="nav-links">
         <a href="#" class="nav-link">ГЛАВНАЯ</a>
-        <a href="#" class="nav-link">НОВОВВЕДЕНИЯ</a>
         
-        <div class="ai-trigger-container" onclick="toggleAI()">
-            <div class="ai-icon-mini ultra-neon">
-                <div class="dot d1"></div>
-                <div class="dot d2"></div>
+        <div class="dropdown">
+            <div class="ai-trigger-container" onclick="toggleDropdown()">
+                <div class="ai-icon-mini ultra-neon">
+                    <div class="dot d1"></div>
+                    <div class="dot d2"></div>
+                </div>
+                <span class="nav-link">ОРАКУЛ <small>▼</small></span>
             </div>
-            <span class="ai-hint">ОРАКУЛ</span>
+            
+            <div id="ai-dropdown-content" class="dropdown-content ios-blur hidden">
+                <a href="#" onclick="toggleAI(); closeDropdown()">🔮 ОРАКУЛ ИИ (NEW)</a>
+                <a href="ССЫЛКА_НА_ДЕМО" target="_blank">🤖 ДЕМО ПОМОЩНИК</a>
+                <a href="ССЫЛКА_НА_ЛМСХ" target="_blank">📝 ЛМСХ ФОРМА</a>
+            </div>
         </div>
         
         <a href="#" class="nav-link">НАСТРОЙКИ</a>
     </div>
 </nav>
 
-<div id="oracle-tutorial" class="tutorial-overlay hidden">
-    <div class="oracle-message ios-card">
-        <div class="ai-icon-large ultra-neon">
-            <div class="dot d1"></div>
-            <div class="dot d2"></div>
+<div class="container">
+    <div class="search-section">
+        <input type="text" id="pack-search" placeholder="Поиск версий..." onkeyup="searchPacks()">
+    </div>
+
+    <div class="market-grid">
+        <div class="pack-card ios-card" onclick="openPack('pack-30822')">
+            <div class="card-image">
+                <img src="unnamed (2).png" class="main-preview" alt="Pack Preview">
+            </div>
+            <div class="card-content">
+                <h3>KL Preview 30822</h3>
+                <div class="rating">4.9 ★★★★★</div>
+                <button class="ios-btn-green">Установить</button>
+            </div>
         </div>
+    </div>
+</div>
+
+<div id="ai-interface" class="ai-window hidden ios-blur">
+    <div class="ai-header">
+        <div class="ai-status-dots">
+            <span class="circle c1"></span>
+            <span class="circle c2"></span>
+        </div>
+        <span class="header-title">LMLSH ORACLE</span>
+    </div>
+    <div id="chat-history"></div>
+    <div class="input-area">
+        <input type="text" id="user-input" placeholder="Введите вопрос...">
+        <button id="send-btn" onclick="sendMessage()">↑</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
         <h3>ПРИВЕТ, Я ОРАКУЛ</h3>
         <p>Я твой персональный помощник по сайту. Можешь спросить меня о чем угодно!</p>
         <button class="ios-btn-primary" onclick="closeTutorial()">ОГО, КРУТО!</button>
