@@ -2,112 +2,215 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Kosmo Level Store v.3.3</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --bg: #0b0b0d;
+            --nav-bg: rgba(18, 18, 20, 0.8);
+            --card-bg: rgba(28, 28, 30, 0.6);
+            --accent-cyan: #00f2ff;
+            --accent-purple: #bf5af2;
+            --accent-green: #34c759;
+            --text-main: #ffffff;
+            --text-dim: #8e8e93;
+            --ios-blur: blur(20px);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; }
+        body { background: var(--bg); color: var(--text-main); overflow-x: hidden; min-height: 100vh; }
+
+        /* Задний фон с эффектом свечения */
+        .glow { position: fixed; width: 300px; height: 300px; filter: blur(100px); z-index: -1; opacity: 0.15; }
+        .glow-1 { top: -50px; left: -50px; background: var(--accent-cyan); }
+        .glow-2 { bottom: -50px; right: -50px; background: var(--accent-purple); }
+
+        /* Навигация (Фикс вылета) */
+        nav {
+            position: fixed; top: 0; width: 100%; height: 64px;
+            background: var(--nav-bg); backdrop-filter: var(--ios-blur); -webkit-backdrop-filter: var(--ios-blur);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; z-index: 1000; border-bottom: 0.5px solid rgba(255,255,255,0.1);
+        }
+        .logo { font-size: 18px; font-weight: 700; }
+        .nav-right { display: flex; gap: 15px; align-items: center; }
+        .nav-item { font-size: 13px; font-weight: 600; color: var(--text-dim); text-decoration: none; cursor: pointer; }
+
+        /* Выпадающее меню Оракула */
+        .dropdown { position: relative; display: flex; align-items: center; }
+        .dots { display: flex; gap: 4px; margin-right: 6px; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; }
+        .dot-c { background: var(--accent-cyan); box-shadow: 0 0 8px var(--accent-cyan); }
+        .dot-p { background: var(--accent-purple); box-shadow: 0 0 8px var(--accent-purple); }
+        
+        .dropdown-menu {
+            position: absolute; top: 50px; right: 0; width: 220px;
+            background: rgba(25, 25, 27, 0.98); backdrop-filter: var(--ios-blur);
+            border-radius: 14px; border: 0.5px solid rgba(255,255,255,0.1);
+            padding: 8px; display: none; flex-direction: column; z-index: 1001;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .dropdown-menu.show { display: flex; animation: slideIn 0.2s ease-out; }
+        .dropdown-menu a {
+            padding: 12px; color: var(--text-main); text-decoration: none;
+            font-size: 14px; border-radius: 10px; transition: 0.2s;
+        }
+        .dropdown-menu a:hover { background: rgba(255,255,255,0.1); }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Контент */
+        .container { padding: 84px 20px 40px; max-width: 600px; margin: 0 auto; }
+        .search-bar {
+            width: 100%; background: rgba(255,255,255,0.08); border: none;
+            padding: 14px 20px; border-radius: 12px; color: white; font-size: 16px;
+            margin-bottom: 25px; outline: none;
+        }
+
+        /* Карточка Пака */
+        .card {
+            background: var(--card-bg); border-radius: 24px; overflow: hidden;
+            border: 0.5px solid rgba(255,255,255,0.1); margin-bottom: 20px;
+        }
+        .card-img { width: 100%; height: 200px; background: #1c1c1e; }
+        .card-img img { width: 100%; height: 100%; object-fit: cover; }
+        .card-body { padding: 20px; }
+        .card-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+        .card-meta { color: var(--text-dim); font-size: 13px; margin-bottom: 16px; }
+        
+        .btn-group { display: flex; gap: 10px; }
+        .btn {
+            flex: 1; padding: 14px; border-radius: 14px; border: none;
+            font-weight: 700; cursor: pointer; transition: 0.2s;
+        }
+        .btn-green { background: var(--accent-green); color: white; }
+        .btn-blur { background: rgba(255,255,255,0.1); color: white; }
+        .btn:active { transform: scale(0.97); }
+
+        /* ВСПЛЫВАЮЩЕЕ ОКНО ОТЗЫВОВ (iOS Style) */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px); z-index: 2000;
+            display: none; align-items: flex-end;
+        }
+        .modal {
+            width: 100%; background: #1c1c1e; border-radius: 24px 24px 0 0;
+            padding: 20px; padding-bottom: 40px;
+            transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.3, 1, 0.4, 1);
+        }
+        .modal.open { transform: translateY(0); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .handle { width: 40px; height: 5px; background: rgba(255,255,255,0.2); border-radius: 3px; margin: 0 auto 15px; }
+        
+        .review-box {
+            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 16px; margin-bottom: 10px;
+        }
+        .rev-user { font-weight: 600; font-size: 14px; color: var(--accent-cyan); }
+        .rev-text { font-size: 14px; margin-top: 4px; opacity: 0.9; }
+    </style>
 </head>
 <body>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
 
-<div class="main-bg"></div>
-
-<nav class="top-nav ios-blur">
-    <div class="site-logo">KOSMO STORE</div>
-    <div class="nav-links">
-        <a href="#" class="nav-link">ГЛАВНАЯ</a>
-        
-        <div class="dropdown">
-            <div class="ai-trigger-container" onclick="toggleDropdown()">
-                <div class="ultra-neon">
-                    <div class="dot d1"></div>
-                    <div class="dot d2"></div>
+    <nav>
+        <div class="logo">KOSMO STORE</div>
+        <div class="nav-right">
+            <span class="nav-item">ГЛАВНАЯ</span>
+            <div class="dropdown" onclick="toggleMenu(event)">
+                <div class="dots">
+                    <div class="dot dot-c"></div>
+                    <div class="dot dot-p"></div>
                 </div>
-                <span class="nav-link">ОРАКУЛ <small style="font-size: 8px;">▼</small></span>
-            </div>
-            
-            <div id="ai-dropdown-content" class="dropdown-content ios-blur hidden">
-                <a href="#" onclick="toggleAI(); closeDropdown()">🔮 ОРАКУЛ ИИ (NEW)</a>
-                <a href="demo.html">🤖 ДЕМО ПОМОЩНИК</a>
-                <a href="titan.html">📝 ЛМСХ ФОРМА</a>
+                <span class="nav-item">ОРАКУЛ ▼</span>
+                <div class="dropdown-menu" id="dd-menu">
+                    <a href="#" onclick="alert('Оракул ИИ в разработке')">🔮 ОРАКУЛ ИИ (NEW)</a>
+                    <a href="demo.html">🤖 ДЕМО ПОМОЩНИК</a>
+                    <a href="titan.html">📝 ЛМСХ ФОРМА</a>
+                </div>
             </div>
         </div>
-        
-        <a href="#" class="nav-link">НАСТРОЙКИ</a>
-    </div>
-</nav>
+    </nav>
 
-<div class="container">
-    <div class="search-section">
-        <input type="text" id="pack-search" placeholder="Поиск версий..." onkeyup="searchPacks()">
-    </div>
+    <div class="container">
+        <input type="text" class="search-bar" placeholder="Поиск..." onkeyup="search(this)">
 
-    <div class="market-grid" id="market-grid">
-        <div class="pack-card ios-card" data-name="kl preview 30822">
-            <div class="card-image">
-                <img src="unnamed (2).png" class="main-preview" alt="Pack Preview">
-            </div>
-            <div class="card-content">
-                <h3>KL Preview 30822</h3>
-                <div class="rating">4.9 ★★★★★</div>
-                <button class="ios-btn-green" onclick="downloadPack('ССЫЛКА_НА_ФАЙЛ_ТУТ', this)">Установить</button>
+        <div id="grid">
+            <div class="card" data-name="kl preview 30822">
+                <div class="card-img">
+                    <img src="unnamed (2).png" alt="Preview">
+                </div>
+                <div class="card-body">
+                    <div class="card-title">KL Preview 30822</div>
+                    <div class="card-meta">4.9 ★★★★★ • 1.2 GB</div>
+                    <div class="btn-group">
+                        <button class="btn btn-green" onclick="install(this)">УСТАНОВИТЬ</button>
+                        <button class="btn btn-blur" onclick="openReviews('KL Preview 30822')">ОТЗЫВЫ</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div id="ai-interface" class="ai-window hidden ios-blur">
-    <div class="ai-header">
-        <div class="ai-status-dots">
-            <span class="circle c1"></span>
-            <span class="circle c2"></span>
+    <div class="modal-overlay" id="overlay" onclick="closeReviews(event)">
+        <div class="modal" id="modal">
+            <div class="handle"></div>
+            <div class="modal-header">
+                <h2 id="modal-title">Отзывы</h2>
+                <button style="background:none; border:none; color:var(--accent-purple); font-weight:bold;" onclick="closeReviews(null)">Закрыть</button>
+            </div>
+            <div id="reviews-list"></div>
         </div>
-        <span class="header-title">LMSH ORACLE</span>
-        <button class="close-ai" onclick="toggleAI()">✕</button>
     </div>
-    <div id="chat-history">
-        <div class="msg ai">Система 3.3 готова. Оракул на связи. Чем могу помочь?</div>
-    </div>
-    <div class="input-area">
-        <input type="text" id="user-input" placeholder="Введите вопрос..." onkeypress="handleChatEnter(event)">
-        <button id="send-btn" onclick="sendMessage()">↑</button>
-    </div>
-</div>
 
-<script src="script.js"></script>
-<script>
-    // Саня, вот логика для кнопки установить и поиска прямо тут, чтоб не потерялась
-    function downloadPack(url, btn) {
-        const originalText = btn.innerText;
-        btn.innerText = "ПОДГОТОВКА...";
-        btn.style.opacity = "0.7";
-        
-        setTimeout(() => {
-            btn.innerText = "ЗАГРУЗКА...";
-            window.open(url, '_blank');
-            
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.style.opacity = "1";
-            }, 2000);
-        }, 1000);
-    }
-
-    function searchPacks() {
-        let input = document.getElementById('pack-search').value.toLowerCase();
-        let cards = document.getElementsByClassName('pack-card');
-        
-        for (let i = 0; i < cards.length; i++) {
-            let name = cards[i].getAttribute('data-name');
-            if (name.includes(input)) {
-                cards[i].style.display = "block";
-            } else {
-                cards[i].style.display = "none";
-            }
+    <script>
+        function toggleMenu(e) {
+            e.stopPropagation();
+            document.getElementById('dd-menu').classList.toggle('show');
         }
-    }
 
-    function handleChatEnter(e) {
-        if (e.key === 'Enter') sendMessage();
-    }
-</script>
+        window.onclick = () => document.getElementById('dd-menu').classList.remove('show');
+
+        function search(el) {
+            let val = el.value.toLowerCase();
+            document.querySelectorAll('.card').forEach(c => {
+                c.style.display = c.dataset.name.includes(val) ? 'block' : 'none';
+            });
+        }
+
+        function install(btn) {
+            btn.innerText = "ЗАГРУЗКА...";
+            setTimeout(() => { btn.innerText = "УСТАНОВИТЬ"; window.open('#'); }, 2000);
+        }
+
+        // Данные отзывов (можно дополнять)
+        const allReviews = {
+            'KL Preview 30822': [
+                { u: 'Мурзик', t: 'Лучший пак в моей жизни! Блюр просто секс.' },
+                { u: 'Хахми', t: 'На 5 уровне мамонты плачут. Ставлю 5 звезд.' },
+                { u: 'User_404', t: 'А когда выйдет обновление Оракула?' }
+            ]
+        };
+
+        function openReviews(name) {
+            const list = document.getElementById('reviews-list');
+            document.getElementById('modal-title').innerText = name;
+            list.innerHTML = (allReviews[name] || []).map(r => `
+                <div class="review-box">
+                    <div class="rev-user">${r.u}</div>
+                    <div class="rev-text">${r.t}</div>
+                </div>
+            `).join('') || 'Отзывов пока нет...';
+
+            document.getElementById('overlay').style.display = 'flex';
+            setTimeout(() => document.getElementById('modal').classList.add('open'), 10);
+        }
+
+        function closeReviews(e) {
+            if (e && e.target !== document.getElementById('overlay')) return;
+            document.getElementById('modal').classList.remove('open');
+            setTimeout(() => document.getElementById('overlay').style.display = 'none', 400);
+        }
+    </script>
 </body>
 </html>
