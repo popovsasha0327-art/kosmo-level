@@ -1,68 +1,41 @@
-// --- 1. ЛОГИКА ОКНА ОРАКУЛА ---
-function openOracle() {
-    // Закрываем модалку скачивания, если она открыта
-    closeDownloadModal();
-    const modal = document.getElementById('oracle-modal');
-    if(modal) modal.classList.remove('hidden');
+// --- 1. СИСТЕМА СОХРАНЕНИЯ ПРОФИЛЯ ---
+// Чтобы сохранить данные "навсегда" в браузере, используем localStorage.
+
+function changeProfile() {
+    const newName = prompt("Введите имя Агента штаба:");
+    if (newName) {
+        localStorage.setItem('LMSH_USER_NAME', newName); // Сохраняем
+        updateProfileUI();
+    }
 }
 
-function closeOracle() {
-    const modal = document.getElementById('oracle-modal');
-    if(modal) modal.classList.add('hidden');
+function updateProfileUI() {
+    const savedName = localStorage.getItem('LMSH_USER_NAME') || "Агент";
+    const btn = document.getElementById('user-link');
+    if (btn) btn.innerText = `Профиль (${savedName[0].toUpperCase()})`;
 }
 
-function oracleProcess() {
-    const query = document.getElementById('oracle-query').value;
-    if(!query) return;
-    alert("Оракул анализирует: " + query + "\n\nСтатус: Доступ запрещен. Требуется ключ 🔑)");
-}
-
-// --- 2. ЛОГИКА ОКНА СКАЧИВАНИЯ ---
-function openDownloadModal(ver) {
+// --- 2. УПРАВЛЕНИЕ ОКНАМИ (MODALS) ---
+function openDownloadModal(ver, title) {
     const modal = document.getElementById('download-modal');
-    const verLabel = document.getElementById('modal-ver');
-    if(verLabel) verLabel.innerText = ver;
-    if(modal) modal.classList.remove('hidden');
+    document.getElementById('modal-ver').innerText = ver;
+    document.getElementById('modal-title').innerText = "Kosmo Level " + title;
+    modal.classList.remove('hidden');
 }
 
 function closeDownloadModal() {
-    const modal = document.getElementById('download-modal');
-    if(modal) modal.classList.add('hidden');
+    document.getElementById('download-modal').classList.add('hidden');
 }
 
-// --- 3. ЭПИЧЕСКАЯ ПОДСВЕТКА МЕНЮ (Каждые 2.5 минуты) ---
-function initEpicHighlight() {
+// --- 3. ЭПИЧЕСКАЯ ПОДСВЕТКА (2:30) ---
+setInterval(() => {
     const menu = document.getElementById('helpers-menu');
-    if(!menu) return;
+    menu.classList.add('epic-purple');
+    setTimeout(() => menu.classList.remove('epic-purple'), 5000);
+}, 150000);
 
-    setInterval(() => {
-        // Активируем фиолетовый неон
-        menu.classList.add('epic-purple');
-        
-        // Через 5 секунд возвращаем как было
-        setTimeout(() => {
-            menu.classList.remove('epic-purple');
-        }, 5000);
-
-    }, 150000); // 150 000 мс = 2 минуты 30 секунд
-}
-
-// --- 4. ЗАПУСК СИСТЕМЫ ---
+// --- 4. ЗАПУСК ПРИ ЗАГРУЗКЕ ---
 window.onload = () => {
-    initEpicHighlight();
-    
-    // Проверка профиля (Просто для красоты)
-    const name = localStorage.getItem('LMSH_NAME') || "Агент";
-    const userLink = document.getElementById('user-link');
-    if (userLink) {
-        userLink.innerText = "Профиль (" + name[0].toUpperCase() + ")";
-    }
+    updateProfileUI();
+    // Тут можно добавить загрузку истории чата из localStorage.getItem('CHAT_HISTORY')
 };
-
-// Закрытие модалок по клику на фон
-window.onclick = function(event) {
-    const oracle = document.getElementById('oracle-modal');
-    const download = document.getElementById('download-modal');
-    if (event.target == oracle) closeOracle();
-    if (event.target == download) closeDownloadModal();
-}
