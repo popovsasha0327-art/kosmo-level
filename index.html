@@ -3,107 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>LMSH PRESTIGE - THE COMPLETE STORE</title>
+    <title>LMSH PRESTIGE - GLOBAL STORE</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="base-nav">
-    <div class="logo-site">LMSH PRESTIGE</div>
-    <nav class="nav-right">
-        <a href="index.html">Kosmo Level Store</a>
-        <a href="#">Kosmogram</a>
+<header class="glass-nav">
+    <div class="logo">LMSH PRESTIGE</div>
+    <nav class="nav-links">
+        <a href="index.html" class="nav-item active">Kosmo Level Store</a>
+        <a href="#" class="nav-item">Kosmogram</a>
         
         <div class="dropdown" id="helpers-menu">
             <button class="dropbtn">Помощники ▼</button>
-            <div class="dropdown-content">
-                <div class="helper-item" onclick="openOracle()">
-                    <div class="dots-wrapper"><span class="dot-purple"></span><span class="dot-blue"></span></div>
-                    <b>Оракул ИИ</b>
+            <div class="dropdown-content glass-effect">
+                <div class="helper-option" onclick="openOracle()">
+                    <div class="indicator-dots"><span class="p-dot"></span><span class="b-dot"></span></div>
+                    <span>Оракул ИИ</span>
                 </div>
-                <div class="helper-item" onclick="alert('Быстрый помощник активен!')">
-                    <div class="q-circle">?</div> 
-                    <b>Быстрый Помощник</b>
+                <div class="helper-option" onclick="openAssistant()">
+                    <div class="q-mark">?</div>
+                    <span>Быстрый Помощник</span>
                 </div>
-                <div class="helper-item" onclick="alert('Форма восстановления открыта')">
-                    <span class="book-icon">≡</span> 
-                    <b>Форма Восстановления</b>
+                <div class="helper-option" onclick="openRecovery()">
+                    <div class="rec-icon">≡</div>
+                    <span>Форма Восстановления</span>
                 </div>
             </div>
         </div>
 
-        <a href="#about">О Сайте</a>
-        <button id="user-link" class="login-btn" onclick="changeProfile()">Профиль (О)</button>
+        <a href="#about" class="nav-item">О Сайте</a>
+        <button id="profile-btn" class="profile-pill" onclick="handleProfile()">Профиль (О)</button>
     </nav>
 </header>
 
-<main class="store-content">
-    
-    <section class="pack-section">
-        <h2 class="section-title">Паки для предрегистрации</h2>
-        <p class="warning-text">Утилита по Предрегистрации может уведомлять об открытии пака позже чем надо.</p>
-        <div class="packs-grid">
-            <div class="pack-card" onclick="openDownloadModal('3.4', 'Insider')">
-                <div class="img-placeholder">3.4</div>
+<main class="content-wrapper">
+    <section class="store-section">
+        <h2 class="category-title">Паки для предрегистрации</h2>
+        <p class="alert-text">Утилита по Предрегистрации может не работать или уведомлять позже чем надо</p>
+        <div class="grid">
+            <div class="card" onclick="showPack('3.4', 'Insider', 'insider.png')">
+                <div class="card-thumb insider-bg">3.4</div>
                 <h3>Kosmo Level 3.4</h3>
             </div>
         </div>
     </section>
 
-    <section class="pack-section">
-        <h2 class="section-title">Preview Packs</h2>
-        <div class="packs-grid">
-            <div class="pack-card" onclick="openDownloadModal('2.8.1', 'Preview')">
-                <div class="img-placeholder">2.8.1</div>
+    <section class="store-section">
+        <h2 class="category-title">Preview Packs</h2>
+        <div class="grid">
+            <div class="card" onclick="showPack('2.8.1', 'Preview', 'preview281.png')">
+                <div class="card-thumb">2.8.1</div>
                 <h3>Kosmo Level 2.8.1</h3>
             </div>
-            <div class="pack-card" onclick="openDownloadModal('2.1', 'Traitor')">
-                <div class="img-placeholder">TRAITOR</div>
+            <div class="card" onclick="showPack('2.1', 'Traitor', 'traitor.png')">
+                <div class="card-thumb traitor-glow">2.1</div>
                 <h3>Traitor Level 2.1</h3>
             </div>
         </div>
     </section>
 
-    <section class="pack-section">
-        <h2 class="section-title">Паки Kosmo Level</h2>
-        <div class="packs-grid main-packs">
-            <div class="pack-card" onclick="openDownloadModal('3.3', 'Project Circle')">
-                <div class="img-placeholder circle">3.3</div>
-                <h3>Kosmo Level 3.3</h3>
+    <section class="store-section">
+        <h2 class="category-title">Паки Kosmo Level</h2>
+        <div class="grid" id="main-packs-grid">
             </div>
-            <div class="pack-card" onclick="openDownloadModal('3.2', 'Beta Legend')">
-                <div class="img-placeholder">3.2</div>
-                <h3>Kosmo Level 3.2</h3>
-            </div>
-            <script>
-                const versions = ["3.1", "3.0", "29000", "2.8", "2.5", "2.2", "2.0", "1.0"];
-                versions.forEach(v => {
-                    document.write(`
-                        <div class="pack-card" onclick="openDownloadModal('${v}', 'Classic')">
-                            <div class="img-placeholder">${v}</div>
-                            <h3>Kosmo Level ${v}</h3>
-                        </div>
-                    `);
-                });
-            </script>
-        </div>
     </section>
-
 </main>
 
-<div id="download-modal" class="modal-overlay hidden">
-    <div class="download-card">
-        <button class="close-btn" onclick="closeDownloadModal()">×</button>
-        <div class="download-header">
-            <img src="kosmolevel30822.png" id="modal-img" class="pack-img-1to1">
-            <div>
-                <h2 id="modal-title">Kosmo Level</h2>
-                <p>Версия: <span id="modal-ver">3.2</span></p>
+<div id="pack-modal" class="modal hidden">
+    <div class="modal-card glass-effect">
+        <button class="close-modal" onclick="closePack()">×</button>
+        <div class="modal-body">
+            <img src="kosmolevel30822.png" id="modal-img" class="pack-preview">
+            <h2 id="modal-name">Kosmo Level</h2>
+            <p>Версия: <span id="modal-version">3.3</span></p>
+            <div class="modal-btns">
+                <button class="btn-main" onclick="startDownload()">Скачать</button>
+                <button class="btn-sub" onclick="openOracle()">Спросить Оракула</button>
             </div>
         </div>
-        <div class="download-actions">
-            <button class="main-dl-btn" onclick="alert('Начинаю загрузку...')">Скачать Пак</button>
-            <button class="settings-btn" onclick="openOracle()">Спросить Оракула о Паке</button>
+    </div>
+</div>
+
+<div id="oracle-window" class="modal hidden">
+    <div class="oracle-container glass-effect">
+        <div class="oracle-header">
+            <span>ORACLE PRESTIGE</span>
+            <button onclick="closeOracle()">×</button>
+        </div>
+        <div id="chat-box" class="chat-area">
+            </div>
+        <div class="chat-input-row">
+            <input type="text" id="user-input" placeholder="Введите запрос...">
+            <button onclick="sendMessage()">↑</button>
         </div>
     </div>
 </div>
