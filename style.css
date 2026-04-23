@@ -1,56 +1,69 @@
 :root {
-    --bg: #000000;
-    --card: rgba(28, 28, 30, 0.9);
-    --accent: #00f2ff;
-    --user-bg: #007aff;
-    --ai-bg: #262629;
-    --purple: #a855f7;
-    --blue: #3b82f6;
-    --glass: rgba(255, 255, 255, 0.05);
+    --bg: #000; --card: rgba(20, 20, 22, 0.95); --accent: #00f2ff;
+    --purple: #a855f7; --blue: #3b82f6; --glass: rgba(255, 255, 255, 0.05);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-
-body { background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; background-image: radial-gradient(circle at top, #1a1a1a 0%, #000 100%); }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
+body { background: var(--bg); color: #fff; overflow-x: hidden; background-image: radial-gradient(circle at top, #111 0%, #000 100%); }
 
 /* ШАПКА */
 header {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 15px 5%; background: rgba(0,0,0,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    padding: 15px 5%; background: rgba(0,0,0,0.8); backdrop-filter: blur(15px);
     border-bottom: 1px solid var(--glass); position: fixed; top: 0; width: 100%; z-index: 1000;
 }
-
 .logo-site { font-weight: 900; font-size: 22px; color: var(--accent); letter-spacing: 1px; }
-
 .nav-right { display: flex; align-items: center; gap: 20px; }
-.nav-right a { color: #fff; text-decoration: none; font-size: 14px; opacity: 0.7; transition: 0.3s; white-space: nowrap; }
+.nav-right a { color: #fff; text-decoration: none; font-size: 14px; opacity: 0.7; }
 
-/* ВЫПАДАЮЩЕЕ МЕНЮ */
+/* DROPDOWN */
 .dropdown { position: relative; }
-.dropbtn { background: none; border: none; color: #fff; cursor: pointer; font-size: 14px; font-weight: 600; padding: 10px; display: flex; align-items: center; gap: 5px; }
 .dropdown-content {
-    display: none; position: absolute; right: 0; top: 100%; background: #1c1c1e;
-    min-width: 250px; border-radius: 22px; border: 1px solid var(--glass); padding: 10px; z-index: 2000;
+    display: none; position: absolute; right: 0; top: 100%; 
+    background: #1c1c1e; min-width: 240px; border-radius: 20px; 
+    border: 1px solid var(--glass); padding: 10px; z-index: 2000;
 }
 .dropdown:hover .dropdown-content { display: block; }
-
-.helper-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+.helper-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; cursor: pointer; }
 .helper-item:hover { background: var(--glass); }
 
-.dots-group { display: flex; gap: 4px; }
-.dot-purple { width: 10px; height: 10px; background: var(--purple); border-radius: 50%; box-shadow: 0 0 8px var(--purple); }
-.dot-blue { width: 10px; height: 10px; background: var(--blue); border-radius: 50%; box-shadow: 0 0 8px var(--blue); }
+/* МОДАЛЬНОЕ ОКНО (ОРАКУЛ) */
+.modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+    display: flex; align-items: center; justify-content: center; z-index: 5000;
+    backdrop-filter: blur(10px); transition: 0.3s;
+}
+.hidden { display: none !important; opacity: 0; pointer-events: none; }
+
+.oracle-card {
+    background: var(--card); width: 90%; max-width: 500px;
+    border-radius: 40px; border: 1px solid rgba(0, 242, 255, 0.2);
+    padding: 35px; position: relative; overflow: hidden;
+}
+.oracle-glow {
+    position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
+    width: 200px; height: 100px; background: var(--accent);
+    filter: blur(80px); opacity: 0.2; pointer-events: none;
+}
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+.close-btn { background: none; border: none; color: #fff; font-size: 30px; cursor: pointer; }
+
+.status-line { font-size: 12px; letter-spacing: 2px; margin-bottom: 10px; }
+.active { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+.oracle-text { font-size: 15px; opacity: 0.7; line-height: 1.6; margin-bottom: 25px; }
+
+.oracle-input-wrap { display: flex; gap: 10px; }
+.oracle-input-wrap input {
+    flex: 1; background: #000; border: 1px solid #333; padding: 15px;
+    border-radius: 15px; color: #fff; outline: none;
+}
+.oracle-input-wrap button {
+    background: var(--accent); color: #000; border: none; padding: 0 25px;
+    border-radius: 15px; font-weight: bold; cursor: pointer;
+}
+
+/* ИКОНКИ ТОЧЕК */
+.dots-group { display: flex; gap: 5px; }
+.dot-purple { width: 10px; height: 10px; background: var(--purple); border-radius: 50%; box-shadow: 0 0 10px var(--purple); }
+.dot-blue { width: 10px; height: 10px; background: var(--blue); border-radius: 50%; box-shadow: 0 0 10px var(--blue); }
 .q-circle { width: 22px; height: 22px; border: 1.5px solid #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
-
-/* ПАКИ */
-.content { padding: 120px 5% 50px; text-align: center; }
-.main-title { font-size: 30px; margin-bottom: 40px; color: var(--accent); }
-.packs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-.pack-card { background: var(--card); padding: 30px; border-radius: 35px; border: 1px solid var(--glass); text-align: left; position: relative; transition: 0.3s; }
-.pack-card:hover { transform: translateY(-5px); border-color: var(--accent); }
-.pack-version { font-size: 50px; font-weight: 900; opacity: 0.05; position: absolute; right: 10px; top: 0; }
-
-.download-btn { width: 100%; padding: 12px; border-radius: 12px; border: none; background: var(--glass); color: #fff; cursor: pointer; margin-top: 15px; }
-.download-btn.lock { background: #222; color: #555; cursor: not-allowed; }
-
-.login-btn { background: var(--accent); color: #000 !important; padding: 8px 18px; border-radius: 12px; font-weight: bold; opacity: 1 !important; }
