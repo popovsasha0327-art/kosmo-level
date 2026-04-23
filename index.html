@@ -3,38 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LMSH PRESTIGE HUB</title>
+    <title>LMSH PRESTIGE 2026</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <div class="nav-links">
-            <span>Kosmo Level Store</span>
-            <span>Kosmogram</span>
-            <b onclick="toggleOracle()" style="cursor:pointer">🔮 ОРАКУЛ</b>
-        </div>
-        <a href="auth.html" id="login-link" class="login-btn">ВОЙТИ</a>
-    </header>
 
-    <div id="oracle-modal" class="modal hidden">
-        <div class="modal-content">
-            <div class="oracle-header">
-                <span id="oracle-title">Привет, агент!</span>
-                <button onclick="toggleOracle()">×</button>
-            </div>
-            <div id="admin-nav" class="admin-menu"></div> <div class="chat-box" id="chat">
+<header>
+    <div class="logo-site">LMSH PRESTIGE</div>
+    
+    <nav class="nav-right">
+        <a href="index.html">Kosmo Level Store</a>
+        
+        <div class="dropdown">
+            <button class="dropbtn">Помощники <span class="arrow">▼</span></button>
+            <div class="dropdown-content">
+                <div class="helper-item" onclick="toggleOracle()">
+                    <span class="dot-purple"></span> <span class="dot-blue"></span> 
+                    <b>Оракул ИИ</b>
                 </div>
-            <div class="input-area">
-                <input type="text" id="user-input" placeholder="Спросить Оракула...">
-                <button onclick="sendMessage()">→</button>
+                <div class="helper-item" onclick="openHelper()">
+                    <div class="q-circle">?</div> 
+                    <b>Быстрый Помощник</b>
+                </div>
+                <div class="helper-item" onclick="location.href='titan.html'">
+                    <span class="book-icon">≡</span> 
+                    <b>Форма Восстановления</b>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div id="quick-helper" class="helper-bubble" onclick="openHelper()">
-        ❗️
-    </div>
+        <a href="#about">О Сайте</a>
+        <a href="auth.html" id="user-link">Войти</a>
+    </nav>
+</header>
 
-    <script src="script.js"></script>
+<div id="oracle-modal" class="modal hidden">
+    <div class="modal-content">
+        <div class="oracle-header">
+            <span id="oracle-status">🔮 Оракул ИИ</span>
+            <button onclick="toggleOracle()">×</button>
+        </div>
+        <div id="admin-nav" class="admin-menu"></div> <div class="chat-box" id="chat"></div>
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Спросить...">
+            <button onclick="sendMessage()">→</button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
