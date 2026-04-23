@@ -1,130 +1,113 @@
-/* --- LMSH PRESTIGE 3.3: ULTIMATE GLASS DESIGN --- */
+/* LMSH PRESTIGE 3.3 — ULTIMATE STABILIZATION
+   Архитектор: Саня | Инженеры: Ламирк & Мурзик 
+*/
+
 :root {
     --accent: #007aff;
-    --accent-glow: rgba(0, 122, 255, 0.5);
-    --bg-dark: #050505;
-    --glass: rgba(255, 255, 255, 0.08);
+    --neon-blue: #00e5ff;
+    --purple: #5856d6;
+    --glass: rgba(255, 255, 255, 0.06);
     --glass-border: rgba(255, 255, 255, 0.12);
+    --bg-deep: #020202;
+    --text-dim: rgba(255, 255, 255, 0.6);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    -webkit-tap-highlight-color: transparent; /* Убираем синий квадрат при клике на мобилках */
+}
 
 body {
-    background: var(--bg-dark);
-    color: white;
-    font-family: 'Inter', -apple-system, sans-serif;
+    background-color: var(--bg-deep);
+    background-image: 
+        radial-gradient(circle at 80% 20%, rgba(0, 122, 255, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 20% 80%, rgba(88, 86, 214, 0.08) 0%, transparent 40%);
+    color: #fff;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
     overflow-x: hidden;
     min-height: 100vh;
 }
 
-/* ФОНОВОЕ СВЕЧЕНИЕ */
-body::before {
-    content: '';
-    position: fixed;
-    top: -10%; right: -10%;
-    width: 50%; height: 50%;
-    background: radial-gradient(circle, rgba(0, 122, 255, 0.15), transparent 70%);
-    z-index: -1;
-}
-
-/* НАВИГАЦИЯ */
+/* --- НАВИГАЦИЯ --- */
 .top-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px 40px;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(20px);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(25px);
     border-bottom: 1px solid var(--glass-border);
-    position: sticky; top: 0; z-index: 1000;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-.site-name { font-weight: 700; letter-spacing: 1px; color: var(--accent); }
-
-/* ДИЗАЙН ОРАКУЛА (ЧАТА) */
-#ai-interface {
-    position: fixed;
-    bottom: 30px; right: 30px;
-    width: 400px; height: 550px;
-    background: rgba(18, 18, 22, 0.75);
-    backdrop-filter: blur(40px);
-    border: 1px solid var(--glass-border);
-    border-radius: 32px;
-    display: flex; flex-direction: column;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+.site-name { 
+    font-weight: 800; 
+    letter-spacing: 2px; 
+    color: var(--accent); 
+    text-shadow: 0 0 15px rgba(0, 122, 255, 0.4);
 }
 
-.ai-header {
-    padding: 20px 25px;
-    border-bottom: 1px solid var(--glass-border);
-    display: flex; justify-content: space-between; align-items: center;
-}
+.nav-right { display: flex; align-items: center; gap: 15px; }
 
-.header-title { font-size: 0.8rem; font-weight: 700; opacity: 0.5; letter-spacing: 2px; }
+/* --- ПОМОЩНИКИ & ВЫПАДАЮЩЕЕ МЕНЮ --- */
+.helpers-dropdown { position: relative; display: flex; align-items: center; }
 
-#chat-history {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    display: flex; flex-direction: column; gap: 15px;
-}
-
-/* ПУЗЫРИ СООБЩЕНИЙ */
-.msg {
-    padding: 14px 20px;
-    border-radius: 22px;
-    max-width: 85%;
-    font-size: 0.95rem;
-    line-height: 1.4;
-}
-
-.msg.ai {
-    background: rgba(255, 255, 255, 0.08);
-    align-self: flex-start;
-    border-bottom-left-radius: 4px;
-}
-
-.msg.user {
-    background: var(--accent);
-    color: white;
-    align-self: flex-end;
-    border-bottom-right-radius: 4px;
-    box-shadow: 0 8px 20px var(--accent-glow);
-}
-
-/* ЗОНА ВВОДА */
-.input-area {
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.3);
-    display: flex; align-items: center; gap: 12px;
-    border-radius: 0 0 32px 32px;
-}
-
-#user-input {
-    flex: 1;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
-    padding: 14px 20px;
-    border-radius: 18px;
-    color: white;
-    outline: none;
-}
-
-#send-btn {
-    width: 45px; height: 45px;
-    border-radius: 50%;
-    background: #00e5ff; /* Тот самый циан со скрина */
-    border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
+.dropdown-trigger { 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    cursor: pointer; 
+    padding: 8px 12px; 
+    border-radius: 12px; 
     transition: 0.3s;
 }
 
-#send-btn:hover { transform: scale(1.1); box-shadow: 0 0 15px rgba(0, 229, 255, 0.5); }
+.dropdown-trigger:hover { background: var(--glass); }
 
-/* КАРТОЧКИ ПАКОВ */
-.store-container { padding: 50px 10%; }
-.section-title { font-size: 1.5rem; margin-bottom: 25px; letter-spacing: -0.5px; }
+.helpers-menu-content {
+    position: absolute;
+    top: 130%;
+    left: 0;
+    min-width: 250px;
+    background: rgba(10, 10, 15, 0.9);
+    backdrop-filter: blur(40px);
+    border: 1px solid var(--glass-border);
+    border-radius: 22px;
+    padding: 10px;
+    z-index: 10001;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+}
+
+.hidden { display: none !important; }
+
+.helper-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.helper-item:hover { background: rgba(255,255,255,0.08); }
+
+/* --- МАГАЗИН ПАКОВ --- */
+.store-container { padding: 40px 10%; max-width: 1400px; margin: 0 auto; }
+
+.section-title { 
+    font-size: 1.4rem; 
+    font-weight: 700; 
+    margin: 40px 0 20px; 
+    padding-left: 15px; 
+    border-left: 3px solid var(--accent);
+    color: var(--text-dim);
+}
 
 .packs-grid {
     display: grid;
@@ -136,14 +119,146 @@ body::before {
     background: var(--glass);
     backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
-    border-radius: 24px;
+    border-radius: 28px;
     padding: 25px;
     text-align: center;
-    transition: 0.4s;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-10px) scale(1.02);
     border-color: var(--accent);
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+}
+
+.thumb { 
+    height: 120px; 
+    background: rgba(0,0,0,0.2); 
+    border-radius: 20px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 2rem; 
+    font-weight: 800; 
+    color: var(--accent); 
+    margin-bottom: 15px; 
+}
+
+/* --- ОРАКУЛ (ИНТЕРФЕЙС) --- */
+#ai-interface {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 380px;
+    height: 550px;
+    background: rgba(15, 15, 20, 0.85);
+    backdrop-filter: blur(50px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: 32px;
+    display: flex;
+    flex-direction: column;
+    z-index: 9999;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.9);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ai-hidden { 
+    opacity: 0 !important; 
+    transform: translateY(100px) scale(0.9) !important; 
+    pointer-events: none !important; 
+}
+
+#chat-history {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.msg {
+    padding: 12px 18px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    max-width: 85%;
+    word-wrap: break-word;
+}
+
+.msg.ai { background: rgba(255, 255, 255, 0.08); align-self: flex-start; border-bottom-left-radius: 4px; }
+.msg.user { background: var(--accent); align-self: flex-end; border-bottom-right-radius: 4px; }
+
+.input-area {
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    gap: 10px;
+    border-radius: 0 0 32px 32px;
+}
+
+#user-input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    padding: 10px 15px;
+    color: #fff;
+    outline: none;
+}
+
+#send-btn {
+    background: var(--neon-blue);
+    color: #000;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+/* --- МОБИЛЬНАЯ АДАПТАЦИЯ (АНТИ-ПРОБКА) --- */
+@media (max-width: 600px) {
+    .top-nav { padding: 10px 15px; }
+    .site-name { font-size: 0.9rem; }
+    
+    .store-container { padding: 20px 5%; }
+    
+    .packs-grid {
+        grid-template-columns: repeat(2, 1fr) !important; /* Ровно 2 колонки */
+        gap: 12px;
+    }
+
+    .glass-card { padding: 15px; border-radius: 20px; }
+    .thumb { height: 90px; font-size: 1.5rem; }
+    .glass-card h3 { font-size: 0.85rem; }
+
+    #ai-interface {
+        width: 94% !important;
+        right: 3% !important;
+        left: 3% !important;
+        height: 65vh !important;
+        bottom: 10px !important;
+    }
+
+    /* Исправление модалки */
+    #pack-modal .modal-content {
+        width: 90% !important;
+        padding: 20px !important;
+    }
+
+    .dl-btn, .ask-btn {
+        width: 100% !important;
+        padding: 15px !important;
+        font-size: 1rem !important;
+    }
+}
+
+/* ЭПИЧЕСКАЯ ПОДСВЕТКА */
+.epic-flash {
+    background: var(--purple) !important;
+    box-shadow: 0 0 25px var(--purple) !important;
+    transform: scale(1.05);
 }
