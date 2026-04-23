@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>LMSH PRESTIGE 2026</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -18,7 +18,10 @@
             <button class="dropbtn">Помощники <span class="arrow">▼</span></button>
             <div class="dropdown-content">
                 <div class="helper-item" onclick="toggleOracle()">
-                    <span class="dot-purple"></span> <span class="dot-blue"></span> 
+                    <div class="dots-group">
+                        <span class="dot-purple"></span>
+                        <span class="dot-blue"></span>
+                    </div>
                     <b>Оракул ИИ</b>
                 </div>
                 <div class="helper-item" onclick="openHelper()">
@@ -33,7 +36,7 @@
         </div>
 
         <a href="#about">О Сайте</a>
-        <a href="auth.html" id="user-link">Войти</a>
+        <a href="auth.html" id="user-link" class="login-btn">Войти</a>
     </nav>
 </header>
 
@@ -41,12 +44,13 @@
     <div class="modal-content">
         <div class="oracle-header">
             <span id="oracle-status">🔮 Оракул ИИ</span>
-            <button onclick="toggleOracle()">×</button>
+            <button class="close-btn" onclick="toggleOracle()">×</button>
         </div>
-        <div id="admin-nav" class="admin-menu"></div> <div class="chat-box" id="chat"></div>
+        <div id="admin-nav" class="admin-menu"></div>
+        <div class="chat-box" id="chat"></div>
         <div class="input-area">
             <input type="text" id="user-input" placeholder="Спросить...">
-            <button onclick="sendMessage()">→</button>
+            <button class="send-btn" onclick="sendMessage()">→</button>
         </div>
     </div>
 </div>
