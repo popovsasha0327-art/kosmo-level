@@ -1,10 +1,20 @@
-// База данных персонала
-const Staff = {
-    "ламирк": "оптимизирует сервер.",
-    "мурзик": "шьет систему.",
-    "хахми": "взламывает систему смехом."
-};
+function openOracle() {
+    const modal = document.getElementById('oracle-modal');
+    if(modal) modal.classList.remove('hidden');
+}
 
+function closeOracle() {
+    const modal = document.getElementById('oracle-modal');
+    if(modal) modal.classList.add('hidden');
+}
+
+function oracleProcess() {
+    const query = document.getElementById('oracle-query').value;
+    if(!query) return;
+    alert("Оракул начал глубокий анализ запроса: " + query);
+}
+
+// Загрузка профиля
 window.onload = () => {
     const name = localStorage.getItem('LMSH_NAME') || "Агент";
     const rank = localStorage.getItem('LMSH_RANK');
@@ -13,14 +23,3 @@ window.onload = () => {
         userLink.innerText = "Профиль (" + name[0].toUpperCase() + ")";
     }
 };
-
-// Функция для Быстрого Помощника (Агента)
-function openAgent() {
-    window.location.href = 'demo.html';
-}
-
-// Функция для продвинутого Оракула
-function openOracle() {
-    // Здесь будет ссылка на отдельный продвинутый ИИ
-    window.location.href = 'oracle_adv.html';
-}
