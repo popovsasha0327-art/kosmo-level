@@ -1,4 +1,3 @@
-/* LMSH PRESTIGE 2026 - FULL SYSTEM STYLE */
 :root {
     --bg: #000000;
     --card: rgba(28, 28, 30, 0.9);
@@ -10,99 +9,48 @@
     --glass: rgba(255, 255, 255, 0.05);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
 
-body { 
-    background: var(--bg); 
-    color: #fff; 
-    min-height: 100vh; 
-    background-image: radial-gradient(circle at top, #1a1a1a 0%, #000 100%);
-    overflow-x: hidden;
-}
+body { background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; background-image: radial-gradient(circle at top, #1a1a1a 0%, #000 100%); }
 
-/* --- НАВИГАЦИЯ (HEADER) --- */
+/* ШАПКА */
 header {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    padding: 15px 5%; 
-    background: rgba(0,0,0,0.85); 
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--glass);
-    position: fixed; top: 0; width: 100%; z-index: 1000;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 5%; background: rgba(0,0,0,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass); position: fixed; top: 0; width: 100%; z-index: 1000;
 }
 
 .logo-site { font-weight: 900; font-size: 22px; color: var(--accent); letter-spacing: 1px; }
 
-.nav-right { display: flex; align-items: center; gap: 25px; }
+.nav-right { display: flex; align-items: center; gap: 20px; }
 .nav-right a { color: #fff; text-decoration: none; font-size: 14px; opacity: 0.7; transition: 0.3s; white-space: nowrap; }
-.nav-right a:hover { opacity: 1; color: var(--accent); }
 
 /* ВЫПАДАЮЩЕЕ МЕНЮ */
 .dropdown { position: relative; }
 .dropbtn { background: none; border: none; color: #fff; cursor: pointer; font-size: 14px; font-weight: 600; padding: 10px; display: flex; align-items: center; gap: 5px; }
-
 .dropdown-content {
-    display: none; position: absolute; right: 0; top: 100%; 
-    background: #1c1c1e; min-width: 240px; border-radius: 22px; 
-    border: 1px solid var(--glass); padding: 10px; z-index: 2000;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+    display: none; position: absolute; right: 0; top: 100%; background: #1c1c1e;
+    min-width: 250px; border-radius: 22px; border: 1px solid var(--glass); padding: 10px; z-index: 2000;
 }
 .dropdown:hover .dropdown-content { display: block; }
 
-.helper-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; cursor: pointer; transition: 0.2s; color: #fff; }
+.helper-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
 .helper-item:hover { background: var(--glass); }
 
-/* ИКОНКИ В МЕНЮ */
-.dots-group { display: flex; gap: 5px; }
-.dot-purple { width: 10px; height: 10px; background: var(--purple); border-radius: 50%; box-shadow: 0 0 10px var(--purple); }
-.dot-blue { width: 10px; height: 10px; background: var(--blue); border-radius: 50%; box-shadow: 0 0 10px var(--blue); }
-.q-circle { width: 22px; height: 22px; border: 1.5px solid #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; }
-.book-icon { font-size: 20px; opacity: 0.6; min-width: 22px; text-align: center; }
+.dots-group { display: flex; gap: 4px; }
+.dot-purple { width: 10px; height: 10px; background: var(--purple); border-radius: 50%; box-shadow: 0 0 8px var(--purple); }
+.dot-blue { width: 10px; height: 10px; background: var(--blue); border-radius: 50%; box-shadow: 0 0 8px var(--blue); }
+.q-circle { width: 22px; height: 22px; border: 1.5px solid #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
 
-/* --- ГЛАВНЫЙ КОНТЕНТ (ПАКИ) --- */
+/* ПАКИ */
 .content { padding: 120px 5% 50px; text-align: center; }
-.main-title { font-size: 32px; margin-bottom: 40px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; }
-
+.main-title { font-size: 30px; margin-bottom: 40px; color: var(--accent); }
 .packs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+.pack-card { background: var(--card); padding: 30px; border-radius: 35px; border: 1px solid var(--glass); text-align: left; position: relative; transition: 0.3s; }
+.pack-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+.pack-version { font-size: 50px; font-weight: 900; opacity: 0.05; position: absolute; right: 10px; top: 0; }
 
-.pack-card {
-    background: var(--card); padding: 35px; border-radius: 35px; 
-    border: 1px solid var(--glass); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    text-align: left; position: relative; overflow: hidden;
-}
-.pack-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(0, 242, 255, 0.1); }
+.download-btn { width: 100%; padding: 12px; border-radius: 12px; border: none; background: var(--glass); color: #fff; cursor: pointer; margin-top: 15px; }
+.download-btn.lock { background: #222; color: #555; cursor: not-allowed; }
 
-.pack-version { font-size: 60px; font-weight: 900; opacity: 0.05; position: absolute; right: -5px; top: -10px; }
-.pack-card h3 { color: var(--accent); margin-bottom: 15px; font-size: 20px; }
-.pack-card p { font-size: 14px; opacity: 0.6; line-height: 1.6; margin-bottom: 25px; }
-
-.download-btn {
-    width: 100%; padding: 14px; border-radius: 15px; border: none;
-    background: rgba(255,255,255,0.05); color: #fff; font-weight: bold; cursor: pointer; transition: 0.2s;
-}
-.download-btn:hover { background: var(--accent); color: #000; }
-.download-btn.lock { background: #222; cursor: not-allowed; color: #555; }
-
-/* --- ЧАТ (iMESSAGE STYLE) --- */
-.chat-container { display: flex; align-items: center; justify-content: center; height: 100vh; padding-top: 80px; }
-.card {
-    background: var(--card); width: 95%; max-width: 420px; height: 85vh;
-    border-radius: 45px; border: 1px solid rgba(255,255,255,0.1);
-    display: flex; flex-direction: column; padding: 25px;
-    backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-}
-
-#chat { flex: 1; overflow-y: auto; padding: 10px 5px; display: flex; flex-direction: column; scrollbar-width: none; }
-#chat::-webkit-scrollbar { display: none; }
-
-.bubble { max-width: 80%; padding: 12px 18px; border-radius: 22px; margin-bottom: 12px; font-size: 16px; line-height: 1.4; }
-.user { align-self: flex-end; background: var(--user-bg); color: #fff; border-bottom-right-radius: 4px; }
-.ai { align-self: flex-start; background: var(--ai-bg); color: #fff; border-bottom-left-radius: 4px; }
-
-.input-area { display: flex; gap: 12px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
-.input-area input { flex: 1; background: #1c1c1e; border: 1px solid #3a3a3c; padding: 14px 20px; border-radius: 25px; color: #fff; outline: none; }
-
-.send-btn { background: var(--accent); border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-.login-btn { background: var(--accent); color: #000 !important; padding: 8px 20px; border-radius: 12px; font-weight: bold; opacity: 1 !important; }
+.login-btn { background: var(--accent); color: #000 !important; padding: 8px 18px; border-radius: 12px; font-weight: bold; opacity: 1 !important; }
