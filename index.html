@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>LMSH PRESTIGE 2026</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -40,20 +40,21 @@
     </nav>
 </header>
 
-<div id="oracle-modal" class="modal hidden">
-    <div class="modal-content">
-        <div class="oracle-header">
-            <span id="oracle-status">🔮 Оракул ИИ</span>
-            <button class="close-btn" onclick="toggleOracle()">×</button>
+<main class="chat-container">
+    <div class="card">
+        <h2 id="ai-head">ORACLE PRESTIGE</h2>
+
+        <div id="chat">
+            <div class="bubble ai">Здравствуйте! Я Агент из Oracle. Могу чем-то помочь или просто поболтаем?</div>
         </div>
-        <div id="admin-nav" class="admin-menu"></div>
-        <div class="chat-box" id="chat"></div>
+
         <div class="input-area">
-            <input type="text" id="user-input" placeholder="Спросить...">
-            <button class="send-btn" onclick="sendMessage()">→</button>
+            <button class="helper-mini-btn" onclick="openHelper()">❗️</button>
+            <input type="text" id="ai-q" placeholder="Сообщение" onkeypress="handleEnter(event)">
+            <button class="send-btn" onclick="ask()">↑</button>
         </div>
     </div>
-</div>
+</main>
 
 <script src="script.js"></script>
 </body>
