@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>LMSH PRESTIGE 2026</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -24,7 +24,7 @@
                     </div>
                     <b>Оракул ИИ</b>
                 </div>
-                <div class="helper-item" onclick="openHelper()">
+                <div class="helper-item" onclick="location.href='demo.html'">
                     <div class="q-circle">?</div> 
                     <b>Быстрый Помощник</b>
                 </div>
@@ -40,18 +40,36 @@
     </nav>
 </header>
 
-<main class="chat-container">
-    <div class="card">
-        <h2 id="ai-head">ORACLE PRESTIGE</h2>
-
-        <div id="chat">
-            <div class="bubble ai">Здравствуйте! Я Агент из Oracle. Могу чем-то помочь или просто поболтаем?</div>
+<main class="content">
+    <h1 class="main-title">Паки Kosmo Level</h1>
+    
+    <div class="packs-grid">
+        <div class="pack-card">
+            <div class="pack-version">3.0</div>
+            <h3>Classic Edition</h3>
+            <p>Начало легенды. Стабильные миры и классический геймплей.</p>
+            <button class="download-btn">Открыть</button>
         </div>
 
-        <div class="input-area">
-            <button class="helper-mini-btn" onclick="openHelper()">❗️</button>
-            <input type="text" id="ai-q" placeholder="Сообщение" onkeypress="handleEnter(event)">
-            <button class="send-btn" onclick="ask()">↑</button>
+        <div class="pack-card">
+            <div class="pack-version">3.1</div>
+            <h3>Expansion</h3>
+            <p>Улучшенные текстуры и расширение границ 12 мира.</p>
+            <button class="download-btn">Открыть</button>
+        </div>
+
+        <div class="pack-card">
+            <div class="pack-version">3.2</div>
+            <h3>Beta Legend</h3>
+            <p>Тот самый пак из видео на 43 минуты. Конец беты близок.</p>
+            <button class="download-btn">Открыть</button>
+        </div>
+
+        <div class="pack-card special">
+            <div class="pack-version">3.3</div>
+            <h3>Circle (Secret)</h3>
+            <p>Проект "Ящик". Ожидайте активации 26 апреля 2026.</p>
+            <button class="download-btn lock">Заблокировано 🔑</button>
         </div>
     </div>
 </main>
