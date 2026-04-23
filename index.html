@@ -2,104 +2,102 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>LMSH PRESTIGE - GLOBAL STORE</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMLSH | Главный Штаб — PRESTIGE STORE</title>
+    <link rel="stylesheet" href="main-prestige.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="main-bg"></div>
 
-<header class="glass-nav">
-    <div class="logo">LMSH PRESTIGE</div>
-    <nav class="nav-links">
-        <a href="index.html" class="nav-item active">Kosmo Level Store</a>
-        <a href="#" class="nav-item">Kosmogram</a>
-        
-        <div class="dropdown" id="helpers-menu">
-            <button class="dropbtn">Помощники ▼</button>
-            <div class="dropdown-content glass-effect">
-                <div class="helper-option" onclick="openOracle()">
-                    <div class="indicator-dots"><span class="p-dot"></span><span class="b-dot"></span></div>
-                    <span>Оракул ИИ</span>
+    <nav class="top-nav">
+        <div class="nav-left">
+            <span class="site-name">LMLSH PRESTIGE</span>
+        </div>
+        <div class="nav-right">
+            <div class="helpers-dropdown">
+                <div class="ai-trigger-container" onclick="toggleAI()" id="oracle-trigger">
+                    <div class="ai-icon-mini">
+                        <div class="dot d1"></div>
+                        <div class="dot d2"></div>
+                    </div>
+                    <span class="ai-hint">Оракул</span>
                 </div>
-                <div class="helper-option" onclick="openAssistant()">
-                    <div class="q-mark">?</div>
-                    <span>Быстрый Помощник</span>
+                
+                <div class="dropdown-trigger" onclick="toggleHelpers()">
+                    <span class="dropdown-label">Дополнительные Помощники</span>
+                    <span class="arrow-icon">▼</span>
                 </div>
-                <div class="helper-option" onclick="openRecovery()">
-                    <div class="rec-icon">≡</div>
-                    <span>Форма Восстановления</span>
+
+                <div id="helpers-list" class="helpers-menu-content glass-effect hidden">
+                    <div class="helper-item" onclick="alert('Быстрый помощник активирован!')">
+                        <div class="q-circle">?</div>
+                        <span>Быстрый Помощник</span>
+                    </div>
+                    <div class="helper-item" onclick="alert('Открываю Форму Восстановления...')">
+                        <span class="form-icon">≡</span>
+                        <span>Форма Восстановления</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <a href="#about" class="nav-item">О Сайте</a>
-        <button id="profile-btn" class="profile-pill" onclick="handleProfile()">Профиль (О)</button>
+            <a href="index.html" class="nav-link active">Store</a>
+            <button id="profile-btn" class="profile-pill" onclick="handleProfile()">Профиль (О)</button>
+        </div>
     </nav>
-</header>
 
-<main class="content-wrapper">
-    <section class="store-section">
-        <h2 class="category-title">Паки для предрегистрации</h2>
-        <p class="alert-text">Утилита по Предрегистрации может не работать или уведомлять позже чем надо</p>
-        <div class="grid">
-            <div class="card" onclick="showPack('3.4', 'Insider', 'insider.png')">
-                <div class="card-thumb insider-bg">3.4</div>
-                <h3>Kosmo Level 3.4</h3>
+    <main class="store-container">
+        <section class="pack-section">
+            <h2 class="section-title">Паки для предрегистрации</h2>
+            <p class="alert-text">Утилита по Предрегистрации может уведомлять об открытии позже чем надо.</p>
+            <div class="packs-grid">
+                <div class="pack-card glass-card" onclick="openPack('3.4', 'Insider')">
+                    <div class="thumb">3.4</div>
+                    <h3>Kosmo Level 3.4</h3>
+                </div>
             </div>
+        </section>
+
+        <section class="pack-section">
+            <h2 class="section-title">Паки Kosmo Level</h2>
+            <div class="packs-grid" id="main-grid">
+                </div>
+        </section>
+    </main>
+
+    <div id="ai-interface" class="ai-hidden">
+        <div class="ai-header" id="drag-header">
+            <div class="ai-logo-container">
+                <div class="circle c1"></div>
+                <div class="circle c2"></div>
+            </div>
+            <span class="header-title">LMLSH ORACLE</span>
+            <div class="minimize-btn" onclick="toggleAI()">−</div>
         </div>
-    </section>
-
-    <section class="store-section">
-        <h2 class="category-title">Preview Packs</h2>
-        <div class="grid">
-            <div class="card" onclick="showPack('2.8.1', 'Preview', 'preview281.png')">
-                <div class="card-thumb">2.8.1</div>
-                <h3>Kosmo Level 2.8.1</h3>
-            </div>
-            <div class="card" onclick="showPack('2.1', 'Traitor', 'traitor.png')">
-                <div class="card-thumb traitor-glow">2.1</div>
-                <h3>Traitor Level 2.1</h3>
-            </div>
+        <div id="chat-history"></div>
+        <div class="input-area">
+            <label for="file-input" class="attach-btn">📎</label>
+            <input type="file" id="file-input" style="display:none">
+            <input type="text" id="user-input" placeholder="Введите вопрос..." autocomplete="off">
+            <button id="send-btn">⬆</button>
         </div>
-    </section>
+    </div>
 
-    <section class="store-section">
-        <h2 class="category-title">Паки Kosmo Level</h2>
-        <div class="grid" id="main-packs-grid">
-            </div>
-    </section>
-</main>
-
-<div id="pack-modal" class="modal hidden">
-    <div class="modal-card glass-effect">
-        <button class="close-modal" onclick="closePack()">×</button>
-        <div class="modal-body">
-            <img src="kosmolevel30822.png" id="modal-img" class="pack-preview">
-            <h2 id="modal-name">Kosmo Level</h2>
-            <p>Версия: <span id="modal-version">3.3</span></p>
-            <div class="modal-btns">
-                <button class="btn-main" onclick="startDownload()">Скачать</button>
-                <button class="btn-sub" onclick="openOracle()">Спросить Оракула</button>
+    <div id="pack-modal" class="modal-hidden">
+        <div class="modal-content glass-card">
+            <button class="close-btn" onclick="closePack()">×</button>
+            <div class="modal-info">
+                <div class="modal-thumb-box">3.3</div>
+                <h2 id="modal-title">Kosmo Level</h2>
+                <p>Версия: <b id="modal-ver">3.3</b></p>
+                <div class="modal-actions">
+                    <button class="dl-btn">Скачать Пак</button>
+                    <button class="ask-btn" onclick="openAndAsk()">Спросить Оракула о Паке</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div id="oracle-window" class="modal hidden">
-    <div class="oracle-container glass-effect">
-        <div class="oracle-header">
-            <span>ORACLE PRESTIGE</span>
-            <button onclick="closeOracle()">×</button>
-        </div>
-        <div id="chat-box" class="chat-area">
-            </div>
-        <div class="chat-input-row">
-            <input type="text" id="user-input" placeholder="Введите запрос...">
-            <button onclick="sendMessage()">↑</button>
-        </div>
-    </div>
-</div>
-
-<script src="script.js"></script>
+    <script src="brain.js"></script>
 </body>
 </html>
