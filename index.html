@@ -2,81 +2,39 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>LMSH PRESTIGE | HUB</title>
-    <style>
-        :root { --bg: #000; --card: #1c1c1e; --accent: #00f2ff; --text: #fff; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
-        body { background: var(--bg); color: var(--text); }
-
-        header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; }
-        .login-btn { background: var(--accent); color: #000; padding: 8px 20px; border-radius: 15px; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 14px; }
-
-        /* ОКНО ОРАКУЛА ПО ЧЕРТЕЖУ */
-        #oracle-window {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 3000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: 0.4s;
-        }
-        #oracle-window.hidden { opacity: 0; pointer-events: none; transform: translateY(20px); }
-
-        .oracle-logo { font-size: 60px; margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--accent)); }
-        .oracle-welcome { font-size: 24px; font-weight: 800; margin-bottom: 10px; }
-        .oracle-modes { display: flex; flex-direction: column; gap: 15px; width: 80%; max-width: 300px; margin-top: 20px; }
-        
-        .mode-choice {
-            background: #2c2c2e; padding: 18px; border-radius: 20px; text-align: center;
-            cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;
-        }
-        .mode-choice:hover { border-color: var(--accent); background: rgba(0,242,255,0.05); }
-        .mode-choice b { display: block; font-size: 16px; margin-bottom: 4px; }
-        .mode-choice span { font-size: 11px; opacity: 0.5; }
-
-        .chat-trigger-bottom {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: #1c1c1e; padding: 15px 30px; border-radius: 30px;
-            border: 1px solid var(--accent); cursor: pointer; font-weight: bold;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMSH PRESTIGE HUB</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <header>
-        <div style="font-weight: 900;">LMSH</div>
-        <a href="login.html" class="login-btn">ВОЙТИ</a>
+        <div class="nav-links">
+            <span>Kosmo Level Store</span>
+            <span>Kosmogram</span>
+            <b onclick="toggleOracle()" style="cursor:pointer">🔮 ОРАКУЛ</b>
+        </div>
+        <a href="auth.html" id="login-link" class="login-btn">ВОЙТИ</a>
     </header>
 
-    <div id="oracle-window" class="hidden">
-        <div class="oracle-logo">🔮</div> <div class="oracle-welcome">Привет, агент!</div>
-        <div style="opacity: 0.6; font-size: 14px;">Я Оракул, чем помочь?</div>
-
-        <div class="oracle-modes">
-            <div class="mode-choice" onclick="startOracle('dev')">
-                <b>С Программированием</b>
-                <span>Oracle Code Assistant 2026</span>
+    <div id="oracle-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="oracle-header">
+                <span id="oracle-title">Привет, агент!</span>
+                <button onclick="toggleOracle()">×</button>
             </div>
-            <div class="mode-choice" onclick="startOracle('std')">
-                <b>С ИИ (Обычный)</b>
-                <span>Стандартный режим общения</span>
+            <div id="admin-nav" class="admin-menu"></div> <div class="chat-box" id="chat">
+                </div>
+            <div class="input-area">
+                <input type="text" id="user-input" placeholder="Спросить Оракула...">
+                <button onclick="sendMessage()">→</button>
             </div>
         </div>
-        
-        <div onclick="toggleOracle()" style="margin-top: 40px; opacity: 0.4; cursor: pointer;">Назад в Хаб</div>
     </div>
 
-    <div class="chat-trigger-bottom" onclick="toggleOracle()">
-        СПРОСИТЬ ОРАКУЛА...
+    <div id="quick-helper" class="helper-bubble" onclick="openHelper()">
+        ❗️
     </div>
 
-    <script>
-        function toggleOracle() {
-            document.getElementById('oracle-window').classList.toggle('hidden');
-        }
-
-        function startOracle(mode) {
-            alert('Режим ' + mode + ' активирован. Запуск систем...');
-            // Тут будет логика перехода в чат
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
