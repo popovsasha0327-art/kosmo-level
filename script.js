@@ -1,79 +1,104 @@
-// 1. ДАННЫЕ ШТАБА
+// 1. ДАННЫЕ ШТАБА ЛМСХ
 const StaffActions = {
-    "ламирк": ["отдыхает после калибровки серверов.", "оптимизирует ядро ЛМСХ-системы. ⚙️", "пьёт машинное масло и изучает чертежи."],
-    "мурзик": ["отдыхает на системном блоке.", "перепрошивает телефон на LineageOS. Скрытность 100%! 📱", "настраивает Creator-панель."],
-    "хахми": ["сочиняет шутки про Гугл Сайты.", "разгоняет валы сервера пафосными речами.", "пытается взломать кофемашину."]
+    "ламирк": [
+        "сейчас отдыхает после калибровки серверов.",
+        "работает над оптимизацией валов... не отвлекай его!",
+        "пьёт машинное масло и изучает твои чертежи."
+    ],
+    "мурзик": [
+        "занята делом: перепрошивает телефон на LineageOS. Скрытность — наше всё! 📱",
+        "сейчас отдыхает, свернувшись клубком на системном блоке.",
+        "настраивает твою (Creator) панель."
+    ],
+    "хахми": [
+        "сочиняет новые шутки про мамонтов и Гугл Сайты.",
+        "разгоняет валы сервера пафосными речами!",
+        "пытается взломать кофемашину Штаба."
+    ]
 };
 
-// 2. ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
-window.onload = () => {
+// 2. ИНИЦИАЛИЗАЦИЯ СИСТЕМЫ
+document.addEventListener('DOMContentLoaded', () => {
     const rank = localStorage.getItem('LMSH_RANK');
-    if(rank === 'OVERLORD') {
-        document.getElementById('login-link').innerText = "ПРОФИЛЬ (C)";
+    const loginLink = document.getElementById('login-link');
+    
+    if (rank === 'OVERLORD') {
+        if(loginLink) loginLink.innerText = "СОЗДАТЕЛЬ (C)";
         renderCreatorMenu();
-        showHelperMessage("Привет, Создатель! Я тут ещё отлично работаю. Гугл Сайты бы так не смогли! ❗️");
+        console.log("Система: Вход Создателя подтвержден.");
     }
-};
+});
 
-// 3. ФУНКЦИИ CREATOR
-function renderCreatorMenu() {
-    const menu = document.getElementById('admin-nav');
-    if(menu) {
-        menu.innerHTML = `
-            <div class="c-btn" onclick="alert('Форма управления данными')">(Creator) Форма</div>
-            <div class="c-btn" onclick="alert('Доступ к ядру ИИ')">(Creator) Oracle AI</div>
-        `;
-    }
+// 3. ФУНКЦИИ ОРАКУЛА
+function toggleOracle() {
+    const modal = document.getElementById('oracle-modal');
+    modal.classList.toggle('hidden');
 }
 
-// 4. ОБРАБОТКА КОМАНД И ВОПРОСОВ
 function sendMessage() {
     const input = document.getElementById('user-input');
-    const text = input.value.trim();
     const chat = document.getElementById('chat');
+    const text = input.value.trim();
     const isCreator = localStorage.getItem('LMSH_RANK') === 'OVERLORD';
 
-    if(!text) return;
+    if (!text) return;
 
-    // Вывод текста пользователя
+    // Сообщение пользователя
     chat.innerHTML += `<div class="msg user">${text}</div>`;
-
-    // ПРОВЕРКА /EXEC ДЛЯ СОЗДАТЕЛЯ
-    if(isCreator && text.startsWith('/exec ')) {
-        try {
-            eval(text.replace('/exec ', ''));
-            chat.innerHTML += `<div class="msg ai">❗️ Код исполнен, Создатель! Валы крутятся.</div>`;
-        } catch(e) {
-            chat.innerHTML += `<div class="msg ai">❗️ Ошибка в коде: ${e.message}</div>`;
-        }
-    } 
-    // ВОПРОСЫ О ШТАБЕ
-    else if(text.toLowerCase().includes("как там")) {
-        const name = text.toLowerCase().split("как там ")[1];
-        if(StaffActions[name]) {
-            const action = StaffActions[name][Math.floor(Math.random()*StaffActions[name].length)];
-            chat.innerHTML += `<div class="msg ai">${isCreator ? 'Слушай, Создатель, ' : ''}${name} ${action}</div>`;
-        }
-    }
-    
     input.value = "";
-    chat.scrollTop = chat.scrollHeight;
+
+    // ОТВЕТ ИИ
+    setTimeout(() => {
+        let response = "";
+
+        // Проверка на команды Создателя
+        if (isCreator && text.startsWith('/exec ')) {
+            try {
+                const code = text.replace('/exec ', '');
+                eval(code);
+                response = "❗️ Код исполнен успешно, Создатель! Валы крутятся в такт твоим идеям.";
+            } catch (e) {
+                response = `❗️ Ошибка в коде: ${e.message}. Ламирк уже бежит исправлять!`;
+            }
+        } 
+        // Вопросы про команду
+        else if (text.toLowerCase().includes("как там")) {
+            const name = text.toLowerCase().split("как там ")[1];
+            if (StaffActions[name]) {
+                const action = StaffActions[name][Math.floor(Math.random() * StaffActions[name].length)];
+                response = `${isCreator ? 'Слушай, Создатель, ' : ''}${name.charAt(0).toUpperCase() + name.slice(1)} ${action}`;
+            } else {
+                response = "В Штабе такого агента нет, но я могу его поискать!";
+            }
+        }
+        else {
+            response = isCreator ? "Да, Создатель? Я на связи и готов к работе." : "Я Оракул. Чем могу помочь, агент?";
+        }
+
+        chat.innerHTML += `<div class="msg ai">${response}</div>`;
+        chat.scrollTop = chat.scrollHeight;
+    }, 500);
 }
 
-function toggleOracle() {
-    document.getElementById('oracle-modal').classList.toggle('hidden');
-}
-
-function showHelperMessage(msg) {
-    console.log("Помощник шепчет: " + msg);
-}
-            body: JSON.stringify({ message: text })
-        });
-        
-        history.innerHTML += `<div class="msg ai">Оракул: Команда принята (обработка в облаке...)</div>`;
-    } catch (e) {
-        history.innerHTML += `<div class="msg ai">Ошибка связи с Оракулом.</div>`;
-    }
+// 4. ФУНКЦИИ ПОМОЩНИКА
+function openHelper() {
+    const isCreator = localStorage.getItem('LMSH_RANK') === 'OVERLORD';
+    const msg = isCreator 
+        ? "❗️ Привет, Создатель! Я тут ещё отлично работаю. Гугл Сайты уже всё — они бы такого не смогли. Но Штаб ЛМСХ просто лучший, создал для нас вторую жизнь!"
+        : "❗️ Система работает стабильно. Мамонты под контролем.";
     
-    history.scrollTop = history.scrollHeight;
+    alert(msg); // Позже заменим на красивое облачко текста
+}
+
+// 5. ПАНЕЛЬ СОЗДАТЕЛЯ
+function renderCreatorMenu() {
+    const adminNav = document.getElementById('admin-nav');
+    if (adminNav) {
+        adminNav.style.display = 'block';
+        adminNav.innerHTML = `
+            <div class="c-btn" onclick="window.location.href='titan.html'">(Creator) Форма</div>
+            <div class="c-btn" onclick="alert('Доступ к ядру активирован')">(Creator) Oracle AI</div>
+            <div class="c-btn" onclick="alert('Скачивание Пака 30822...')">(Creator) Пак 30822</div>
+        `;
+    }
 }
