@@ -1,39 +1,72 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNjxKx-OxMWhABm_YUV9SKMFtbB8_0aj1jHe2jVa983F8_zBAXMtOvBDyW2MdTSf_LCA/exec"; // Не забудь вставить свою!
+// 1. ДАННЫЕ ШТАБА
+const StaffActions = {
+    "ламирк": ["отдыхает после калибровки серверов.", "оптимизирует ядро ЛМСХ-системы. ⚙️", "пьёт машинное масло и изучает чертежи."],
+    "мурзик": ["отдыхает на системном блоке.", "перепрошивает телефон на LineageOS. Скрытность 100%! 📱", "настраивает Creator-панель."],
+    "хахми": ["сочиняет шутки про Гугл Сайты.", "разгоняет валы сервера пафосными речами.", "пытается взломать кофемашину."]
+};
 
-function toggleAI() {
-    document.getElementById('ai-interface').classList.toggle('hidden');
-}
+// 2. ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
+window.onload = () => {
+    const rank = localStorage.getItem('LMSH_RANK');
+    if(rank === 'OVERLORD') {
+        document.getElementById('login-link').innerText = "ПРОФИЛЬ (C)";
+        renderCreatorMenu();
+        showHelperMessage("Привет, Создатель! Я тут ещё отлично работаю. Гугл Сайты бы так не смогли! ❗️");
+    }
+};
 
-function toggleDropdown() {
-    document.getElementById('ai-dropdown-content').classList.toggle('hidden');
-}
-
-function closeDropdown() {
-    document.getElementById('ai-dropdown-content').classList.add('hidden');
-}
-
-// Закрытие меню при клике в любое другое место
-window.onclick = function(event) {
-    if (!event.target.closest('.dropdown')) {
-        closeDropdown();
+// 3. ФУНКЦИИ CREATOR
+function renderCreatorMenu() {
+    const menu = document.getElementById('admin-nav');
+    if(menu) {
+        menu.innerHTML = `
+            <div class="c-btn" onclick="alert('Форма управления данными')">(Creator) Форма</div>
+            <div class="c-btn" onclick="alert('Доступ к ядру ИИ')">(Creator) Oracle AI</div>
+        `;
     }
 }
 
-async function sendMessage() {
+// 4. ОБРАБОТКА КОМАНД И ВОПРОСОВ
+function sendMessage() {
     const input = document.getElementById('user-input');
-    const history = document.getElementById('chat-history');
     const text = input.value.trim();
+    const chat = document.getElementById('chat');
+    const isCreator = localStorage.getItem('LMSH_RANK') === 'OVERLORD';
 
-    if (!text) return;
+    if(!text) return;
 
-    // Показываем сообщение пользователя
-    history.innerHTML += `<div class="msg user">${text}</div>`;
-    input.value = '';
+    // Вывод текста пользователя
+    chat.innerHTML += `<div class="msg user">${text}</div>`;
 
-    try {
-        const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors', // Важно для Google Scripts
+    // ПРОВЕРКА /EXEC ДЛЯ СОЗДАТЕЛЯ
+    if(isCreator && text.startsWith('/exec ')) {
+        try {
+            eval(text.replace('/exec ', ''));
+            chat.innerHTML += `<div class="msg ai">❗️ Код исполнен, Создатель! Валы крутятся.</div>`;
+        } catch(e) {
+            chat.innerHTML += `<div class="msg ai">❗️ Ошибка в коде: ${e.message}</div>`;
+        }
+    } 
+    // ВОПРОСЫ О ШТАБЕ
+    else if(text.toLowerCase().includes("как там")) {
+        const name = text.toLowerCase().split("как там ")[1];
+        if(StaffActions[name]) {
+            const action = StaffActions[name][Math.floor(Math.random()*StaffActions[name].length)];
+            chat.innerHTML += `<div class="msg ai">${isCreator ? 'Слушай, Создатель, ' : ''}${name} ${action}</div>`;
+        }
+    }
+    
+    input.value = "";
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function toggleOracle() {
+    document.getElementById('oracle-modal').classList.toggle('hidden');
+}
+
+function showHelperMessage(msg) {
+    console.log("Помощник шепчет: " + msg);
+}
             body: JSON.stringify({ message: text })
         });
         
