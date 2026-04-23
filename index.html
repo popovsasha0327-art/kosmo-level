@@ -2,228 +2,80 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>LMSH PRESTIGE | HUB</title>
     <style>
-        :root { 
-            --bg: #000000; --card: #1c1c1e; --accent: #00f2ff; 
-            --text: #ffffff; --shadow: rgba(0, 242, 255, 0.2);
+        :root { --bg: #000; --card: #1c1c1e; --accent: #00f2ff; --text: #fff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
+        body { background: var(--bg); color: var(--text); }
+
+        header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; }
+        .login-btn { background: var(--accent); color: #000; padding: 8px 20px; border-radius: 15px; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 14px; }
+
+        /* ОКНО ОРАКУЛА ПО ЧЕРТЕЖУ */
+        #oracle-window {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 3000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: 0.4s;
         }
+        #oracle-window.hidden { opacity: 0; pointer-events: none; transform: translateY(20px); }
+
+        .oracle-logo { font-size: 60px; margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--accent)); }
+        .oracle-welcome { font-size: 24px; font-weight: 800; margin-bottom: 10px; }
+        .oracle-modes { display: flex; flex-direction: column; gap: 15px; width: 80%; max-width: 300px; margin-top: 20px; }
         
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; }
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
-
-        /* ШАПКА */
-        header {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(20px);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: rgba(0,0,0,0.7);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+        .mode-choice {
+            background: #2c2c2e; padding: 18px; border-radius: 20px; text-align: center;
+            cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;
         }
+        .mode-choice:hover { border-color: var(--accent); background: rgba(0,242,255,0.05); }
+        .mode-choice b { display: block; font-size: 16px; margin-bottom: 4px; }
+        .mode-choice span { font-size: 11px; opacity: 0.5; }
 
-        .logo { font-weight: 800; font-size: 20px; letter-spacing: -1px; }
-
-        /* КНОПКА МЕНЮ ОРАКУЛА */
-        .ai-trigger {
-            background: var(--card);
-            padding: 10px 18px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: 0.3s;
+        .chat-trigger-bottom {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #1c1c1e; padding: 15px 30px; border-radius: 30px;
+            border: 1px solid var(--accent); cursor: pointer; font-weight: bold;
         }
-        .ai-trigger:active { transform: scale(0.95); }
-        #ai-arrow { transition: 0.3s; display: inline-block; }
-
-        /* ВЫПАДАЮЩЕЕ МЕНЮ (ТОРТИК) */
-        .ai-menu-container {
-            position: absolute;
-            top: 75px;
-            right: 20px;
-            width: 280px;
-            z-index: 1001;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-origin: top right;
-        }
-        .ai-menu-container.hidden { opacity: 0; transform: scale(0.9) translateY(-10px); pointer-events: none; }
-
-        .ai-menu-blur {
-            background: rgba(28, 28, 30, 0.95);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-        }
-
-        .ai-menu-item {
-            display: flex;
-            align-items: center;
-            padding: 16px;
-            cursor: pointer;
-            transition: background 0.2s;
-            text-decoration: none;
-        }
-        .ai-menu-item:hover { background: rgba(255,255,255,0.05); }
-        .ai-menu-icon { font-size: 22px; margin-right: 15px; }
-        .ai-menu-text { display: flex; flex-direction: column; }
-        .ai-menu-title { color: #fff; font-size: 14px; font-weight: 600; }
-        .ai-menu-desc { color: rgba(255,255,255,0.4); font-size: 11px; }
-        .ai-menu-divider { height: 1px; background: rgba(255,255,255,0.05); margin: 0 16px; }
-
-        /* ОСНОВНОЙ КОНТЕНТ (КАРТОЧКИ ТОВАРОВ) */
-        main { padding: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-width: 800px; margin: 0 auto; }
-        .product-card {
-            background: var(--card);
-            border-radius: 25px;
-            padding: 15px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: 0.3s;
-        }
-        .product-card:active { transform: scale(0.98); }
-        .product-img { width: 100%; border-radius: 18px; margin-bottom: 10px; }
-        .product-title { font-size: 14px; font-weight: 600; margin-bottom: 5px; }
-        .product-price { color: var(--accent); font-weight: 700; font-size: 16px; }
-
-        /* ОКНО ЧАТА ОРАКУЛА (NEW) */
-        #ai-window {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-            z-index: 2000; display: flex; align-items: center; justify-content: center;
-            backdrop-filter: blur(10px); transition: 0.3s;
-        }
-        #ai-window.hidden { opacity: 0; pointer-events: none; }
-        .chat-box {
-            width: 90%; max-width: 400px; height: 70vh;
-            background: #1c1c1e; border-radius: 35px;
-            display: flex; flex-direction: column; overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .chat-header { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; }
-        #chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .msg { padding: 10px 15px; border-radius: 18px; max-width: 80%; font-size: 14px; }
-        .msg.ai { background: #2c2c2e; align-self: flex-start; }
-        .msg.user { background: #007aff; align-self: flex-end; }
-        .chat-input { padding: 15px; display: flex; gap: 10px; background: rgba(0,0,0,0.2); }
-        .chat-input input { flex: 1; background: #2c2c2e; border: none; padding: 12px; border-radius: 20px; color: #fff; outline: none; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">LMSH PRESTIGE</div>
-        
-        <div class="ai-trigger" onclick="toggleAIDropdown()">
-            <span>ОРАКУЛ</span>
-            <span id="ai-arrow">↓</span>
-        </div>
-
-        <div id="ai-dropdown-content" class="ai-menu-container hidden">
-            <div class="ai-menu-blur">
-                <div class="ai-menu-item" onclick="toggleAI(); toggleAIDropdown()">
-                    <div class="ai-menu-icon">🔮</div>
-                    <div class="ai-menu-text">
-                        <span class="ai-menu-title">ОРАКУЛ ИИ (NEW)</span>
-                        <span class="ai-menu-desc">Версия 3.3 • Online</span>
-                    </div>
-                </div>
-                <div class="ai-menu-divider"></div>
-                <a href="demo.html" class="ai-menu-item">
-                    <div class="ai-menu-icon">🤖</div>
-                    <div class="ai-menu-text">
-                        <span class="ai-menu-title">ДЕМО ПОМОЩНИК</span>
-                        <span class="ai-menu-desc">Архив логов 3.2</span>
-                    </div>
-                </a>
-                <div class="ai-menu-divider"></div>
-                <a href="titan.html" class="ai-menu-item">
-                    <div class="ai-menu-icon">📝</div>
-                    <div class="ai-menu-text">
-                        <span class="ai-menu-title">TITAN SYSTEM</span>
-                        <span class="ai-menu-desc">Связь со Штабом</span>
-                    </div>
-                </a>
-            </div>
-        </div>
+        <div style="font-weight: 900;">LMSH</div>
+        <a href="login.html" class="login-btn">ВОЙТИ</a>
     </header>
 
-    <main>
-        <div class="product-card">
-            <div style="height:150px; background:#2c2c2e; border-radius:15px; margin-bottom:10px; display:flex; align-items:center; justify-content:center;">📦</div>
-            <div class="product-title">PACK TITAN</div>
-            <div class="product-price">5000 LM</div>
-        </div>
-        <div class="product-card">
-            <div style="height:150px; background:#2c2c2e; border-radius:15px; margin-bottom:10px; display:flex; align-items:center; justify-content:center;">🔋</div>
-            <div class="product-title">ENERGY CORE</div>
-            <div class="product-price">1200 LM</div>
-        </div>
-    </main>
+    <div id="oracle-window" class="hidden">
+        <div class="oracle-logo">🔮</div> <div class="oracle-welcome">Привет, агент!</div>
+        <div style="opacity: 0.6; font-size: 14px;">Я Оракул, чем помочь?</div>
 
-    <div id="ai-window" class="hidden">
-        <div class="chat-box">
-            <div class="chat-header">
-                <b>🔮 ОРАКУЛ V3.3</b>
-                <span onclick="toggleAI()" style="cursor:pointer; opacity:0.5;">✕</span>
+        <div class="oracle-modes">
+            <div class="mode-choice" onclick="startOracle('dev')">
+                <b>С Программированием</b>
+                <span>Oracle Code Assistant 2026</span>
             </div>
-            <div id="chat-messages">
-                <div class="msg ai">Привет, Саня! Я система 3.3. Что нового в Империи?</div>
-            </div>
-            <div class="chat-input">
-                <input type="text" id="ai-input" placeholder="Спросить..." onkeypress="if(event.key==='Enter') sendMsg()">
-                <button onclick="sendMsg()" style="background:var(--accent); border:none; width:35px; height:35px; border-radius:50%; font-weight:bold;">↑</button>
+            <div class="mode-choice" onclick="startOracle('std')">
+                <b>С ИИ (Обычный)</b>
+                <span>Стандартный режим общения</span>
             </div>
         </div>
+        
+        <div onclick="toggleOracle()" style="margin-top: 40px; opacity: 0.4; cursor: pointer;">Назад в Хаб</div>
+    </div>
+
+    <div class="chat-trigger-bottom" onclick="toggleOracle()">
+        СПРОСИТЬ ОРАКУЛА...
     </div>
 
     <script>
-        // Управление выпадающим списком
-        function toggleAIDropdown() {
-            const menu = document.getElementById('ai-dropdown-content');
-            const arrow = document.getElementById('ai-arrow');
-            menu.classList.toggle('hidden');
-            arrow.style.transform = menu.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+        function toggleOracle() {
+            document.getElementById('oracle-window').classList.toggle('hidden');
         }
 
-        // Управление окном чата (Новый Оракул)
-        function toggleAI() {
-            const win = document.getElementById('ai-window');
-            win.classList.toggle('hidden');
-        }
-
-        // Логика чата
-        function sendMsg() {
-            const input = document.getElementById('ai-input');
-            const messages = document.getElementById('chat-messages');
-            if(!input.value.trim()) return;
-
-            messages.innerHTML += `<div class="msg user">${input.value}</div>`;
-            
-            setTimeout(() => {
-                messages.innerHTML += `<div class="msg ai">Принято. Обрабатываю запрос через протоколы Titan...</div>`;
-                messages.scrollTop = messages.scrollHeight;
-            }, 600);
-
-            input.value = "";
-            messages.scrollTop = messages.scrollHeight;
-        }
-
-        // Закрытие меню при клике мимо
-        window.onclick = function(e) {
-            if (!e.target.closest('.ai-trigger') && !e.target.closest('.ai-menu-container')) {
-                document.getElementById('ai-dropdown-content').classList.add('hidden');
-                document.getElementById('ai-arrow').style.transform = 'rotate(0deg)';
-            }
+        function startOracle(mode) {
+            alert('Режим ' + mode + ' активирован. Запуск систем...');
+            // Тут будет логика перехода в чат
         }
     </script>
 </body>
