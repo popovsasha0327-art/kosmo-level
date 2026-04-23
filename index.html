@@ -2,54 +2,48 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LMLSH | Главный Штаб — PRESTIGE STORE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LMSH | PRESTIGE STORE</title>
     <link rel="stylesheet" href="main-prestige.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="main-bg"></div>
 
     <nav class="top-nav">
         <div class="nav-left">
-            <span class="site-name">LMLSH PRESTIGE</span>
+            <span class="site-name">LMSH PRESTIGE</span>
         </div>
         <div class="nav-right">
             <div class="helpers-dropdown">
-                <div class="ai-trigger-container" onclick="toggleAI()" id="oracle-trigger">
-                    <div class="ai-icon-mini">
-                        <div class="dot d1"></div>
-                        <div class="dot d2"></div>
-                    </div>
+                <div class="ai-trigger-container" onclick="toggleAI()">
+                    <div class="ai-icon-mini"><div class="dot d1"></div><div class="dot d2"></div></div>
                     <span class="ai-hint">Оракул</span>
                 </div>
                 
                 <div class="dropdown-trigger" onclick="toggleHelpers()">
-                    <span class="dropdown-label">Дополнительные Помощники</span>
+                    <span class="dropdown-label">Помощники</span>
                     <span class="arrow-icon">▼</span>
                 </div>
 
-                <div id="helpers-list" class="helpers-menu-content glass-effect hidden">
-                    <div class="helper-item" onclick="alert('Быстрый помощник активирован!')">
+                <div id="helpers-list" class="helpers-menu-content hidden">
+                    <div class="helper-item" onclick="openFastAssistant()">
                         <div class="q-circle">?</div>
                         <span>Быстрый Помощник</span>
                     </div>
-                    <div class="helper-item" onclick="alert('Открываю Форму Восстановления...')">
+                    <div class="helper-item" onclick="openRecoveryForm()">
                         <span class="form-icon">≡</span>
                         <span>Форма Восстановления</span>
                     </div>
                 </div>
             </div>
-
-            <a href="index.html" class="nav-link active">Store</a>
-            <button id="profile-btn" class="profile-pill" onclick="handleProfile()">Профиль (О)</button>
+            <button id="profile-btn" class="profile-pill" onclick="handleProfile()">Профиль</button>
         </div>
     </nav>
 
     <main class="store-container">
         <section class="pack-section">
-            <h2 class="section-title">Паки для предрегистрации</h2>
-            <p class="alert-text">Утилита по Предрегистрации может уведомлять об открытии позже чем надо.</p>
+            <h2 class="section-title">Предрегистрация</h2>
             <div class="packs-grid">
                 <div class="pack-card glass-card" onclick="openPack('3.4', 'Insider')">
                     <div class="thumb">3.4</div>
@@ -59,45 +53,38 @@
         </section>
 
         <section class="pack-section">
-            <h2 class="section-title">Паки Kosmo Level</h2>
-            <div class="packs-grid" id="main-grid">
-                </div>
+            <h2 class="section-title">Архив Kosmo Level</h2>
+            <div class="packs-grid" id="main-grid"></div>
         </section>
     </main>
 
     <div id="ai-interface" class="ai-hidden">
-        <div class="ai-header" id="drag-header">
-            <div class="ai-logo-container">
-                <div class="circle c1"></div>
-                <div class="circle c2"></div>
-            </div>
-            <span class="header-title">LMLSH ORACLE</span>
+        <div class="ai-header">
+            <div class="ai-logo-container"><div class="circle c1"></div><div class="circle c2"></div></div>
+            <span class="header-title">LMSH ORACLE</span>
             <div class="minimize-btn" onclick="toggleAI()">−</div>
         </div>
         <div id="chat-history"></div>
         <div class="input-area">
-            <label for="file-input" class="attach-btn">📎</label>
-            <input type="file" id="file-input" style="display:none">
-            <input type="text" id="user-input" placeholder="Введите вопрос..." autocomplete="off">
-            <button id="send-btn">⬆</button>
+            <input type="text" id="user-input" placeholder="Спроси Оракула..." autocomplete="off">
+            <button id="send-btn" onclick="sendMessage()">⬆</button>
         </div>
     </div>
 
     <div id="pack-modal" class="modal-hidden">
+        <div class="modal-overlay" onclick="closePack()"></div>
         <div class="modal-content glass-card">
             <button class="close-btn" onclick="closePack()">×</button>
-            <div class="modal-info">
-                <div class="modal-thumb-box">3.3</div>
-                <h2 id="modal-title">Kosmo Level</h2>
-                <p>Версия: <b id="modal-ver">3.3</b></p>
-                <div class="modal-actions">
-                    <button class="dl-btn">Скачать Пак</button>
-                    <button class="ask-btn" onclick="openAndAsk()">Спросить Оракула о Паке</button>
-                </div>
+            <div class="modal-thumb-box" id="modal-thumb">V</div>
+            <h2 id="modal-title">Kosmo Level</h2>
+            <p>Версия: <b id="modal-ver">0.0</b></p>
+            <div class="modal-actions">
+                <button class="dl-btn">Скачать Пак</button>
+                <button class="ask-btn" onclick="openAndAsk()">Оракул о Паке</button>
             </div>
         </div>
     </div>
 
     <script src="brain.js"></script>
 </body>
-</html>
+    </html>
