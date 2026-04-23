@@ -101,7 +101,7 @@
             chat.scrollTop = chat.scrollHeight;
 
             setTimeout(() => {
-                let reply = "Анализирую архивы 3.2... Данные не найдены. Попробуйте ключевые слова: 'ящик', '3.2', '12 империя'.";
+                let reply = "к";
                 const t = text.toLowerCase();
                 
                 if(t.includes("привет")) reply = "Привет! Система 3.3 на связи. Чем помочь?";
@@ -109,6 +109,7 @@
                 if(t.includes("ящик")) reply = "Тот самый ящик... Ключ повернется 26 апреля 2026 года. Готовься.";
                 if(t.includes("12 империя")) reply = "12 империя — это начало новой главы. Team2903 следит за прогрессом.";
                 if(t.includes("3.2")) reply = "О, легендарное прохождение Саши! 43 минуты чистого экшена. Хочешь тайм-коды?";
+                if(t.includes("oracle ии")) reply = "О, Оракул ИИ, это мой старший Брат. У тебя проблемы с ним? Или просто хочешь сравнить их?"
 
                 chat.innerHTML += `<div class="bubble ai">${reply}</div>`;
                 chat.scrollTop = chat.scrollHeight;
