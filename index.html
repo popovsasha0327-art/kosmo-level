@@ -2,30 +2,26 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>ORACLE PRESTIGE - LMSH</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>LMSH PRESTIGE - STORE</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header class="base-nav">
     <div class="logo-site">LMSH PRESTIGE</div>
-    
     <nav class="nav-right">
-        <a href="store.html">Kosmo Level Store</a>
+        <a href="index.html">Kosmo Level Store</a>
         <a href="#">Kosmogram</a>
         
-        <div class="dropdown">
-            <button class="dropbtn">Помощники <span class="arrow">▼</span></button>
+        <div class="dropdown" id="helpers-menu">
+            <button class="dropbtn">Помощники ▼</button>
             <div class="dropdown-content">
-                <div class="helper-item" onclick="toggleOracle()">
-                    <div class="dots-wrapper">
-                        <span class="dot-purple"></span>
-                        <span class="dot-blue"></span>
-                    </div>
+                <div class="helper-item" onclick="openOracle()">
+                    <div class="dots-wrapper"><span class="dot-purple"></span><span class="dot-blue"></span></div>
                     <b>Оракул ИИ</b>
                 </div>
-                <div class="helper-item" onclick="openHelperAlert()">
+                <div class="helper-item" onclick="location.href='demo.html'">
                     <div class="q-circle">?</div> 
                     <b>Быстрый Помощник</b>
                 </div>
@@ -37,70 +33,51 @@
         </div>
 
         <a href="#about">О Сайте</a>
-        <a href="auth.html" id="user-link" class="login-btn">Войти</a>
+        <a href="auth.html" id="user-link" class="login-btn">Профиль (О)</a>
     </nav>
 </header>
 
-<main class="chat-container">
-    <div class="card">
-        <h2 id="ai-head">Демо Версия!</h2>
-
-        <div id="chat">
-            <div class="bubble ai">Здравствуйте! Я Агент из Oracle. Могу чем-то помочь или просто поболтаем?</div>
+<main class="store-content">
+    
+    <section class="pack-section">
+        <h2 class="section-title">Паки для предрегистрации</h2>
+        <p class="warning-text">Утилита по Предрегистрации может не работать или уведомлять об открытии пака позже чем надо. Пользуйтесь с умом</p>
+        <div class="packs-grid">
+            <div class="pack-card" onclick="openDownloadModal('3.4')">
+                <img src="preview_34.png" alt="3.4" class="preview-img">
+                <h3>Kosmo Level 3.4</h3>
+            </div>
         </div>
+    </section>
 
-        <div class="input-area">
-            <input type="text" id="ai-q" placeholder="Сообщение" onkeypress="handleEnter(event)">
-            <button class="send-btn" onclick="ask()">↑</button>
+    <section class="pack-section">
+        <h2 class="section-title">Preview Packs</h2>
+        <div class="packs-grid">
+            <div class="pack-card" onclick="openDownloadModal('2.8.1')">
+                <img src="preview_281.png" alt="2.8.1" class="preview-img">
+                <h3>Kosmo Level 2.8.1</h3>
+            </div>
+            <div class="pack-card" onclick="openDownloadModal('2.1')">
+                <img src="traitor.png" alt="2.1" class="preview-img">
+                <h3>Traitor Level 2.1</h3>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <section class="pack-section">
+        <h2 class="section-title">Книги / Истории</h2>
+        <div class="packs-grid">
+            <div class="pack-card">
+                <img src="story_lumi.png" alt="Lumi" class="preview-img">
+                <h3>Как Люми попала сюда?</h3>
+            </div>
+        </div>
+    </section>
+
 </main>
 
-<section class="packs-section">
-    <div class="packs-grid">
-        <div class="pack-card" onclick="openDownloadModal('3.2')">
-            <div class="pack-version">3.2</div>
-            <h3>Beta Legend</h3>
-            <p>Пак Kosmo Level 3.2. Легендарный 12 мир.</p>
-            <button class="pack-btn">Открыть Пак</button>
-        </div>
+<div id="oracle-modal" class="modal-overlay hidden">
     </div>
-</section>
-
-<div id="download-modal" class="modal-overlay hidden">
-    <div class="download-card">
-        <button class="close-modal" onclick="closeDownloadModal()">×</button>
-        
-        <div class="download-content-split">
-            <div class="pack-info">
-                <img src="kosmolevel30822.png" alt="Kosmo Level 3.2" class="pack-img-1to1">
-                <h2>Kosmo Level</h2>
-                <p class="pack-desc">Версия: <b>3.2 Beta</b><br>Легендарное прохождение Саши на 43 минуты. Beta-версия с самым эпичным 12 миром.</p>
-                <div class="download-actions">
-                    <button class="main-dl-btn" onclick="startPackDownload()">Скачать Пак</button>
-                    <button class="settings-btn">Изменения и Настройки</button>
-                </div>
-            </div>
-
-            <div class="pack-oracle">
-                <div class="oracle-header">
-                    <div class="dots-wrapper">
-                        <span class="dot-purple"></span>
-                        <span class="dot-blue"></span>
-                    </div>
-                    <b>Оракул ИИ</b>
-                </div>
-                <div id="pack-chat" class="pack-chat-box">
-                    <div class="msg ai">Я Оракул. Пак 3.2 — это Beta-легенда. Спрашивай, я поясню за 12 мир.</div>
-                </div>
-                <div class="pack-input-area">
-                    <input type="text" id="pack-q" placeholder="Спросить про Пак...">
-                    <button onclick="askPackOracle()">→</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script src="script.js"></script>
 </body>
