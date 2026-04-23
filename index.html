@@ -58,6 +58,28 @@
     </div>
 </main>
 
+    <div id="oracle-modal" class="modal-overlay hidden">
+    <div class="oracle-card">
+        <div class="oracle-glow"></div>
+        <div class="modal-header">
+            <div class="dots-group">
+                <span class="dot-purple"></span>
+                <span class="dot-blue"></span>
+            </div>
+            <span>ADVANCED ORACLE AI</span>
+            <button class="close-btn" onclick="closeOracle()">×</button>
+        </div>
+        <div class="oracle-body">
+            <div class="status-line">СИСТЕМА: <span class="active">ОНЛАЙН</span></div>
+            <p class="oracle-text">Продвинутый интеллект готов к глубокому анализу данных LMSH 3.3. Введите запрос для Оракула...</p>
+            <div class="oracle-input-wrap">
+                <input type="text" placeholder="Глубокий запрос..." id="oracle-query">
+                <button onclick="oracleProcess()">Анализ</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="script.js"></script>
 </body>
 </html>
