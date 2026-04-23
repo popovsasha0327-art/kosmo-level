@@ -16,14 +16,8 @@
         </div>
         <div class="nav-right">
             <div class="helpers-dropdown">
-                <div class="ai-trigger-container" onclick="toggleAI()">
-                    <div class="ai-icon-mini"><div class="dot d1"></div><div class="dot d2"></div></div>
-                    <span class="ai-hint">Оракул</span>
-                </div>
-                
                 <div class="dropdown-trigger" onclick="toggleHelpers()">
                     <span class="dropdown-label">Помощники</span>
-                    <span class="arrow-icon">▼</span>
                 </div>
 
                 <div id="helpers-list" class="helpers-menu-content hidden">
@@ -37,37 +31,68 @@
                     </div>
                 </div>
             </div>
-            <button id="profile-btn" class="profile-pill" onclick="handleProfile()">Профиль</button>
+            <button id="profile-btn" class="profile-pill">Профиль</button>
         </div>
     </nav>
 
     <main class="store-container">
+        <section class="stories-container">
+            <div class="story" onclick="openStory('news')">
+                <div class="story-ring"><img src="https://via.placeholder.com/60" alt="News"></div>
+                <span>Новости</span>
+            </div>
+            <div class="story" onclick="openStory('update')">
+                <div class="story-ring"><img src="https://via.placeholder.com/60" alt="3.4"></div>
+                <span>Update</span>
+            </div>
+            <div class="story" onclick="openStory('dev')">
+                <div class="story-ring"><span>👨‍💻</span></div>
+                <span>Dev</span>
+            </div>
+        </section>
+
         <section class="pack-section">
-            <h2 class="section-title">Предрегистрация</h2>
-            <div class="packs-grid">
-                <div class="pack-card glass-card" onclick="openPack('3.4', 'Insider')">
+            <h2 class="section-title">Preview Packs</h2>
+            <div class="preview-scroll">
+                <div class="preview-card glass-card" onclick="openPack('3.4', 'Coming Soon')">
+                    <div class="preview-badge">NEW</div>
                     <div class="thumb">3.4</div>
-                    <h3>Kosmo Level 3.4</h3>
+                    <div class="preview-info">
+                        <h3>Kosmo Level 3.4</h3>
+                        <p>Следующее поколение</p>
+                    </div>
+                </div>
+                <div class="preview-card glass-card" onclick="openPack('X', 'Limited')">
+                    <div class="preview-badge">EXP</div>
+                    <div class="thumb">⚡</div>
+                    <div class="preview-info">
+                        <h3>Titan Edition</h3>
+                        <p>Экспериментальный пак</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <section class="pack-section">
             <h2 class="section-title">Архив Kosmo Level</h2>
-            <div class="packs-grid" id="main-grid"></div>
+            <div class="packs-grid" id="main-grid">
+                </div>
         </section>
     </main>
 
     <div id="ai-interface" class="ai-hidden">
         <div class="ai-header">
-            <div class="ai-logo-container"><div class="circle c1"></div><div class="circle c2"></div></div>
-            <span class="header-title">LMSH ORACLE</span>
-            <div class="minimize-btn" onclick="toggleAI()">−</div>
+            <div class="ai-logo-container">
+                <div class="circle c1"></div>
+                <div class="circle c2"></div>
+            </div>
+            <span class="oracle-title">LMSH ORACLE</span>
+            <div class="close-ai" onclick="toggleAI()">−</div>
         </div>
         <div id="chat-history"></div>
         <div class="input-area">
             <input type="text" id="user-input" placeholder="Спроси Оракула..." autocomplete="off">
-            <button id="send-btn" onclick="sendMessage()">⬆</button>
+            <button id="send-btn" onclick="sendMessage()">↑</button>
         </div>
     </div>
 
@@ -87,4 +112,4 @@
 
     <script src="brain.js"></script>
 </body>
-    </html>
+</html>
