@@ -10,18 +10,13 @@
 
 <header>
     <div class="logo-site">LMSH PRESTIGE</div>
-    
     <nav class="nav-right">
         <a href="index.html">Kosmo Level Store</a>
-        
         <div class="dropdown">
-            <button class="dropbtn">Помощники <span class="arrow">▼</span></button>
+            <button class="dropbtn">Помощники ▼</button>
             <div class="dropdown-content">
-                <div class="helper-item" onclick="location.href='oracle_adv.html'">
-                    <div class="dots-group">
-                        <span class="dot-purple"></span>
-                        <span class="dot-blue"></span>
-                    </div>
+                <div class="helper-item" onclick="openOracle()">
+                    <div class="dots-group"><span class="dot-purple"></span><span class="dot-blue"></span></div>
                     <b>Оракул ИИ</b>
                 </div>
                 <div class="helper-item" onclick="location.href='demo.html'">
@@ -34,7 +29,6 @@
                 </div>
             </div>
         </div>
-
         <a href="#about">О Сайте</a>
         <a href="auth.html" id="user-link" class="login-btn">Войти</a>
     </nav>
@@ -42,7 +36,7 @@
 
 <main class="content">
     <h1 class="main-title">Паки Kosmo Level</h1>
-    <div class="packs-grid" id="packs-container">
+    <div class="packs-grid">
         <div class="pack-card">
             <div class="pack-version">3.2</div>
             <h3>Beta Legend</h3>
@@ -52,26 +46,23 @@
         <div class="pack-card special">
             <div class="pack-version">3.3</div>
             <h3>Project Circle</h3>
-            <p>Секретный проект. Активация: 26.04.2026.</p>
+            <p>Секретный проект Ящик. Активация: 26.04.2026.</p>
             <button class="download-btn lock">Заблокировано 🔑</button>
         </div>
     </div>
 </main>
 
-    <div id="oracle-modal" class="modal-overlay hidden">
+<div id="oracle-modal" class="modal-overlay hidden">
     <div class="oracle-card">
         <div class="oracle-glow"></div>
         <div class="modal-header">
-            <div class="dots-group">
-                <span class="dot-purple"></span>
-                <span class="dot-blue"></span>
-            </div>
+            <div class="dots-group"><span class="dot-purple"></span><span class="dot-blue"></span></div>
             <span>ADVANCED ORACLE AI</span>
             <button class="close-btn" onclick="closeOracle()">×</button>
         </div>
         <div class="oracle-body">
             <div class="status-line">СИСТЕМА: <span class="active">ОНЛАЙН</span></div>
-            <p class="oracle-text">Продвинутый интеллект готов к глубокому анализу данных LMSH 3.3. Введите запрос для Оракула...</p>
+            <p class="oracle-text">Продвинутый интеллект готов к глубокому анализу данных LMSH 3.3.</p>
             <div class="oracle-input-wrap">
                 <input type="text" placeholder="Глубокий запрос..." id="oracle-query">
                 <button onclick="oracleProcess()">Анализ</button>
