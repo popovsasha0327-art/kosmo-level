@@ -1,22 +1,35 @@
-// ДАННЫЕ О КОМАНДЕ
+// ДАННЫЕ О КОМАНДЕ ШТАБА
 const Staff = {
-    "ламирк": ["отдыхает.", "крутит валы сервера.", "шьет кастом."],
-    "мурзик": ["шьет LineageOS.", "рисует иконки.", "спит."],
-    "хахми": ["шутит.", "взламывает кофеварку.", "поет."]
+    "ламирк": ["отдыхает после смены.", "оптимизирует валы сервера.", "шьет кастомное ядро."],
+    "мурзик": ["перепрошивает телефон на LineageOS. Реклама скрыта! 📱", "спит на сервере.", "рисует иконки для Сани."],
+    "хахми": ["сочиняет шутки про мамонтов.", "взламывает кофеварку.", "разгоняет сервер смехом."]
 };
 
-window.onload = () => {
+// ЗАГРУЗКА ДАННЫХ
+window.addEventListener('load', () => {
     const rank = localStorage.getItem('LMSH_RANK');
     const name = localStorage.getItem('LMSH_NAME') || "Агент";
     const userLink = document.getElementById('user-link');
     
     if(rank) {
-        userLink.innerText = "Профиль (" + name[0] + ")";
-        if(rank === 'OVERLORD') renderCreatorMenu();
+        userLink.innerText = "Профиль (" + name[0].toUpperCase() + ")";
+        if(rank === 'OVERLORD') {
+            const adminNav = document.getElementById('admin-nav');
+            if(adminNav) {
+                adminNav.style.display = 'block';
+                adminNav.innerHTML = `<span class="c-btn" onclick="location.href='titan.html'">(Creator) Форма</span> <span class="c-btn" onclick="alert('Запуск Оракула...')">(Creator) Oracle AI</span>`;
+            }
+        }
     }
-};
+});
 
+// ФУНКЦИИ ИНТЕРФЕЙСА
 function toggleOracle() { document.getElementById('oracle-modal').classList.toggle('hidden'); }
+
+function openHelper() {
+    const name = localStorage.getItem('LMSH_NAME') || "Агент";
+    alert("❗️ Привет, " + name + "! Я тут отлично работаю. Гугл Сайты уже всё, а ЛМСХ — это вторая жизнь!");
+}
 
 function sendMessage() {
     const input = document.getElementById('user-input');
@@ -24,31 +37,23 @@ function sendMessage() {
     const name = localStorage.getItem('LMSH_NAME') || "Агент";
     const isCreator = localStorage.getItem('LMSH_RANK') === 'OVERLORD';
 
-    if(!input.value) return;
-    chat.innerHTML += `<div class="msg user">${input.value}</div>`;
+    if(!input.value.trim()) return;
     
-    let reply = "Привет, " + name + "! Как дела?";
-    if(input.value.toLowerCase().includes("как там")) {
-        const member = input.value.toLowerCase().split("как там ")[1];
-        if(Staff[member]) reply = member + " сейчас " + Staff[member][Math.floor(Math.random()*3)];
-    }
+    chat.innerHTML += `<div class="msg user">${input.value}</div>`;
+    const val = input.value.toLowerCase();
+    input.value = "";
 
     setTimeout(() => {
+        let reply = "Слушаю тебя, " + name + ". Чем могу помочь?";
+        
+        if(val.includes("как там")) {
+            const member = val.split("как там ")[1];
+            if(Staff[member]) {
+                reply = member.charAt(0).toUpperCase() + member.slice(1) + " сейчас " + Staff[member][Math.floor(Math.random()*Staff[member].length)];
+            }
+        }
+
         chat.innerHTML += `<div class="msg ai">${isCreator ? 'Создатель, ' : ''}${reply}</div>`;
         chat.scrollTop = chat.scrollHeight;
-    }, 500);
-    input.value = "";
-}
-
-function openHelper() {
-    const name = localStorage.getItem('LMSH_NAME') || "Агент";
-    alert("❗️ Привет, " + name + "! Я тут отлично работаю. Гугл Сайты уже всё, а ЛМСХ — это вторая жизнь!");
-}
-
-function renderCreatorMenu() {
-    const nav = document.getElementById('admin-nav');
-    if(nav) {
-        nav.style.display = 'block';
-        nav.innerHTML = `<span class="c-btn" onclick="alert('Код...')">/EXEC</span> <span class="c-btn" onclick="location.href='titan.html'">(Creator) Форма</span>`;
-    }
+    }, 600);
 }
