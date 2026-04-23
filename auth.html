@@ -2,42 +2,51 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>LMSH | Авторизация</title>
+    <title>LMSH | Auth</title>
     <style>
-        :root { --bg: #000; --card: #1c1c1e; --accent: #00f2ff; --text: #fff; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
-        body { background: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-        .auth-card { width: 90%; max-width: 400px; padding: 30px; background: var(--card); border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
-        .logo { font-size: 50px; margin-bottom: 10px; }
-        input { width: 100%; background: #2c2c2e; border: none; padding: 15px; border-radius: 15px; color: #fff; margin-bottom: 15px; outline: none; }
-        .btn { width: 100%; background: var(--accent); color: #000; border: none; padding: 15px; border-radius: 15px; font-weight: bold; cursor: pointer; }
+        body { background: #000; color: #fff; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .box { background: #1c1c1e; padding: 30px; border-radius: 25px; width: 320px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 8px 0; background: #2c2c2e; border: none; border-radius: 10px; color: #fff; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #00f2ff; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .toggle { font-size: 12px; color: #888; margin-top: 15px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="auth-card">
-        <div class="logo">🔮</div>
-        <h2>Вход в Систему</h2><br>
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="pass" placeholder="Пароль">
-        <button class="btn" onclick="login()">ПОДТВЕРДИТЬ</button>
-    </div>
+<div class="box">
+    <h2 id="title">Войти</h2>
+    <input type="text" id="name" placeholder="Твое Имя (для Sign Up)" style="display:none;">
+    <input type="email" id="email" placeholder="Почта">
+    <input type="password" id="pass" placeholder="Пароль">
+    <button onclick="handleAuth()">ПОДТВЕРДИТЬ</button>
+    <div class="toggle" onclick="toggleMode()">Нет аккаунта? Зарегистрироваться</div>
+</div>
 
-    <script>
-        function login() {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('pass').value;
-            // ТВОИ СЕКРЕТНЫЕ ДАННЫЕ
-            if(e === "Oracle@lmsh.com" && p === "6hqHeHnX03V%92") {
-                localStorage.setItem('LMSH_RANK', 'OVERLORD');
-                localStorage.setItem('USER_NAME', 'Саня');
-                alert("ПРИВЕТСТВУЮ, СОЗДАТЕЛЬ!");
-                window.location.href = 'index.html';
-            } else {
-                localStorage.setItem('LMSH_RANK', 'AGENT');
-                window.location.href = 'index.html';
-            }
+<script>
+    let isLogin = true;
+    function toggleMode() {
+        isLogin = !isLogin;
+        document.getElementById('title').innerText = isLogin ? "Войти" : "Регистрация";
+        document.getElementById('name').style.display = isLogin ? "none" : "block";
+    }
+
+    function handleAuth() {
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('pass').value;
+        const name = document.getElementById('name').value;
+
+        // СЕКРЕТНЫЙ АККАУНТ
+        if(email === "Oracle@lmsh.com" && pass === "6hqHeHnX03V%92") {
+            localStorage.setItem('LMSH_RANK', 'OVERLORD');
+            localStorage.setItem('LMSH_NAME', 'Саня');
+            window.location.href = 'index.html';
+            return;
         }
-    </script>
+
+        if(!isLogin && name) { localStorage.setItem('LMSH_NAME', name); }
+        localStorage.setItem('LMSH_RANK', 'AGENT');
+        localStorage.setItem('LMSH_LOGGED', 'true');
+        window.location.href = 'index.html';
+    }
+</script>
 </body>
 </html>
