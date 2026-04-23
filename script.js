@@ -1,78 +1,99 @@
-// 1. ГЕНЕРАЦИЯ ПАКОВ
-const packVersions = ["3.3", "3.2", "3.1", "3.0", "29000", "2.8", "2.5", "2.2", "2.0", "1.0"];
-const grid = document.getElementById('main-packs-grid');
+// 1. КОНСТАНТЫ
+const GOOGLE_URL = "https://script.google.com/macros/s/AKfycbwTGRx7v4Ri2r_3xMYeN873BdldGY2Lh2u7LpvJX9NKGNjmOsJNOLh-G-n9DulkLJbjHg/exec";
+
+// 2. ГЕНЕРАЦИЯ ПАКОВ (Версии по списку Сани)
+const versions = ["3.3", "3.2", "3.1", "3.0", "29000", "2.8", "2.5", "2.2", "2.0", "1.0"];
+const grid = document.getElementById('main-grid');
 
 if(grid) {
-    packVersions.forEach(v => {
+    versions.forEach(v => {
         grid.innerHTML += `
-            <div class="card" onclick="showPack('${v}', 'Kosmo Level', 'pack.png')">
-                <div class="card-thumb ${v === '3.3' ? 'epic-border' : ''}">${v}</div>
+            <div class="pack-card glass-card" onclick="openPack('${v}', 'Kosmo Level')">
+                <div class="thumb">${v === '29000' ? '⚡' : v}</div>
                 <h3>Kosmo Level ${v}</h3>
             </div>
         `;
     });
 }
 
-// 2. ИНСТРУКЦИЯ ПО СОХРАНЕНИЮ (ПРОФИЛЬ)
-function handleProfile() {
-    const current = localStorage.getItem('user_name') || "Агент";
-    const name = prompt("Введите имя профиля:", current);
-    if(name) {
-        localStorage.setItem('user_name', name);
-        updateUI();
+// 3. ВЫПАДАЮЩЕЕ МЕНЮ ПОМОЩНИКОВ
+function toggleHelpers() {
+    const menu = document.getElementById('helpers-list');
+    const arrow = document.querySelector('.arrow-icon');
+    menu.classList.toggle('hidden');
+    arrow.style.transform = menu.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+
+// 4. УПРАВЛЕНИЕ ОКНАМИ
+function openPack(ver, title) {
+    document.getElementById('modal-ver').innerText = ver;
+    document.getElementById('modal-title').innerText = title;
+    document.getElementById('pack-modal').classList.remove('modal-hidden');
+}
+
+function closePack() {
+    document.getElementById('pack-modal').classList.add('modal-hidden');
+}
+
+function openAndAsk() {
+    const ver = document.getElementById('modal-ver').innerText;
+    closePack();
+    if(ui.classList.contains('ai-hidden')) toggleAI();
+    userInput.value = `Расскажи подробнее про Kosmo Level версии ${ver}`;
+}
+
+// 5. ЛОГИКА ОРАКУЛА (Твой эталонный код)
+const ui = document.getElementById('ai-interface');
+const chatHistory = document.getElementById('chat-history');
+const userInput = document.getElementById('user-input');
+
+function toggleAI() { ui.classList.toggle('ai-hidden'); }
+
+async function sendMessage() {
+    const text = userInput.value.trim();
+    if (!text) return;
+
+    renderMessage('user', text);
+    userInput.value = "";
+    const thinkingId = "think-" + Date.now();
+    renderMessage('ai', '●●●', thinkingId);
+
+    try {
+        const response = await fetch(`${GOOGLE_URL}?q=${encodeURIComponent(text)}`);
+        const data = await response.json();
+        document.getElementById(thinkingId).innerText = data.answer;
+    } catch (e) {
+        document.getElementById(thinkingId).innerText = "Ошибка Штаба ЛМЛСХ.";
     }
 }
 
-function updateUI() {
-    const name = localStorage.getItem('user_name') || "Агент";
-    document.getElementById('profile-btn').innerText = `Профиль (${name[0].toUpperCase()})`;
+function renderMessage(role, text, id = null) {
+    const div = document.createElement('div');
+    div.className = `msg ${role}`;
+    if (id) div.id = id;
+    div.innerText = text;
+    chatHistory.appendChild(div);
+    chatHistory.scrollTop = chatHistory.scrollHeight;
 }
 
-// 3. СОХРАНЕНИЕ ЧАТА (ОРАКУЛ)
-let chatHistory = JSON.parse(localStorage.getItem('oracle_chat')) || [
-    {role: 'ai', text: 'Здравствуйте! Я Агент из Oracle. Чем помочь?'}
-];
-
-function sendMessage() {
-    const input = document.getElementById('user-input');
-    if(!input.value) return;
-
-    chatHistory.push({role: 'user', text: input.value});
-    // Ответ ИИ
-    chatHistory.push({role: 'ai', text: 'Запрос принят. Анализирую данные 3.3...'});
-    
-    localStorage.setItem('oracle_chat', JSON.stringify(chatHistory));
-    input.value = '';
-    renderChat();
+// 6. СИСТЕМА ПРОФИЛЯ
+function handleProfile() {
+    const name = prompt("Имя Агента:", localStorage.getItem('lmsh_name') || "Саня");
+    if(name) {
+        localStorage.setItem('lmsh_name', name);
+        document.getElementById('profile-btn').innerText = `Профиль (${name[0].toUpperCase()})`;
+    }
 }
 
-function renderChat() {
-    const box = document.getElementById('chat-box');
-    if(!box) return;
-    box.innerHTML = chatHistory.map(m => `
-        <div class="msg ${m.role}">${m.text}</div>
-    `).join('');
-    box.scrollTop = box.scrollHeight;
-}
-
-// 4. ТАЙМЕР ЭПИКА (2:30)
+// 7. ЭПИК ТАЙМЕР (2:30)
 setInterval(() => {
-    const menu = document.getElementById('helpers-menu');
-    menu.classList.add('epic-flash');
-    setTimeout(() => menu.classList.remove('epic-flash'), 5000);
+    const trig = document.getElementById('oracle-trigger');
+    trig.classList.add('epic-flash');
+    setTimeout(() => trig.classList.remove('epic-flash'), 5000);
 }, 150000);
 
-// 5. МОДАЛКИ
-function showPack(ver, name) {
-    document.getElementById('modal-version').innerText = ver;
-    document.getElementById('modal-name').innerText = name;
-    document.getElementById('pack-modal').classList.remove('hidden');
-}
-function closePack() { document.getElementById('pack-modal').classList.add('hidden'); }
-function openOracle() { 
-    document.getElementById('oracle-window').classList.remove('hidden');
-    renderChat();
-}
-function closeOracle() { document.getElementById('oracle-window').classList.add('hidden'); }
-
-window.onload = updateUI;
+// Запуск
+window.onload = () => {
+    const saved = localStorage.getItem('lmsh_name') || "Саня";
+    document.getElementById('profile-btn').innerText = `Профиль (${saved[0].toUpperCase()})`;
+};
