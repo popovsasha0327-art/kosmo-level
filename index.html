@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>LMSH PRESTIGE | HQ</title>
     <style>
-        /* --- БАЗОВЫЕ СТИЛИ --- */
         :root {
             --bg: #050507;
             --card: rgba(28, 28, 30, 0.6);
@@ -23,7 +22,7 @@
             background: radial-gradient(circle at top right, #1c1c1e 0%, #050507 100%);
         }
 
-        /* --- НАВИГАЦИЯ --- */
+        /* НАВИГАЦИЯ */
         .top-nav {
             padding: 15px 25px; display: flex; justify-content: space-between; align-items: center;
             position: sticky; top: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(25px);
@@ -32,52 +31,41 @@
 
         .nav-right { display: flex; align-items: center; gap: 25px; }
 
-        /* ВЫПАДАЮЩЕЕ МЕНЮ */
         .nav-dropdown { position: relative; display: inline-block; }
-        .drop-btn { background: none; border: none; color: var(--text); cursor: pointer; font-size: 15px; font-weight: 600; opacity: 0.8; }
-        .drop-btn:hover { opacity: 1; }
-        
+        .drop-btn { background: none; border: none; color: var(--text); cursor: pointer; font-size: 15px; font-weight: 600; }
         .drop-content {
             display: none; position: absolute; right: 0; background: #1c1c1e;
-            min-width: 240px; border-radius: 18px; backdrop-filter: blur(20px);
-            border: 1px solid var(--border); overflow: hidden; margin-top: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            min-width: 240px; border-radius: 18px; border: 1px solid var(--border);
+            overflow: hidden; margin-top: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .nav-dropdown:hover .drop-content { display: block; animation: slideUp 0.2s ease-out; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .drop-content a { color: white; padding: 14px 20px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid var(--border); }
-        .drop-content a:last-child { border-none; }
+        .nav-dropdown:hover .drop-content { display: block; }
+        .drop-content a { color: white; padding: 14px 20px; text-decoration: none; display: block; font-size: 14px; }
         .drop-content a:hover { background: var(--accent); }
 
-        /* ОРАКУЛ: ЯДРО (В ШАПКЕ) */
-        .oracle-core { display: flex; gap: 6px; cursor: pointer; padding: 8px; border-radius: 20px; transition: 0.3s; }
-        .oracle-core:hover { background: rgba(255,255,255,0.1); }
+        /* ЯДРО ОРАКУЛА */
+        .oracle-core { display: flex; gap: 6px; cursor: pointer; padding: 8px; border-radius: 20px; }
         .ball { width: 12px; height: 12px; border-radius: 50%; filter: blur(1px); }
         .b1 { background: var(--accent); animation: pulse 2s infinite; }
         .b2 { background: var(--purple); animation: pulse 2s infinite 1s; }
         @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.3); opacity: 1; } }
 
-        /* --- КОНТЕНТ --- */
+        /* КОНТЕНТ */
         .store-container { padding: 30px 20px; max-width: 1100px; margin: 0 auto; }
-        .section-label { font-size: 24px; font-weight: 800; margin: 40px 0 20px; letter-spacing: -0.5px; opacity: 0.9; }
-
+        .section-label { font-size: 24px; font-weight: 800; margin: 40px 0 20px; opacity: 0.9; }
         .packs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
 
         .glass-card {
             background: var(--card); padding: 30px; border-radius: 28px;
             border: 1px solid var(--border); backdrop-filter: blur(15px);
-            cursor: pointer; transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            display: flex; flex-direction: column; gap: 8px;
+            cursor: pointer; transition: 0.4s;
         }
-        .glass-card:hover { transform: translateY(-8px); border-color: var(--accent); background: rgba(255,255,255,0.08); box-shadow: 0 15px 40px rgba(0,122,255,0.2); }
-        .v-num { font-size: 36px; font-weight: 900; color: var(--accent); letter-spacing: -1px; }
-        .v-tag { font-size: 10px; font-weight: 800; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 10px; width: fit-content; margin-bottom: 5px; }
+        .glass-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .v-num { font-size: 36px; font-weight: 900; color: var(--accent); }
 
-        /* --- ИНТЕРФЕЙС ОРАКУЛА --- */
+        /* ОКНО ОРАКУЛА */
         #ai-interface {
             position: fixed; bottom: 25px; right: 25px; width: 360px; height: 520px;
-            background: rgba(13, 13, 15, 0.95); border-radius: 35px;
+            background: rgba(13, 13, 15, 0.98); border-radius: 35px;
             border: 1px solid var(--border); display: flex; flex-direction: column;
             box-shadow: 0 25px 60px rgba(0,0,0,0.8); z-index: 9999;
             backdrop-filter: blur(30px); transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
@@ -85,43 +73,33 @@
         .ai-hidden { opacity: 0; transform: translateY(40px) scale(0.9); pointer-events: none; }
         
         .ai-header { padding: 18px 25px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .ai-title { font-size: 12px; font-weight: 800; letter-spacing: 2px; opacity: 0.6; }
+        #chat-history { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
         
-        #chat-history { flex: 1; overflow-y: auto; padding: 25px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
-        
-        .msg { padding: 12px 18px; border-radius: 22px; font-size: 14px; max-width: 85%; line-height: 1.5; }
+        .msg { padding: 12px 18px; border-radius: 22px; font-size: 14px; max-width: 85%; }
         .msg.ai { background: #242426; align-self: flex-start; border-bottom-left-radius: 5px; }
         .msg.user { background: var(--accent); align-self: flex-end; border-bottom-right-radius: 5px; }
 
-        /* АНИМАЦИЯ СФЕР ОЖИДАНИЯ */
+        /* АНИМАЦИЯ СФЕР */
         .oracle-typing {
             display: flex; align-items: center; justify-content: center;
             padding: 12px; background: rgba(255,255,255,0.05);
-            border-radius: 25px; width: 75px; height: 40px; position: relative; margin-bottom: 10px;
+            border-radius: 25px; width: 75px; height: 40px; position: relative;
         }
         .t-ball { width: 10px; height: 10px; border-radius: 50%; position: absolute; filter: blur(1.5px); }
         .tb-1 { background: var(--accent); animation: orbit 1.4s infinite ease-in-out; }
         .tb-2 { background: var(--purple); animation: orbit 1.4s infinite ease-in-out -0.7s; }
-        @keyframes orbit { 
-            0%, 100% { transform: translateX(-18px) scale(1); z-index: 1; opacity: 0.5; } 
-            50% { transform: translateX(18px) scale(1.4); z-index: 2; opacity: 1; } 
-        }
+        @keyframes orbit { 0%, 100% { transform: translateX(-18px); opacity: 0.5; } 50% { transform: translateX(18px); opacity: 1; } }
 
-        /* ПОЛЕ ВВОДА */
         .ai-input-box { padding: 20px; display: flex; gap: 15px; align-items: center; border-top: 1px solid var(--border); }
-        .attachment { transform: rotate(45deg); cursor: pointer; color: #8e8e93; font-size: 22px; transition: 0.3s; }
-        .attachment:hover { color: var(--accent); }
-        #user-input { flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 15px; }
-        .send-btn { background: var(--accent); border: none; color: white; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-weight: bold; }
+        #user-input { flex: 1; background: transparent; border: none; color: white; outline: none; }
+        .send-btn { background: var(--accent); border: none; color: white; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="main-bg"></div>
 
     <nav class="top-nav">
-        <div class="nav-left">
-            <b style="letter-spacing: 1.5px; font-size: 18px; font-weight: 900;">LMSH <span style="color:var(--accent)">PRESTIGE</span></b>
-        </div>
+        <div class="nav-left"><b>LMSH PRESTIGE</b></div>
         <div class="nav-right">
             <div class="nav-dropdown">
                 <button class="drop-btn">ПОМОЩНИКИ ▼</button>
@@ -138,96 +116,68 @@
     </nav>
 
     <main class="store-container">
-        <h2 class="section-label">В РАЗРАБОТКЕ</h2>
-        <div class="packs-grid">
-            <div class="glass-card">
-                <div class="v-tag">NEXT GEN</div>
-                <div class="v-num">3.4</div>
-                <p style="opacity: 0.6; font-size: 14px;">Kosmo Level 3.4 — Глобальное обновление системы</p>
-            </div>
-            <div class="glass-card">
-                <div class="v-tag" style="background:rgba(255, 69, 58, 0.2); color:#ff453a;">LIMITED</div>
-                <div class="v-num">Titan</div>
-                <p style="opacity: 0.6; font-size: 14px;">Экспериментальный пак для главных архитекторов</p>
-            </div>
-        </div>
-
         <h2 class="section-label">АРХИВ KOSMO LEVEL</h2>
-        <div class="packs-grid" id="archive-grid">
-            </div>
+        <div class="packs-grid" id="main-grid">
+            <div class="glass-card"><div class="v-num">3.4</div><p>В разработке...</p></div>
+            <div class="glass-card"><div class="v-num">3.3</div><p>Stable Build</p></div>
+        </div>
     </main>
 
     <div id="ai-interface" class="ai-hidden">
         <div class="ai-header">
             <div class="oracle-core"><div class="ball b1"></div><div class="ball b2"></div></div>
-            <span class="ai-title">ORACLE PRESTIGE</span>
-            <div onclick="toggleAI()" style="cursor:pointer; opacity: 0.5;">✕</div>
+            <span style="font-weight:bold; font-size:12px;">ORACLE SYSTEM</span>
+            <div onclick="toggleAI()" style="cursor:pointer">✕</div>
         </div>
         <div id="chat-history">
-            <div class="msg ai">Штаб на связи, Саня. Готов к сканированию секторов. Что ищем? 🛠</div>
+            <div class="msg ai">Штаб на связи. Ожидаю запрос... 🛠</div>
         </div>
         <div class="ai-input-box">
             <div class="attachment">📎</div>
-            <input type="text" id="user-input" placeholder="Запрос в Штаб..." autocomplete="off">
+            <input type="text" id="user-input" placeholder="Запрос в Штаб...">
             <button class="send-btn" onclick="sendMessage()">↑</button>
         </div>
     </div>
 
     <script>
-        // ГЕНЕРАЦИЯ АРХИВА
-        const versions = ["3.3", "3.2", "3.0", "2.8", "2.5", "2.0", "1.0"];
-        const grid = document.getElementById('archive-grid');
-        
-        versions.forEach(v => {
-            grid.innerHTML += `
-                <div class="glass-card">
-                    <div class="v-num">${v}</div>
-                    <p style="opacity: 0.6; font-size: 14px;">Kosmo Level ${v} Stable Build</p>
-                </div>
-            `;
-        });
-
-        // ЛОГИКА ОРАКУЛА
         function toggleAI() {
-            document.getElementById('ai-interface').classList.toggle('ai-hidden');
+            const ui = document.getElementById('ai-interface');
+            ui.classList.toggle('ai-hidden');
         }
 
-        function sendMessage() {
+        async function sendMessage() {
             const input = document.getElementById('user-input');
-            const text = input.value.trim();
-            if(!text) return;
+            const val = input.value.trim();
+            if(!val) return;
 
-            addMsg('user', text);
+            addMsg('user', val);
             input.value = "";
 
-            // Показываем "Танцующие сферы"
-            const hist = document.getElementById('chat-history');
+            const history = document.getElementById('chat-history');
             const loader = document.createElement('div');
             loader.className = 'oracle-typing';
             loader.innerHTML = '<div class="t-ball tb-1"></div><div class="t-ball tb-2"></div>';
-            hist.appendChild(loader);
-            hist.scrollTop = hist.scrollHeight;
+            history.appendChild(loader);
+            history.scrollTop = history.scrollHeight;
 
-            // Имитация ответа
             setTimeout(() => {
                 loader.remove();
-                addMsg('ai', "Анализ завершен. Данные по сектору синхронизированы со Штабом. 🛠️");
+                addMsg('ai', "Запрос принят. Анализирую данные секторов... 🛰️");
             }, 1500);
         }
 
         function addMsg(type, text) {
-            const hist = document.getElementById('chat-history');
+            const history = document.getElementById('chat-history');
             const d = document.createElement('div');
             d.className = `msg ${type}`;
             d.innerText = text;
-            hist.appendChild(d);
-            hist.scrollTop = hist.scrollHeight;
+            history.appendChild(d);
+            history.scrollTop = history.scrollHeight;
         }
 
-        // Enter для отправки
         document.getElementById('user-input').addEventListener('keypress', (e) => {
             if(e.key === 'Enter') sendMessage();
         });
-    <script src="brain.js"></script>
+    </script>
 </body>
 </html>
