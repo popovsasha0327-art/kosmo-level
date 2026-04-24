@@ -2,45 +2,107 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LMSH PRESTIGE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LMSH | PRESTIGE STORE</title>
     <link rel="stylesheet" href="main-prestige.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="main-bg"></div>
 
     <nav class="top-nav">
-        <div class="site-name">LMSH PRESTIGE</div>
+        <div class="nav-left">
+            <span class="site-name">LMSH PRESTIGE</span>
+        </div>
+        
         <div class="nav-right">
+            <div class="nav-dropdown">
+                <button class="drop-btn">Помощники ▼</button>
+                <div class="drop-content">
+                    <a href="demo.html">
+                        <span class="quest-circle">?</span>Быстрый Помощник
+                    </a>
+                    <a href="titan.html">
+                        <span class="quest-circle">🛠</span>Форма Восстановления
+                    </a>
+                </div>
+            </div>
+
+            <div class="oracle-core" onclick="toggleAI()">
+                <div class="ball b1"></div>
+                <div class="ball b2"></div>
+            </div>
+            
             <button class="profile-pill">Профиль</button>
-            <div class="ai-navbar-btn" onclick="toggleAI()" style="cursor:pointer; margin-left:15px;">🌐</div>
         </div>
     </nav>
 
-    <section class="stories-scroll">
+    <main class="store-container">
+        <section class="stories-scroll">
+            <div class="story-item">
+                <div class="ring">📢</div><span>Новости</span>
+            </div>
+            <div class="story-item">
+                <div class="ring">🚀</div><span>3.4 Upd</span>
+            </div>
+            <div class="story-item">
+                <div class="ring">👨‍💻</div><span>Dev Log</span>
+            </div>
         </section>
 
-    <main class="packs-grid" id="main-grid">
-        </main>
+        <h2 class="section-label">В разработке (Скоро)</h2>
+        <div class="packs-grid">
+            <div class="glass-card" onclick="openPack('3.4', 'Kosmo Level')">
+                <div class="v-tag">NEXT</div>
+                <h3 class="v-num">3.4</h3>
+                <p>Global Evolution</p>
+            </div>
+        </div>
+
+        <h2 class="section-label">Preview Packs</h2>
+        <div class="packs-grid">
+            <div class="glass-card" onclick="openPack('2.8.1', 'Kosmo Level')">
+                <h3 class="v-num">2.8.1</h3>
+                <p>Stable Preview</p>
+            </div>
+            <div class="glass-card" onclick="openPack('2.1', 'Traitor Level')">
+                <div class="v-tag" style="background: #ff3b30;">RARE</div>
+                <h3 class="v-num">2.1</h3>
+                <p>Traitor Edition</p>
+            </div>
+        </div>
+
+        <h2 class="section-label">Архив Kosmo Level</h2>
+        <div class="packs-grid" id="main-grid">
+            </div>
+    </main>
 
     <div id="ai-interface" class="ai-hidden">
-        <div class="ai-header" style="padding:20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between;">
-            <span>LMSH ORACLE</span>
-            <span onclick="toggleAI()" style="cursor:pointer;">✕</span>
+        <div class="ai-header">
+            <div class="oracle-core">
+                <div class="ball b1"></div>
+                <div class="ball b2"></div>
+            </div>
+            <span class="ai-title">ORACLE LITE</span>
+            <div class="ai-close" onclick="toggleAI()">−</div>
         </div>
-        <div id="chat-history" style="flex:1; overflow-y:auto; padding:15px;"></div>
-        <div class="ai-input" style="padding:15px; display:flex; gap:10px;">
-            <input type="text" id="user-input" style="flex:1; background:rgba(255,255,255,0.1); border:none; border-radius:10px; color:#fff; padding:10px;">
-            <button onclick="sendMessage()" style="background:var(--accent); border:none; border-radius:10px; padding:0 15px;">↑</button>
+        <div id="chat-history"></div>
+        <div class="ai-input-box">
+            <input type="text" id="user-input" placeholder="Запрос в Штаб..." autocomplete="off">
+            <button onclick="sendMessage()">↑</button>
         </div>
     </div>
 
     <div id="pack-modal" class="modal-hidden">
         <div class="modal-overlay" onclick="closePack()"></div>
-        <div class="modal-content">
-            <h2 id="modal-title">Название</h2>
-            <p>Версия: <span id="modal-ver"></span></p>
-            <button class="profile-pill" style="margin-top:20px;" onclick="openAndAsk()">Оракул о Паке</button>
+        <div class="modal-content glass-card">
+            <div class="m-icon" id="modal-thumb">📦</div>
+            <h2 id="modal-title">Пак</h2>
+            <p>Версия: <b id="modal-ver">0.0</b></p>
+            <div class="m-btns">
+                <button class="btn-main">Скачать</button>
+                <button class="btn-sec" onclick="openAndAsk()">Спросить Оракула</button>
+            </div>
         </div>
     </div>
 
