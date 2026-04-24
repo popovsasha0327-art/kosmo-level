@@ -1,92 +1,78 @@
-/* LMSH PRESTIGE 3.4 — THE RESTORE */
+/* LMSH PRESTIGE 3.4.5 — ULTIMATE EDITION */
 :root {
     --accent: #007aff;
     --purple: #5856d6;
     --glass: rgba(255, 255, 255, 0.08);
     --border: rgba(255, 255, 255, 0.15);
-    --anim-speed: 0.5s;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { 
-    background: #020202; color: #fff; 
-    font-family: 'Inter', -apple-system, sans-serif; 
-    overflow-x: hidden; 
-}
+body { background: #020202; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-/* Фон с анимацией сияния */
-.main-bg { 
-    position: fixed; inset: 0; z-index: -1; 
-    background: radial-gradient(circle at 50% 0%, #1a1a2e, #020202);
-    animation: bgPulse 10s infinite alternate;
-}
-@keyframes bgPulse { from { opacity: 0.8; } to { opacity: 1; } }
+/* ФОН */
+.main-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 0%, #1a1a2e, #020202); }
 
-/* --- НАВИГАЦИЯ --- */
+/* НАВИГАЦИЯ */
 .top-nav {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 15px 25px; background: rgba(0,0,0,0.8); 
-    backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; z-index: 1000;
+    padding: 15px 25px; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000;
 }
 
-/* Красивая кнопка Профиля */
-.profile-pill {
-    background: var(--accent); color: white; border: none;
-    padding: 8px 18px; border-radius: 20px; font-weight: 700;
-    cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+/* ВЫПАДАЮЩЕЕ МЕНЮ ПОМОЩНИКОВ */
+.nav-dropdown { position: relative; display: inline-block; }
+.drop-btn { background: var(--glass); border: 1px solid var(--border); color: #fff; padding: 8px 15px; border-radius: 12px; cursor: pointer; }
+.drop-content {
+    display: none; position: absolute; right: 0; background: #111;
+    min-width: 200px; border-radius: 15px; border: 1px solid var(--border); z-index: 1001;
 }
-.profile-pill:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--accent); }
+.nav-dropdown:hover .drop-content { display: block; }
+.drop-content a { color: #fff; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; }
+.drop-content a:hover { background: var(--accent); }
 
-/* --- СЕТКА (ФИКС image_884c75.png) --- */
-.packs-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* СТРОГО 2 КОЛОНКИ */
-    gap: 15px; padding: 20px 5%;
-    animation: slideUp 0.8s ease-out;
+/* АНИМАЦИЯ "?" ДЛЯ ПОМОЩНИКА */
+.quest-circle {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; border: 2px solid var(--accent); border-radius: 50%;
+    margin-right: 8px; font-weight: 800; transition: 0.3s;
 }
-
-.glass-card {
-    background: var(--glass); backdrop-filter: blur(20px);
-    border: 1px solid var(--border); border-radius: 28px;
-    padding: 25px; transition: 0.4s;
-    display: flex; flex-direction: column; align-items: center; text-align: center;
-}
-.glass-card:hover { transform: translateY(-8px) scale(1.02); border-color: var(--accent); }
-
-/* --- STORIES --- */
-.stories-scroll { display: flex; gap: 20px; padding: 20px 5%; overflow-x: auto; scrollbar-width: none; }
-.story-item { text-align: center; min-width: 80px; animation: fadeIn 1s ease-in; }
-.ring { 
-    width: 68px; height: 68px; border-radius: 50%; border: 2.5px solid var(--accent);
-    display: flex; align-items: center; justify-content: center; font-size: 1.8rem;
-    background: rgba(255,255,255,0.05); margin-bottom: 8px;
+.drop-content a:hover .quest-circle {
+    transform: rotate(360deg) scale(1.2);
+    box-shadow: 0 0 10px var(--accent);
 }
 
-/* --- ОРАКУЛ (ВОЗВРАЩЕНИЕ) --- */
-#ai-interface {
-    position: fixed; bottom: 25px; right: 25px; width: 360px; height: 550px;
-    background: rgba(10,10,15,0.9); backdrop-filter: blur(35px);
-    border: 1px solid var(--border); border-radius: 35px;
-    display: flex; flex-direction: column; z-index: 9999;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+/* ЯДРО ОРАКУЛА (ВМЕСТО 🌐) */
+.oracle-core { display: flex; gap: 4px; align-items: center; cursor: pointer; }
+.ball { width: 12px; height: 12px; border-radius: 50%; filter: blur(1px); }
+.b1 { background: var(--accent); animation: pulse 2s infinite; }
+.b2 { background: var(--purple); animation: pulse 2s infinite 1s; }
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.4); opacity: 1; filter: blur(3px); }
 }
 
-.ai-hidden { opacity: 0; transform: translateY(50px) scale(0.9); pointer-events: none; }
+/* КАТЕГОРИИ */
+.section-label { padding: 20px 5% 5px; font-size: 12px; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; }
 
-/* --- АНИМАЦИИ --- */
-@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-/* МОДАЛКА */
-#pack-modal { position: fixed; inset: 0; z-index: 10001; display: flex; align-items: center; justify-content: center; }
-.modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); }
-.modal-content { 
-    position: relative; width: 90%; max-width: 400px; padding: 40px; 
-    background: #0a0a0a; border: 1px solid var(--border); border-radius: 40px; text-align: center;
-    animation: modalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+/* СЕТКА ПАКОВ */
+.packs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 10px 5% 30px; }
+.glass-card { 
+    background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); 
+    border-radius: 25px; padding: 20px; transition: 0.3s; text-align: center;
 }
-@keyframes modalIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.glass-card:hover { transform: translateY(-5px); border-color: var(--accent); }
 
-.hidden, .modal-hidden { display: none !important; }
+/* СООБЩЕНИЯ ОРАКУЛА (КТО ЕСТЬ КТО) */
+.msg { padding: 12px 16px; border-radius: 18px; margin-bottom: 10px; max-width: 85%; font-size: 14px; }
+.msg.user { background: var(--accent); align-self: flex-end; border-bottom-right-radius: 4px; margin-left: auto; }
+.msg.ai { background: rgba(255,255,255,0.1); align-self: flex-start; border-bottom-left-radius: 4px; }
+.msg.ai::before { content: "Оракул:"; display: block; font-size: 10px; opacity: 0.5; margin-bottom: 4px; }
+
+/* СКРЫТИЕ */
+.ai-hidden, .modal-hidden { display: none !important; }
+
+/* МОДАЛКА ВСПЛЫВАЮЩИХ ОКОН */
+#pack-modal { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; }
+.modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); }
+.modal-content { position: relative; background: #0a0a0a; border: 1px solid var(--border); border-radius: 35px; width: 90%; max-width: 380px; padding: 30px; text-align: center; }
