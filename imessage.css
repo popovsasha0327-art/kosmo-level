@@ -1,48 +1,64 @@
-:root {
-    --ios-blue: #007aff;
-    --ios-gray: #e5e5ea;
-    --ios-bg: #ffffff;
-    --text-dark: #000000;
+const chatWindow = document.getElementById('chat-window');
+const msgInput = document.getElementById('msg-input');
+const hintsBox = document.getElementById('quick-hints');
+
+// Функция отправки сообщения
+function sendMsg() {
+    const text = msgInput.value.trim();
+    if (!text) return;
+
+    // 1. Отображаем сообщение пользователя
+    renderMessage(text, 'outgoing');
+    msgInput.value = "";
+    
+    // Скрываем подсказки после первого взаимодействия
+    hintsBox.style.opacity = "0";
+    setTimeout(() => hintsBox.style.display = "none", 300);
+
+    // 2. Имитируем "Печатает..."
+    setTimeout(() => {
+        const response = getAIResponse(text);
+        renderMessage(response, 'incoming');
+    }, 1000);
 }
 
-body {
-    margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #f2f2f7; height: 100vh; overflow: hidden;
+// Рендер сообщения в окно
+function renderMessage(text, type) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `message ${type}`;
+    msgDiv.innerText = text;
+    chatWindow.appendChild(msgDiv);
+    
+    // Автопрокрутка вниз
+    chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-.imessage-container {
-    display: flex; flex-direction: column; height: 100vh; max-width: 600px; margin: 0 auto; background: var(--ios-bg);
+// Функция для подсказок
+function askHint(question) {
+    msgInput.value = question;
+    sendMsg();
 }
 
-/* ШАПКА */
-.chat-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 15px; background: rgba(255,255,255,0.8);
-    backdrop-filter: blur(20px); border-bottom: 1px solid #d1d1d6;
+// МОЗГИ ПОМОЩНИКА (Тут твой секрет!)
+function getAIResponse(text) {
+    const lowText = text.toLowerCase();
+    
+    if (lowText.includes('26 апреля')) {
+        return "🤫 О-о-о, ты затронул великую тайну! 26 Апреля 2026 года в 12:00 по МСК произойдет то, чего ждал весь Штаб. Kosmo Level 3.4 принесет не просто паки, а новую эру. Готовься!";
+    }
+    
+    if (lowText.includes('установить') || lowText.includes('3.3')) {
+        return "Всё просто: скачиваешь архив, распаковываешь в папку с игрой и подтверждаешь замену. Если вылезет ошибка — пиши Ламирку!";
+    }
+    
+    if (lowText.includes('архив')) {
+        return "Все старые версии (от 1.0 до 3.2) доступны в главном меню нашего Стора. Просто прокрути страницу вниз!";
+    }
+
+    return "Хороший вопрос! Сейчас уточню у Ламирка... А пока просто знай: Штаб работает на полную мощность! 🛠";
 }
-.back-btn { background: none; border: none; color: var(--ios-blue); font-size: 18px; cursor: pointer; }
-.contact-info { text-align: center; }
-.avatar { width: 35px; height: 35px; background: #8e8e93; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 3px; font-weight: bold; }
-.contact-name { font-size: 12px; font-weight: 600; display: block; }
-.status { font-size: 10px; color: #34c759; }
 
-/* ТЕЛО ЧАТА */
-.chat-body { flex: 1; overflow-y: auto; padding: 20px 15px; display: flex; flex-direction: column; gap: 10px; }
-.date-divider { text-align: center; font-size: 11px; color: #8e8e93; margin-bottom: 10px; text-transform: uppercase; }
-
-/* ПУЗЫРИ сообщений */
-.message { display: flex; width: 100%; }
-.bubble { max-width: 75%; padding: 8px 15px; border-radius: 20px; font-size: 15px; line-height: 1.4; }
-
-.received { justify-content: flex-start; }
-.received .bubble { background: var(--ios-gray); color: black; border-bottom-left-radius: 5px; }
-
-.sent { justify-content: flex-end; }
-.sent .bubble { background: var(--ios-blue); color: white; border-bottom-right-radius: 5px; }
-
-/* ВВОД */
-.chat-input-area { padding: 10px 15px; display: flex; align-items: center; gap: 10px; border-top: 1px solid #d1d1d6; }
-.plus-btn { font-size: 24px; color: #8e8e93; }
-.input-wrapper { flex: 1; position: relative; }
-#msg-input { width: 100%; border: 1px solid #d1d1d6; border-radius: 20px; padding: 8px 35px 8px 15px; outline: none; }
-.send-icon { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: var(--ios-blue); color: white; border: none; width: 25px; height: 25px; border-radius: 50%; font-weight: bold; cursor: pointer; }
+// Отправка по Enter
+msgInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMsg();
+});
