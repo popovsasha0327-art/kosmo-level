@@ -1,72 +1,46 @@
-/* LMSH PRESTIGE 3.3.8 — RECOVERY BUILD */
+/* LMSH PRESTIGE 3.3.9 — EMERGENCY RECOVERY */
 :root {
     --accent: #007aff;
-    --purple: #5856d6;
     --glass: rgba(255, 255, 255, 0.08);
     --border: rgba(255, 255, 255, 0.15);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { background: #020202; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #020202; color: #fff; font-family: sans-serif; overflow-x: hidden; }
 
+/* ФОН */
 .main-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 0%, #1a1a2e, #020202); }
 
-/* --- NAV --- */
+/* НАВИГАЦИЯ */
 .top-nav {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 10px 20px; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000;
-}
-.site-name { font-weight: 800; color: var(--accent); }
-
-/* --- STORIES (Горизонтально!) --- */
-.stories-scroll { 
-    display: flex; gap: 15px; padding: 15px 5%; 
-    overflow-x: auto; scrollbar-width: none; 
-}
-.story-item { text-align: center; min-width: 75px; font-size: 0.7rem; }
-.ring {
-    width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--accent);
-    display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
-    background: rgba(255,255,255,0.05); margin-bottom: 5px;
+    display: flex; justify-content: space-between; padding: 15px 20px;
+    background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
 }
 
-/* --- ГРИД (Чтобы не было колонны) --- */
-.section-group { padding: 20px 5%; }
-.label { font-size: 1rem; color: rgba(255,255,255,0.4); margin-bottom: 15px; }
-
-.packs-grid { 
-    display: grid; 
-    grid-template-columns: repeat(2, 1fr); /* СТРОГО 2 КОЛОНКИ */
-    gap: 15px; 
+/* ГРИД (ФИКС ДЛЯ КАРТОЧЕК) */
+.packs-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important; /* ДВЕ КОЛОНКИ ВСЕГДА */
+    gap: 15px; padding: 10px 5%;
 }
 
-.glass-card { 
+.glass-card {
     background: var(--glass); backdrop-filter: blur(25px);
     border: 1px solid var(--border); border-radius: 24px;
-    padding: 20px; transition: 0.3s;
+    padding: 20px; min-height: 120px; display: flex; flex-direction: column; align-items: center;
 }
 
-/* --- PREVIEW CARD --- */
-.preview-row { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; scrollbar-width: none; }
-.preview-card { 
-    min-width: 280px; padding: 20px; position: relative;
-    display: flex; align-items: center; gap: 15px;
+/* STORIES */
+.stories-scroll { display: flex; gap: 15px; padding: 20px 5%; overflow-x: auto; }
+.story-item { text-align: center; min-width: 70px; }
+.ring { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: 5px; background: rgba(255,255,255,0.05); }
+
+/* МОДАЛЬНОЕ ОКНО (ВОСКРЕШЕНИЕ) */
+#pack-modal { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; }
+.modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); }
+.modal-content { 
+    position: relative; width: 90%; max-width: 400px; padding: 30px; 
+    background: #111; border: 1px solid var(--border); border-radius: 30px; text-align: center;
 }
 
-/* --- ОРАКУЛ (ФИКС ВИДА) --- */
-#ai-interface {
-    position: fixed; bottom: 20px; right: 20px; width: 350px; height: 500px;
-    background: rgba(10,10,15,0.9); border-radius: 30px; 
-    border: 1px solid var(--border); backdrop-filter: blur(30px);
-    display: flex; flex-direction: column; z-index: 9999;
-}
-
-.ai-hidden { opacity: 0; transform: translateY(40px); pointer-events: none; }
-.hidden, .modal-hidden { display: none !important; }
-
-/* Адаптив для мобилок */
-@media (max-width: 480px) {
-    .packs-grid { grid-template-columns: repeat(2, 1fr); }
-    #ai-interface { width: 94%; left: 3%; bottom: 10px; }
-}
+.modal-hidden, .hidden { display: none !important; }
