@@ -1,64 +1,99 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbwTGRx7v4Ri2r_3xMYeN873BdldGY2Lh2u7LpvJX9NKGNjmOsJNOLh-G-n9DulkLJbjHg/exec";
+/**
+ * LMSH PRESTIGE | ORACLE CORE SYSTEM
+ * Инженер: Ламирк & Мурзик
+ */
 
+// 1. АДРЕС ВАШЕГО ШТАБА (Ссылка на Google Apps Script)
+const API_URL = "https://script.google.com/macros/s/AKfycbzGwqfcvjGwsGlyvH32866wffj8uBjXSh6pzwgG0WmDiXqO3ghP4sG0qq16eWVWkSBw-Q/exec";
+
+/**
+ * Переключение видимости интерфейса Оракула
+ */
 function toggleAI() {
-    document.getElementById('ai-interface').classList.toggle('ai-hidden');
+    const ui = document.getElementById('ai-interface');
+    if (ui) {
+        ui.classList.toggle('ai-hidden');
+    }
 }
 
+/**
+ * Основная функция отправки сообщения
+ */
 async function sendMessage() {
     const input = document.getElementById('user-input');
+    const history = document.getElementById('chat-history');
+    
     const val = input.value.trim();
     if (!val) return;
 
-    // 1. Сообщение пользователя
+    // Выводим сообщение пользователя
     addMsg('user', val);
     input.value = "";
-    
-    // 2. Показываем "Живое ожидание" Оракула
-    const typingId = showOracleTyping(true);
+
+    // Создаем и показываем анимацию "загрузки" (Орбитальные сферы)
+    const loaderId = "loader-" + Date.now();
+    const loader = document.createElement('div');
+    loader.id = loaderId;
+    loader.className = 'oracle-typing';
+    loader.innerHTML = '<div class="t-ball tb-1"></div><div class="t-ball tb-2"></div>';
+    history.appendChild(loader);
+    history.scrollTop = history.scrollHeight;
 
     try {
+        // Отправляем запрос в Google Scripts через параметр q
         const response = await fetch(`${API_URL}?q=${encodeURIComponent(val)}`);
+        
+        if (!response.ok) throw new Error("Сбой канала связи");
+
         const data = await response.json();
         
-        // 3. Убираем анимацию и выводим ответ
-        showOracleTyping(false, typingId);
-        addMsg('ai', data.answer || "Штаб на связи, но ответа нет.");
-    } catch (e) {
-        showOracleTyping(false, typingId);
-        addMsg('ai', "Ошибка связи. Оракул временно вне зоны доступа. 🛠");
+        // Убираем анимацию загрузки
+        const currentLoader = document.getElementById(loaderId);
+        if (currentLoader) currentLoader.remove();
+
+        // Выводим ответ Оракула
+        addMsg('ai', data.answer);
+
+    } catch (error) {
+        // Если что-то пошло не так
+        const currentLoader = document.getElementById(loaderId);
+        if (currentLoader) currentLoader.remove();
+        
+        addMsg('ai', "Критическая ошибка связи со Штабом. Проверь развертывание скрипта. 🛠️");
+        console.error("Oracle Error:", error);
     }
 }
 
-function addMsg(role, text) {
+/**
+ * Отрисовка сообщения в чате
+ */
+function addMsg(type, text) {
     const history = document.getElementById('chat-history');
+    if (!history) return;
+
     const msgDiv = document.createElement('div');
-    msgDiv.className = `msg ${role}`;
+    msgDiv.className = `msg ${type}`;
     msgDiv.innerText = text;
+
     history.appendChild(msgDiv);
-    history.scrollTop = history.scrollHeight;
-}
-
-// ФУНКЦИЯ АНИМАЦИИ СФЕР
-function showOracleTyping(show, id) {
-    const history = document.getElementById('chat-history');
-    if (show) {
-        const typingDiv = document.createElement('div');
-        const uniqueId = 'typing-' + Date.now();
-        typingDiv.id = uniqueId;
-        typingDiv.className = 'oracle-typing';
-        typingDiv.innerHTML = '<div class="typing-ball tb-1"></div><div class="typing-ball tb-2"></div>';
-        history.appendChild(typingDiv);
-        history.scrollTop = history.scrollHeight;
-        return uniqueId;
-    } else if (!show && id) {
-        const el = document.getElementById(id);
-        if (el) el.remove();
-    }
-}
-
-// Enter для отправки
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('user-input')?.addEventListener('keypress', (e) => {
-        if(e.key === 'Enter') sendMessage();
+    
+    // Плавная прокрутка вниз
+    history.scrollTo({
+        top: history.scrollHeight,
+        behavior: 'smooth'
     });
+}
+
+/**
+ * Слушатель нажатия Enter
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('user-input');
+    if (input) {
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    }
 });
