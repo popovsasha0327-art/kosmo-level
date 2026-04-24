@@ -2,116 +2,45 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LMSH | PRESTIGE STORE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMSH PRESTIGE</title>
     <link rel="stylesheet" href="main-prestige.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="main-bg"></div>
 
     <nav class="top-nav">
-        <div class="nav-left">
-            <span class="site-name">LMSH PRESTIGE</span>
-        </div>
+        <div class="site-name">LMSH PRESTIGE</div>
         <div class="nav-right">
-            <div class="helpers-dropdown">
-                <div class="dropdown-trigger" onclick="toggleHelpers()">
-                    <span class="dropdown-label">Помощники</span>
-                    <span class="arrow-icon">▼</span>
-                </div>
-                <div id="helpers-list" class="helpers-menu-content hidden">
-                    <div class="helper-item" onclick="openFastAssistant()">
-                        <div class="q-circle">?</div>
-                        <span>Быстрый Помощник</span>
-                    </div>
-                    <div class="helper-item" onclick="openRecoveryForm()">
-                        <span class="form-icon">≡</span>
-                        <span>Форма Восстановления</span>
-                    </div>
-                </div>
-            </div>
-            <div class="ai-trigger-icon" onclick="toggleAI()">
-                <div class="mini-circles">
-                    <div class="m-c c-blue"></div>
-                    <div class="m-c c-purple"></div>
-                </div>
-            </div>
-            <button id="profile-btn" class="profile-pill">Профиль</button>
+            <button class="profile-pill">Профиль</button>
+            <div class="ai-navbar-btn" onclick="toggleAI()" style="cursor:pointer; margin-left:15px;">🌐</div>
         </div>
     </nav>
 
-    <main class="store-container">
-        <section class="stories-container">
-            <div class="story" onclick="openStory('news')">
-                <div class="story-ring"><span>📢</span></div>
-                <span>Новости</span>
-            </div>
-            <div class="story" onclick="openStory('update')">
-                <div class="story-ring"><span>🚀</span></div>
-                <span>3.4 Upd</span>
-            </div>
-            <div class="story" onclick="openStory('dev')">
-                <div class="story-ring"><span>🛠️</span></div>
-                <span>Dev Log</span>
-            </div>
+    <section class="stories-scroll">
         </section>
 
-        <section class="pack-section">
-            <h2 class="section-title">Preview Packs</h2>
-            <div class="preview-scroll">
-                <div class="preview-card glass-card" onclick="openPack('3.4', 'Coming Soon')">
-                    <div class="preview-badge">NEXT GEN</div>
-                    <div class="thumb">3.4</div>
-                    <div class="preview-info">
-                        <h3>Kosmo Level 3.4</h3>
-                        <p>В разработке...</p>
-                    </div>
-                </div>
-                <div class="preview-card glass-card" onclick="openPack('X', 'Titan Edition')">
-                    <div class="preview-badge">LIMITED</div>
-                    <div class="thumb">⚡</div>
-                    <div class="preview-info">
-                        <h3>Titan Pack</h3>
-                        <p>Experimental</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="pack-section">
-            <h2 class="section-title">Архив Kosmo Level</h2>
-            <div class="packs-grid" id="main-grid"></div>
-        </section>
-    </main>
+    <main class="packs-grid" id="main-grid">
+        </main>
 
     <div id="ai-interface" class="ai-hidden">
-        <div class="ai-header">
-            <div class="ai-logo-container">
-                <div class="circle c1"></div>
-                <div class="circle c2"></div>
-            </div>
-            <span class="oracle-title">LMSH ORACLE</span>
-            <div class="close-ai" onclick="toggleAI()">−</div>
+        <div class="ai-header" style="padding:20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between;">
+            <span>LMSH ORACLE</span>
+            <span onclick="toggleAI()" style="cursor:pointer;">✕</span>
         </div>
-        <div id="chat-history"></div>
-        <div class="input-area">
-            <input type="text" id="user-input" placeholder="Спроси Оракула..." autocomplete="off">
-            <button id="send-btn" onclick="sendMessage()">↑</button>
+        <div id="chat-history" style="flex:1; overflow-y:auto; padding:15px;"></div>
+        <div class="ai-input" style="padding:15px; display:flex; gap:10px;">
+            <input type="text" id="user-input" style="flex:1; background:rgba(255,255,255,0.1); border:none; border-radius:10px; color:#fff; padding:10px;">
+            <button onclick="sendMessage()" style="background:var(--accent); border:none; border-radius:10px; padding:0 15px;">↑</button>
         </div>
     </div>
 
     <div id="pack-modal" class="modal-hidden">
         <div class="modal-overlay" onclick="closePack()"></div>
-        <div class="modal-content glass-card">
-            <button class="close-btn" onclick="closePack()">×</button>
-            <div class="modal-thumb-box" id="modal-thumb">V</div>
-            <h2 id="modal-title">Kosmo Level</h2>
-            <p>Версия: <b id="modal-ver">0.0</b></p>
-            <div class="modal-actions">
-                <button class="dl-btn">Скачать Пак</button>
-                <button class="ask-btn" onclick="openAndAsk()">Оракул о Паке</button>
-            </div>
+        <div class="modal-content">
+            <h2 id="modal-title">Название</h2>
+            <p>Версия: <span id="modal-ver"></span></p>
+            <button class="profile-pill" style="margin-top:20px;" onclick="openAndAsk()">Оракул о Паке</button>
         </div>
     </div>
 
