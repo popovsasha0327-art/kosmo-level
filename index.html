@@ -18,8 +18,8 @@
             <div class="helpers-dropdown">
                 <div class="dropdown-trigger" onclick="toggleHelpers()">
                     <span class="dropdown-label">Помощники</span>
+                    <span class="arrow-icon">▼</span>
                 </div>
-
                 <div id="helpers-list" class="helpers-menu-content hidden">
                     <div class="helper-item" onclick="openFastAssistant()">
                         <div class="q-circle">?</div>
@@ -31,6 +31,12 @@
                     </div>
                 </div>
             </div>
+            <div class="ai-trigger-icon" onclick="toggleAI()">
+                <div class="mini-circles">
+                    <div class="m-c c-blue"></div>
+                    <div class="m-c c-purple"></div>
+                </div>
+            </div>
             <button id="profile-btn" class="profile-pill">Профиль</button>
         </div>
     </nav>
@@ -38,16 +44,16 @@
     <main class="store-container">
         <section class="stories-container">
             <div class="story" onclick="openStory('news')">
-                <div class="story-ring"><img src="https://via.placeholder.com/60" alt="News"></div>
+                <div class="story-ring"><span>📢</span></div>
                 <span>Новости</span>
             </div>
             <div class="story" onclick="openStory('update')">
-                <div class="story-ring"><img src="https://via.placeholder.com/60" alt="3.4"></div>
-                <span>Update</span>
+                <div class="story-ring"><span>🚀</span></div>
+                <span>3.4 Upd</span>
             </div>
             <div class="story" onclick="openStory('dev')">
-                <div class="story-ring"><span>👨‍💻</span></div>
-                <span>Dev</span>
+                <div class="story-ring"><span>🛠️</span></div>
+                <span>Dev Log</span>
             </div>
         </section>
 
@@ -55,19 +61,19 @@
             <h2 class="section-title">Preview Packs</h2>
             <div class="preview-scroll">
                 <div class="preview-card glass-card" onclick="openPack('3.4', 'Coming Soon')">
-                    <div class="preview-badge">NEW</div>
+                    <div class="preview-badge">NEXT GEN</div>
                     <div class="thumb">3.4</div>
                     <div class="preview-info">
                         <h3>Kosmo Level 3.4</h3>
-                        <p>Следующее поколение</p>
+                        <p>В разработке...</p>
                     </div>
                 </div>
-                <div class="preview-card glass-card" onclick="openPack('X', 'Limited')">
-                    <div class="preview-badge">EXP</div>
+                <div class="preview-card glass-card" onclick="openPack('X', 'Titan Edition')">
+                    <div class="preview-badge">LIMITED</div>
                     <div class="thumb">⚡</div>
                     <div class="preview-info">
-                        <h3>Titan Edition</h3>
-                        <p>Экспериментальный пак</p>
+                        <h3>Titan Pack</h3>
+                        <p>Experimental</p>
                     </div>
                 </div>
             </div>
@@ -75,8 +81,7 @@
 
         <section class="pack-section">
             <h2 class="section-title">Архив Kosmo Level</h2>
-            <div class="packs-grid" id="main-grid">
-                </div>
+            <div class="packs-grid" id="main-grid"></div>
         </section>
     </main>
 
