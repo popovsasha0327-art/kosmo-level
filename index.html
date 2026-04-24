@@ -2,10 +2,30 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>LMSH | PRESTIGE STORE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>LMSH PRESTIGE | HQ</title>
     <link rel="stylesheet" href="main-prestige.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Дополнительные стили для анимации сфер Оракула прямо здесь, чтобы не потерялись */
+        .oracle-typing {
+            display: flex; align-items: center; justify-content: center;
+            padding: 12px 16px; background: rgba(255,255,255,0.08);
+            border-radius: 20px; width: 70px; height: 40px; margin-bottom: 10px;
+            position: relative;
+        }
+        .typing-ball { width: 10px; height: 10px; border-radius: 50%; position: absolute; filter: blur(1px); }
+        .tb-1 { background: #007aff; animation: ballMove1 1.5s infinite ease-in-out; }
+        .tb-2 { background: #5856d6; animation: ballMove2 1.5s infinite ease-in-out; }
+        @keyframes ballMove1 {
+            0%, 100% { transform: translateX(-18px) scale(1); z-index: 1; }
+            50% { transform: translateX(18px) scale(1.3); z-index: 2; filter: blur(3px); }
+        }
+        @keyframes ballMove2 {
+            0%, 100% { transform: translateX(18px) scale(1.3); z-index: 2; filter: blur(3px); }
+            50% { transform: translateX(-18px) scale(1); z-index: 1; }
+        }
+    </style>
 </head>
 <body>
     <div class="main-bg"></div>
@@ -39,23 +59,18 @@
 
     <main class="store-container">
         <section class="stories-scroll">
-            <div class="story-item">
-                <div class="ring">📢</div><span>Новости</span>
-            </div>
-            <div class="story-item">
-                <div class="ring">🚀</div><span>3.4 Upd</span>
-            </div>
-            <div class="story-item">
-                <div class="ring">👨‍💻</div><span>Dev Log</span>
-            </div>
+            <div class="story-item"><div class="ring">📢</div><span>Новости</span></div>
+            <div class="story-item"><div class="ring">🚀</div><span>3.4 Upd</span></div>
+            <div class="story-item"><div class="ring">👨‍💻</div><span>Dev Log</span></div>
+            <div class="story-item"><div class="ring">📖</div><span>Истории</span></div>
         </section>
 
-        <h2 class="section-label">В разработке (Скоро)</h2>
+        <h2 class="section-label">Разработка (v3.4)</h2>
         <div class="packs-grid">
             <div class="glass-card" onclick="openPack('3.4', 'Kosmo Level')">
-                <div class="v-tag">NEXT</div>
+                <div class="v-tag">FUTURE</div>
                 <h3 class="v-num">3.4</h3>
-                <p>Global Evolution</p>
+                <p>Global System</p>
             </div>
         </div>
 
@@ -63,10 +78,10 @@
         <div class="packs-grid">
             <div class="glass-card" onclick="openPack('2.8.1', 'Kosmo Level')">
                 <h3 class="v-num">2.8.1</h3>
-                <p>Stable Preview</p>
+                <p>Preview</p>
             </div>
             <div class="glass-card" onclick="openPack('2.1', 'Traitor Level')">
-                <div class="v-tag" style="background: #ff3b30;">RARE</div>
+                <div class="v-tag" style="background: #ff453a;">RARE</div>
                 <h3 class="v-num">2.1</h3>
                 <p>Traitor Edition</p>
             </div>
@@ -83,11 +98,16 @@
                 <div class="ball b1"></div>
                 <div class="ball b2"></div>
             </div>
-            <span class="ai-title">ORACLE LITE</span>
-            <div class="ai-close" onclick="toggleAI()">−</div>
+            <span class="ai-title">ORACLE PRESTIGE</span>
+            <div class="ai-close" onclick="toggleAI()">✕</div>
         </div>
-        <div id="chat-history"></div>
+        
+        <div id="chat-history">
+            <div class="msg ai">Штаб на связи. Ожидаю запрос... 🛠</div>
+        </div>
+
         <div class="ai-input-box">
+            <div class="attachment-btn">📎</div>
             <input type="text" id="user-input" placeholder="Запрос в Штаб..." autocomplete="off">
             <button onclick="sendMessage()">↑</button>
         </div>
@@ -96,12 +116,12 @@
     <div id="pack-modal" class="modal-hidden">
         <div class="modal-overlay" onclick="closePack()"></div>
         <div class="modal-content glass-card">
-            <div class="m-icon" id="modal-thumb">📦</div>
+            <div class="m-icon">📦</div>
             <h2 id="modal-title">Пак</h2>
-            <p>Версия: <b id="modal-ver">0.0</b></p>
-            <div class="m-btns">
-                <button class="btn-main">Скачать</button>
-                <button class="btn-sec" onclick="openAndAsk()">Спросить Оракула</button>
+            <p style="margin-bottom: 20px;">Версия: <b id="modal-ver">0.0</b></p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="profile-pill" style="width: 100%; padding: 15px;">Скачать Пак</button>
+                <button onclick="openAndAsk()" style="background:none; border:none; color:#007aff; cursor:pointer; font-weight:700;">Спросить Оракула</button>
             </div>
         </div>
     </div>
