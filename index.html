@@ -4,128 +4,188 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>LMSH PRESTIGE | HQ</title>
-    <link rel="stylesheet" href="main-prestige.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        /* Дополнительные стили для анимации сфер Оракула прямо здесь, чтобы не потерялись */
+        :root {
+            --bg: #000000;
+            --card: rgba(28, 28, 30, 0.7);
+            --accent: #007aff;
+            --purple: #5856d6;
+            --text: #ffffff;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        
+        body { background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
+
+        /* ФОН */
+        .main-bg {
+            position: fixed; inset: 0; z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1c1c1e 0%, #000000 100%);
+        }
+
+        /* НАВИГАЦИЯ */
+        .top-nav {
+            padding: 20px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); z-index: 100;
+        }
+
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+
+        /* ВЫПАДАЮЩЕЕ МЕНЮ */
+        .nav-dropdown { position: relative; display: inline-block; }
+        .drop-btn { background: none; border: none; color: var(--text); cursor: pointer; font-size: 15px; font-weight: 600; }
+        .drop-content {
+            display: none; position: absolute; right: 0; background: var(--card);
+            min-width: 220px; border-radius: 15px; backdrop-filter: blur(20px);
+            border: 1px solid var(--border); overflow: hidden; margin-top: 10px;
+        }
+        .nav-dropdown:hover .drop-content { display: block; }
+        .drop-content a { color: white; padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; }
+        .drop-content a:hover { background: rgba(255,255,255,0.1); }
+
+        /* ОРАКУЛ ГЛАВНЫЙ СИМВОЛ */
+        .oracle-core { display: flex; gap: 5px; cursor: pointer; padding: 5px; }
+        .ball { width: 12px; height: 12px; border-radius: 50%; filter: blur(1px); }
+        .b1 { background: var(--accent); animation: pulse 2s infinite; }
+        .b2 { background: var(--purple); animation: pulse 2s infinite 1s; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.4); opacity: 1; } }
+
+        /* СЕТКА ПАКОВ */
+        .store-container { padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .section-label { font-size: 22px; font-weight: 800; margin: 30px 0 15px; letter-spacing: -0.5px; }
+        .packs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+
+        .glass-card {
+            background: var(--card); padding: 25px; border-radius: 25px;
+            border: 1px solid var(--border); backdrop-filter: blur(10px);
+            cursor: pointer; transition: 0.3s;
+        }
+        .glass-card:hover { transform: translateY(-5px); border-color: var(--accent); background: rgba(255,255,255,0.05); }
+        .v-num { font-size: 32px; font-weight: 900; color: var(--accent); }
+
+        /* ОКНО ОРАКУЛА */
+        #ai-interface {
+            position: fixed; bottom: 20px; right: 20px; width: 350px; height: 500px;
+            background: rgba(10, 10, 15, 0.98); border-radius: 30px;
+            border: 1px solid var(--border); display: flex; flex-direction: column;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); z-index: 1000;
+        }
+        .ai-hidden { display: none !important; }
+        
+        .ai-header { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        #chat-history { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        
+        .msg { padding: 10px 15px; border-radius: 18px; font-size: 14px; max-width: 80%; line-height: 1.4; }
+        .msg.ai { background: #262629; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .msg.user { background: var(--accent); align-self: flex-end; border-bottom-right-radius: 4px; }
+
+        /* ОЖИДАНИЕ ОРАКУЛА */
         .oracle-typing {
             display: flex; align-items: center; justify-content: center;
-            padding: 12px 16px; background: rgba(255,255,255,0.08);
-            border-radius: 20px; width: 70px; height: 40px; margin-bottom: 10px;
-            position: relative;
+            padding: 10px; background: rgba(255,255,255,0.05);
+            border-radius: 20px; width: 60px; height: 35px; position: relative;
         }
-        .typing-ball { width: 10px; height: 10px; border-radius: 50%; position: absolute; filter: blur(1px); }
-        .tb-1 { background: #007aff; animation: ballMove1 1.5s infinite ease-in-out; }
-        .tb-2 { background: #5856d6; animation: ballMove2 1.5s infinite ease-in-out; }
-        @keyframes ballMove1 {
-            0%, 100% { transform: translateX(-18px) scale(1); z-index: 1; }
-            50% { transform: translateX(18px) scale(1.3); z-index: 2; filter: blur(3px); }
-        }
-        @keyframes ballMove2 {
-            0%, 100% { transform: translateX(18px) scale(1.3); z-index: 2; filter: blur(3px); }
-            50% { transform: translateX(-18px) scale(1); z-index: 1; }
-        }
+        .t-ball { width: 8px; height: 8px; border-radius: 50%; position: absolute; }
+        .tb-1 { background: var(--accent); animation: move 1.2s infinite ease-in-out; }
+        .tb-2 { background: var(--purple); animation: move 1.2s infinite ease-in-out -0.6s; }
+        @keyframes move { 0%, 100% { transform: translateX(-15px); } 50% { transform: translateX(15px); } }
+
+        /* ВВОД */
+        .ai-input-box { padding: 15px; display: flex; gap: 10px; align-items: center; border-top: 1px solid var(--border); }
+        .attachment { transform: rotate(45deg); cursor: pointer; color: #8e8e93; font-size: 20px; }
+        #user-input { flex: 1; background: transparent; border: none; color: white; outline: none; }
+        .send-btn { background: var(--accent); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="main-bg"></div>
 
     <nav class="top-nav">
-        <div class="nav-left">
-            <span class="site-name">LMSH PRESTIGE</span>
-        </div>
-        
+        <div class="nav-left"><b style="letter-spacing: 1px;">LMSH PRESTIGE</b></div>
         <div class="nav-right">
             <div class="nav-dropdown">
                 <button class="drop-btn">Помощники ▼</button>
                 <div class="drop-content">
-                    <a href="demo.html">
-                        <span class="quest-circle">?</span>Быстрый Помощник
-                    </a>
-                    <a href="titan.html">
-                        <span class="quest-circle">🛠</span>Форма Восстановления
-                    </a>
+                    <a href="demo.html">❓ Быстрый Помощник</a>
+                    <a href="titan.html">🛠 Форма Восстановления</a>
                 </div>
             </div>
-
             <div class="oracle-core" onclick="toggleAI()">
                 <div class="ball b1"></div>
                 <div class="ball b2"></div>
             </div>
-            
-            <button class="profile-pill">Профиль</button>
         </div>
     </nav>
 
     <main class="store-container">
-        <section class="stories-scroll">
-            <div class="story-item"><div class="ring">📢</div><span>Новости</span></div>
-            <div class="story-item"><div class="ring">🚀</div><span>3.4 Upd</span></div>
-            <div class="story-item"><div class="ring">👨‍💻</div><span>Dev Log</span></div>
-            <div class="story-item"><div class="ring">📖</div><span>Истории</span></div>
-        </section>
-
         <h2 class="section-label">Разработка (v3.4)</h2>
         <div class="packs-grid">
-            <div class="glass-card" onclick="openPack('3.4', 'Kosmo Level')">
-                <div class="v-tag">FUTURE</div>
-                <h3 class="v-num">3.4</h3>
-                <p>Global System</p>
-            </div>
-        </div>
-
-        <h2 class="section-label">Preview Packs</h2>
-        <div class="packs-grid">
-            <div class="glass-card" onclick="openPack('2.8.1', 'Kosmo Level')">
-                <h3 class="v-num">2.8.1</h3>
-                <p>Preview</p>
-            </div>
-            <div class="glass-card" onclick="openPack('2.1', 'Traitor Level')">
-                <div class="v-tag" style="background: #ff453a;">RARE</div>
-                <h3 class="v-num">2.1</h3>
-                <p>Traitor Edition</p>
+            <div class="glass-card">
+                <div class="v-num">3.4</div>
+                <p>Global System — В разработке</p>
             </div>
         </div>
 
         <h2 class="section-label">Архив Kosmo Level</h2>
-        <div class="packs-grid" id="main-grid">
-            </div>
+        <div class="packs-grid">
+            <div class="glass-card"><div class="v-num">3.3</div><p>Stable Build</p></div>
+            <div class="glass-card"><div class="v-num">3.2</div><p>Legacy Pack</p></div>
+            <div class="glass-card"><div class="v-num">2.8</div><p>Classic Edition</p></div>
+        </div>
     </main>
 
     <div id="ai-interface" class="ai-hidden">
         <div class="ai-header">
-            <div class="oracle-core">
-                <div class="ball b1"></div>
-                <div class="ball b2"></div>
-            </div>
-            <span class="ai-title">ORACLE PRESTIGE</span>
-            <div class="ai-close" onclick="toggleAI()">✕</div>
+            <div class="oracle-core"><div class="ball b1"></div><div class="ball b2"></div></div>
+            <span style="font-weight: bold; font-size: 13px;">ORACLE SYSTEM</span>
+            <div onclick="toggleAI()" style="cursor:pointer">✕</div>
         </div>
-        
         <div id="chat-history">
-            <div class="msg ai">Штаб на связи. Ожидаю запрос... 🛠</div>
+            <div class="msg ai">Штаб на связи. Что сканируем? 🛠</div>
         </div>
-
         <div class="ai-input-box">
-            <div class="attachment-btn">📎</div>
-            <input type="text" id="user-input" placeholder="Запрос в Штаб..." autocomplete="off">
-            <button onclick="sendMessage()">↑</button>
+            <div class="attachment">📎</div>
+            <input type="text" id="user-input" placeholder="Запрос...">
+            <button class="send-btn" onclick="sendMessage()">↑</button>
         </div>
     </div>
 
-    <div id="pack-modal" class="modal-hidden">
-        <div class="modal-overlay" onclick="closePack()"></div>
-        <div class="modal-content glass-card">
-            <div class="m-icon">📦</div>
-            <h2 id="modal-title">Пак</h2>
-            <p style="margin-bottom: 20px;">Версия: <b id="modal-ver">0.0</b></p>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button class="profile-pill" style="width: 100%; padding: 15px;">Скачать Пак</button>
-                <button onclick="openAndAsk()" style="background:none; border:none; color:#007aff; cursor:pointer; font-weight:700;">Спросить Оракула</button>
-            </div>
-        </div>
-    </div>
+    <script>
+        function toggleAI() {
+            document.getElementById('ai-interface').classList.toggle('ai-hidden');
+        }
 
-    <script src="brain.js"></script>
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const text = input.value.trim();
+            if(!text) return;
+
+            addMsg('user', text);
+            input.value = "";
+
+            // Анимация сфер
+            const hist = document.getElementById('chat-history');
+            const loader = document.createElement('div');
+            loader.className = 'oracle-typing';
+            loader.innerHTML = '<div class="t-ball tb-1"></div><div class="t-ball tb-2"></div>';
+            hist.appendChild(loader);
+            hist.scrollTop = hist.scrollHeight;
+
+            setTimeout(() => {
+                loader.remove();
+                addMsg('ai', "Запрос принят. Анализирую данные в секторе...");
+            }, 1500);
+        }
+
+        function addMsg(type, text) {
+            const hist = document.getElementById('chat-history');
+            const d = document.createElement('div');
+            d.className = `msg ${type}`;
+            d.innerText = text;
+            hist.appendChild(d);
+            hist.scrollTop = hist.scrollHeight;
+        }
+    </script>
 </body>
 </html>
