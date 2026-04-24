@@ -2,73 +2,45 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LMSH | Быстрый Помощник</title>
     <link rel="stylesheet" href="imessage.css">
 </head>
 <body>
-    <div class="imessage-container">
+    <div class="chat-container">
         <header class="chat-header">
-            <button class="back-btn" onclick="window.location.href='index.html'">‹ Стор</button>
+            <div class="back-btn" onclick="window.location.href='index.html'">‹ Назад</div>
             <div class="contact-info">
-                <div class="avatar">L</div>
-                <div class="name-status">
-                    <span class="contact-name">Быстрый Помощник</span>
-                    <span class="status">В сети</span>
-                </div>
+                <div class="avatar">🤖</div>
+                <div class="name">Быстрый Помощник</div>
+                <div class="status">в сети</div>
             </div>
-            <div class="info-icon">i</div>
+            <div class="info-icon">ⓘ</div>
         </header>
 
-        <main class="chat-body" id="chat-body">
-            <div class="date-divider">Сегодня 12:00</div>
-            
-            <div class="message received">
-                <div class="bubble">Привет! Я твой быстрый помощник по Kosmo Level. Что тебя интересует?</div>
-            </div>
-            
-            <div class="message sent">
-                <div class="bubble">Как установить версию 3.3?</div>
-            </div>
-
-            <div class="message received">
-                <div class="bubble">Всё просто: скачай пак, распакуй в папку с игрой и перезапусти систему. Нужна детальная инструкция?</div>
+        <main class="chat-main" id="chat-window">
+            <div class="msg-time">Сегодня, 16:20</div>
+            <div class="message incoming">
+                Привет! Я помогу тебе разобраться с Kosmo Level. О чем хочешь узнать?
             </div>
         </main>
+
+        <div id="quick-hints" class="suggestions-container">
+            <div class="hint-chip" onclick="askHint('Что за секрет будет 26 Апреля 2026?')">🤫 Секрет 26 апреля?</div>
+            <div class="hint-chip" onclick="askHint('Как установить пак 3.3?')">💾 Установка 3.3</div>
+            <div class="hint-chip" onclick="askHint('Где найти архив?')">📂 Архив версий</div>
+        </div>
 
         <footer class="chat-input-area">
             <div class="plus-btn">+</div>
             <div class="input-wrapper">
-                <input type="text" id="msg-input" placeholder="iMessage">
-                <button class="send-icon" onclick="sendMsg()">↑</button>
+                <input type="text" id="msg-input" placeholder="iMessage" autocomplete="off">
+                <div class="audio-btn">🎤</div>
             </div>
+            <button id="send-btn" onclick="sendMsg()">↑</button>
         </footer>
     </div>
 
-    <script>
-        function sendMsg() {
-            const input = document.getElementById('msg-input');
-            const body = document.getElementById('chat-body');
-            if(!input.value.trim()) return;
-
-            // Твоё сообщение
-            const msg = document.createElement('div');
-            msg.className = 'message sent';
-            msg.innerHTML = `<div class="bubble">${input.value}</div>`;
-            body.appendChild(msg);
-            
-            input.value = '';
-            body.scrollTop = body.scrollHeight;
-
-            // Ответ (заглушка)
-            setTimeout(() => {
-                const reply = document.createElement('div');
-                reply.className = 'message received';
-                reply.innerHTML = `<div class="bubble">Интересный вопрос! Дай мне секунду...</div>`;
-                body.appendChild(reply);
-                body.scrollTop = body.scrollHeight;
-            }, 1000);
-        }
-    </script>
+    <script src="imessage-logic.js"></script>
 </body>
 </html>
