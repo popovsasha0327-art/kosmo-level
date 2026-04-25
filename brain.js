@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbycDZ9RrWt6J-gpjqm7JsUtc40kro0QcZHtByb8Wk_7i-qU9XT8N8S3m75HCdpf892NrQ/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzQM4EJJ9VWLJe0pbp3YhKQEGZyhKaN7kuqSPELtyVdc44nHTNAgMpa6xXx28IV8v1XcQ/exec";
 
 function toggleAI() {
     const ui = document.getElementById('ai-interface');
