@@ -1,202 +1,64 @@
-/* LMSH PRESTIGE | ULTIMATE DESIGN SYSTEM */
-
+/* LMSH PRESTIGE | FINAL ADAPTIVE STYLES */
 :root {
     --bg: #050507;
     --card: rgba(28, 28, 30, 0.6);
-    --accent: #007aff;      /* Синий для Оракула */
-    --accent-red: #ff3b30;  /* Красный для Titan */
-    --purple: #5856d6;
+    --accent: #007aff;
     --text: #ffffff;
     --border: rgba(255, 255, 255, 0.1);
     --glass: blur(20px);
 }
 
-/* 1. БАЗА */
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
+body { background: var(--bg); color: var(--text); overflow-x: hidden; }
 
-body { 
-    background: var(--bg); 
-    color: var(--text); 
-    overflow-x: hidden; 
-    min-height: 100vh;
-}
-
-.main-bg {
-    position: fixed; 
-    inset: 0; 
-    z-index: -1;
-    background: radial-gradient(circle at top right, #1c1c1e 0%, #050507 100%);
-}
-
-/* 2. НАВИГАЦИЯ И МЕНЮ (ИСПРАВЛЕННОЕ) */
+/* НАВИГАЦИЯ */
 .top-nav {
-    padding: 15px 25px; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    position: sticky; 
-    top: 0; 
-    background: rgba(0,0,0,0.8); 
-    backdrop-filter: var(--glass);
-    z-index: 1000; 
-    border-bottom: 1px solid var(--border);
+    padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;
+    position: sticky; top: 0; background: rgba(0,0,0,0.8); backdrop-filter: var(--glass);
+    z-index: 1000; border-bottom: 1px solid var(--border);
 }
 
-.nav-dropdown { 
-    position: relative; 
-    display: inline-block; 
-    padding-bottom: 20px; /* Защитная зона, чтобы меню не закрывалось */
-    margin-bottom: -20px;
-}
-
-.drop-btn { 
-    background: none; 
-    border: none; 
-    color: var(--text); 
-    cursor: pointer; 
-    font-size: 14px; 
-    font-weight: 600; 
-    letter-spacing: 0.5px;
-}
-
+/* ФИКС МЕНЮ: Чтобы не исчезало */
+.nav-dropdown { position: relative; padding-bottom: 15px; margin-bottom: -15px; }
 .drop-content {
-    display: none; 
-    position: absolute; 
-    right: 0; 
-    top: 40px; /* Вплотную к зоне наведения */
-    background: rgba(28, 28, 30, 0.95);
-    min-width: 240px; 
-    border-radius: 18px; 
-    backdrop-filter: var(--glass);
-    border: 1px solid var(--border); 
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: none; position: absolute; right: 0; top: 35px;
+    background: rgba(28, 28, 30, 0.98); min-width: 220px; border-radius: 15px;
+    border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
+.nav-dropdown:hover .drop-content { display: block; }
+.drop-content a { color: white; padding: 12px 20px; text-decoration: none; display: block; font-size: 14px; }
+.drop-content a:hover { background: var(--accent); }
 
-.nav-dropdown:hover .drop-content { 
-    display: block; 
-    animation: slideUp 0.2s ease-out; 
-}
-
-@keyframes slideUp { 
-    from { opacity: 0; transform: translateY(10px); } 
-    to { opacity: 1; transform: translateY(0); } 
-}
-
-.drop-content a { 
-    color: white; 
-    padding: 14px 20px; 
-    text-decoration: none; 
-    display: block; 
-    font-size: 14px; 
-    border-bottom: 1px solid var(--border);
-}
-
-.drop-content a:hover { background: var(--accent); color: #000; font-weight: 600; }
-
-/* 3. ЯДРО ОРАКУЛА (СФЕРЫ) */
-.oracle-core { display: flex; gap: 6px; cursor: pointer; padding: 8px; }
-.ball { width: 12px; height: 12px; border-radius: 50%; filter: blur(1px); }
-.b1 { background: var(--accent); animation: pulse 2s infinite; }
-.b2 { background: var(--purple); animation: pulse 2s infinite 1s; }
-
-@keyframes pulse { 
-    0%, 100% { transform: scale(1); opacity: 0.5; } 
-    50% { transform: scale(1.3); opacity: 1; } 
-}
-
-/* 4. СЕТКА ПАКОВ (GLASS-CARDS) */
-.store-container { padding: 30px 20px; max-width: 1200px; margin: 0 auto; }
-.section-label { font-size: 24px; font-weight: 800; margin: 40px 0 20px; letter-spacing: -0.5px; }
-
-.packs-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-    gap: 20px; 
-}
-
-.glass-card {
-    background: var(--card); 
-    padding: 30px; 
-    border-radius: 28px;
-    border: 1px solid var(--border); 
-    backdrop-filter: var(--glass);
-    cursor: pointer; 
-    transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-.glass-card:hover { 
-    transform: translateY(-8px); 
-    border-color: var(--accent); 
-    background: rgba(255,255,255,0.08);
-    box-shadow: 0 15px 40px rgba(0,122,255,0.15);
-}
-
-.v-num { font-size: 36px; font-weight: 900; color: var(--accent); }
-
-/* 5. ИНТЕРФЕЙС ОРАКУЛА (WIDGET) */
+/* ОРАКУЛ: АДАПТИВНЫЙ РАЗМЕР */
 #ai-interface {
-    position: fixed; 
-    bottom: 25px; 
-    right: 25px; 
-    width: 360px; 
-    height: 520px;
-    background: rgba(13, 13, 15, 0.95); 
-    border-radius: 35px;
-    border: 1px solid var(--border); 
-    display: flex; 
-    flex-direction: column;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.8); 
-    z-index: 9999;
-    backdrop-filter: var(--glass); 
-    transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    position: fixed; bottom: 20px; right: 20px;
+    width: calc(100% - 40px); max-width: 360px;
+    height: 60vh; max-height: 500px;
+    background: rgba(13, 13, 15, 0.98); border-radius: 25px;
+    border: 1px solid var(--border); display: flex; flex-direction: column;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.8); z-index: 10000;
+    backdrop-filter: var(--glass); transition: 0.4s ease;
+}
+
+/* Мобильный режим для телефона */
+@media (max-width: 480px) {
+    #ai-interface { bottom: 0; right: 0; width: 100%; height: 75vh; border-radius: 25px 25px 0 0; }
 }
 
 .ai-hidden { opacity: 0; transform: translateY(40px) scale(0.9); pointer-events: none; }
+.ai-header { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+#chat-history { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
 
-.ai-header { padding: 18px 25px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-
-#chat-history { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-
-.msg { padding: 12px 18px; border-radius: 20px; font-size: 14px; max-width: 85%; animation: msgPop 0.3s ease-out; }
-@keyframes msgPop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
+/* СООБЩЕНИЯ */
+.msg { padding: 10px 15px; border-radius: 18px; font-size: 14px; max-width: 85%; }
 .msg.ai { background: #242426; align-self: flex-start; border-bottom-left-radius: 5px; }
-.msg.user { background: var(--accent); align-self: flex-end; border-bottom-right-radius: 5px; color: #000; font-weight: 500; }
+.msg.user { background: var(--accent); align-self: flex-end; border-bottom-right-radius: 5px; }
 
-/* 6. АНИМАЦИЯ ОЖИДАНИЯ (СФЕРЫ В ЧАТЕ) */
-.oracle-typing {
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    padding: 12px; 
-    background: rgba(255,255,255,0.05);
-    border-radius: 25px; 
-    width: 75px; 
-    height: 40px; 
-    position: relative;
-}
+/* ПОЛЕ ВВОДА */
+.ai-input-box { padding: 15px; display: flex; gap: 10px; border-top: 1px solid var(--border); }
+#user-input { flex: 1; background: transparent; border: none; color: white; outline: none; }
 
-.t-ball { width: 10px; height: 10px; border-radius: 50%; position: absolute; filter: blur(1.5px); }
-.tb-1 { background: var(--accent); animation: orbit 1.4s infinite ease-in-out; }
-.tb-2 { background: var(--purple); animation: orbit 1.4s infinite ease-in-out -0.7s; }
-
-@keyframes orbit { 
-    0%, 100% { transform: translateX(-18px) scale(1); opacity: 0.5; } 
-    50% { transform: translateX(18px) scale(1.4); opacity: 1; } 
-}
-
-/* 7. ВВОД */
-.ai-input-box { padding: 20px; display: flex; gap: 15px; align-items: center; border-top: 1px solid var(--border); }
-#user-input { flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 15px; }
-
-/* 8. TITAN OVERRIDE (ДЛЯ СТРАНИЦЫ TITAN) */
-.titan-mode .glass-card:hover { border-color: var(--accent-red); box-shadow: 0 15px 40px rgba(255, 59, 48, 0.2); }
-.titan-mode .v-num { color: var(--accent-red); }
-.titan-mode .msg.user { background: var(--accent-red); }
-.titan-mode .tb-1 { background: var(--accent-red); }
+/* АНИМАЦИЯ ЗАГРУЗКИ */
+.oracle-typing { display: flex; gap: 5px; padding: 10px; }
+.t-ball { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: blink 1.4s infinite; }
+@keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
