@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Переход завершен | Prestige 3.4</title>
+    <style>
+        body {
+            background: #000;
+            color: #fff;
+            font-family: -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .portal-text {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .glitch {
+            font-size: 24px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: #ff453a; /* Цвет старого сайта (опасность/лимиты) */
+            animation: transformToGreen 3s forwards;
+        }
+
+        @keyframes transformToGreen {
+            0% { color: #ff453a; filter: blur(2px); }
+            50% { color: #bf5af2; filter: blur(0); text-shadow: 0 0 20px #bf5af2; }
+            100% { color: #32d74b; text-shadow: 0 0 20px #32d74b; }
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #8e8e93;
+            max-width: 300px;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeIn 1s 2s forwards;
+        }
+
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        .btn-enter {
+            margin-top: 40px;
+            padding: 15px 30px;
+            background: #fff;
+            color: #000;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            opacity: 0;
+            animation: fadeIn 1s 3s forwards;
+            transition: 0.3s;
+        }
+
+        .btn-enter:hover { transform: scale(1.1); box-shadow: 0 0 30px rgba(255,255,255,0.4); }
+    </style>
+</head>
+<body>
+
+    <div class="portal-text">
+        <div class="glitch">HELLO FROM GSITES</div>
+        <div class="message">
+            Связь со старым штабом разорвана. <br>
+            Лимиты аннулированы. <br>
+            Добро пожаловать в <b>Prestige 3.4</b>.
+        </div>
+        <a href="index.html" class="btn-enter">ВОЙТИ В СИСТЕМУ</a>
+    </div>
+
+</body>
+</html>
