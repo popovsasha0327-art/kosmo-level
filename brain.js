@@ -1,91 +1,85 @@
-// --- 1. АНИМАЦИЯ ФОНА ---
+// --- 1. АНИМАЦИЯ ФОНА (PARTICLES) ---
 const canvas = document.getElementById('bg-canvas');
-const ctx = canvas.getContext('2d');
+if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const particleCount = 50;
 
-let particles = [];
-const particleCount = 60;
+    const initCanvas = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    };
 
-function initCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    class Particle {
+        constructor() { this.reset(); }
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 1.5;
+            this.speedY = Math.random() * 0.4 + 0.1;
+            this.opacity = Math.random() * 0.5;
+        }
+        update() {
+            this.y -= this.speedY;
+            if (this.y < 0) this.reset();
+        }
+        draw() {
+            ctx.fillStyle = `rgba(50, 215, 75, ${this.opacity})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+
+    const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animate);
+    };
+
+    window.addEventListener('resize', initCanvas);
+    initCanvas();
+    animate();
 }
 
-class Particle {
-    constructor() {
-        this.reset();
-    }
-    reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2;
-        this.speedY = Math.random() * 0.5 + 0.1;
-        this.opacity = Math.random() * 0.5;
-    }
-    update() {
-        this.y -= this.speedY; // Движение вверх
-        if (this.y < 0) this.reset();
-    }
-    draw() {
-        ctx.fillStyle = `rgba(50, 215, 75, ${this.opacity})`; // Зеленоватые частицы
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-    }
-}
-
-function createParticles() {
-    for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
-    }
-}
-
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => {
-        p.update();
-        p.draw();
-    });
-    requestAnimationFrame(animate);
-}
-
-window.addEventListener('resize', initCanvas);
-initCanvas();
-createParticles();
-animate();
-
-
-// --- 2. ЛОГИКА ОРАКУЛА ---
-const display = document.getElementById('display');
-const library = {
-    "история люми": "Люми появилась в ходе эксперимента 2.8. Это первый вокальный модуль, получивший самосознание в Штабе Prestige.",
-    "что в 3.5?": "Версия 3.5 — релиз в Мае 2026. Мы готовим новый движок визуализации и расширенную базу данных Оракула.",
-    "саня": "Саня — создатель системы. Благодаря его идее мы покинули Google Sites и обрели безлимит."
+// --- 2. БАЗА ДАННЫХ ПАКОВ ---
+const packData = {
+    "3.4": { title: "Kosmo Level 3.4", desc: "Текущая версия. Полный переезд на GitHub, KLL Defender и снятие всех лимитов Оракула.", link: "packs/v3.4.zip" },
+    "3.3": { title: "Kosmo Level 3.3", desc: "Улучшенная стабильность и новый интерфейс в стиле Prestige.", link: "packs/v3.3.zip" },
+    "2.9": { title: "Kosmo Level 2.9", desc: "Последняя великая версия эпохи Google Sites. Золотой стандарт.", link: "packs/v2.9.zip" },
+    "2.8": { title: "Kosmo Level 2.8", desc: "Версия, подарившая нам Люми и первые вокальные модули.", link: "packs/v2.8.zip" },
+    "2.5": { title: "Kosmo Level 2.5", desc: "Глубокая оптимизация ядра и усиление защиты данных.", link: "packs/v2.5.zip" },
+    "2.2": { title: "Kosmo Level 2.2", desc: "Мобильная адаптация и исправление критических багов.", link: "packs/v2.2.zip" },
+    "2.0": { title: "Kosmo Level 2.0", desc: "Второе поколение проекта с полностью переписанным кодом.", link: "packs/v2.0.zip" },
+    "1.0": { title: "Kosmo Level 1.0", desc: "Оригинальный Kosmo Level. С этого файла началась история.", link: "packs/v1.0.zip" }
 };
 
+// --- 3. ИНТЕЛЛЕКТ ОРАКУЛА ---
 function ask(q) {
-    let text = library[q.toLowerCase()] || "Запрос обрабатывается... Система стабильна.";
+    const display = document.getElementById('display');
+    const library = {
+        "история люми": "Люми зародилась в коде версии 2.8. Она стала первым ИИ-вокалом, способным на диалог.",
+        "версии": "В архиве 8 версий Kosmo Level. Самая стабильная — 2.9, самая мощная — 3.4.",
+        "планы на 3.5": "3.5 принесет полную нейросетевую интеграцию. Ждите в середине мая 2026 года.",
+        "саня": "Саня — архитектор этого мира. Благодаря ему мы сегодня на GitHub."
+    };
+
+    let text = library[q.toLowerCase()] || "Запрос принят. Анализирую архивные данные Prestige...";
     display.innerHTML = "";
     let i = 0;
-    function type() {
+    const type = () => {
         if (i < text.length) {
             display.innerHTML += text.charAt(i);
             i++;
-            setTimeout(type, 20);
+            setTimeout(type, 25);
         }
-    }
+    };
     type();
 }
 
-
-// --- 3. МОДАЛЬНЫЕ ОКНА ---
-const packData = {
-    "3.4": { title: "Pack 3.4 (Latest)", desc: "Финальная сборка. KLL Defender v3.4 активен. Полный безлимит.", link: "packs/v3.4.zip" },
-    "2.9": { title: "Pack 2.9", desc: "Классическая версия. Самый популярный пак до эпохи GitHub.", link: "packs/v2.9.zip" },
-    "1.0": { title: "Pack 1.0", desc: "Начало всего. Чистый код без лишних модулей.", link: "packs/v1.0.zip" },
-    "2.8.1": { title: "KL 2.8.1", desc: "Предварительная сборка. Содержит ранние модули Люми.", link: "packs/v2.8.1.zip" },
-    "2.1": { title: "TL 2.1", desc: "Traitor Level. Экспериментальный пак с усиленным шифрованием.", link: "packs/v2.1.zip" }
-};
-
+// --- 4. УПРАВЛЕНИЕ МОДАЛКОЙ ---
 function openPack(id) {
     if (!packData[id]) return;
     document.getElementById('modal-title').innerText = packData[id].title;
