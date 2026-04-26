@@ -3,68 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KLL Prestige Hub | GitHub Edition</title>
+    <title>KLL Prestige Hub | Full Archive</title>
     <link rel="stylesheet" href="main-prestige.css">
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <canvas id="bg-canvas"></canvas>
 
+    <nav class="top-nav">
+        <div class="nav-logo">PRESTIGE 3.4</div>
+        <div class="nav-links">
+            <a href="#oracle">Оракул</a>
+            <a href="#packs">Паки</a>
+            <a href="#history">Истории</a>
+        </div>
+    </nav>
+
     <div class="container">
-        <section class="oracle-section">
-            <div class="status-bar"><div class="pulse"></div> ORACLE v3.4 ACTIVE / UNLIMITED</div>
-            <div id="display">Синхронизация завершена. Фон стабилизирован. Чем займемся, Саня?</div>
+        <section id="oracle" class="oracle-section">
+            <div class="status-bar"><div class="pulse"></div> SYSTEM STATUS: OPTIMAL</div>
+            <div id="display">Архив Kosmo Level загружен. Все версии от 1.0 до 3.4 доступны.</div>
             <div class="oracle-btns">
                 <button onclick="ask('История Люми')">ИСТОРИЯ ЛЮМИ</button>
-                <button onclick="ask('Что в 3.5?')">ПЛАНЫ НА 3.5</button>
+                <button onclick="ask('Версии')">СПРАВКА ПО ВЕРСИЯМ</button>
             </div>
         </section>
 
-        <h2 class="cat-title">Импортированные Паки</h2>
+        <h2 id="packs" class="cat-title">Kosmo Level Archive</h2>
         <div class="grid">
             <div class="card latest" onclick="openPack('3.4')">
-                <h3>Pack 3.4</h3>
-                <p>Новейшая система с KLL Defender. Полная безопасность.</p>
-                <span class="badge">LATEST</span>
+                <div class="badge">LATEST</div>
+                <h3>Kosmo Level 3.4</h3>
+                <p>Текущая версия. Интеграция с GitHub и безлимитный ИИ.</p>
             </div>
-            <div class="card" onclick="openPack('2.9')">
-                <h3>Pack 2.9</h3>
-                <p>Стабильная версия "Золотой эры". Классика Prestige.</p>
-            </div>
-            <div class="card" onclick="openPack('1.0')">
-                <h3>Pack 1.0</h3>
-                <p>Первый пак. Начало великой истории.</p>
+
+            <div class="card" onclick="openPack('3.3')"><h3>Kosmo Level 3.3</h3><p>Улучшение протоколов связи и дизайна.</p></div>
+            <div class="card" onclick="openPack('2.9')"><h3>Kosmo Level 2.9</h3><p>Стабильная классика эпохи Google Sites.</p></div>
+            <div class="card" onclick="openPack('2.8')"><h3>Kosmo Level 2.8</h3><p>Первое появление вокальных модулей.</p></div>
+            <div class="card" onclick="openPack('2.5')"><h3>Kosmo Level 2.5</h3><p>Глобальное обновление безопасности.</p></div>
+            <div class="card" onclick="openPack('2.2')"><h3>Kosmo Level 2.2</h3><p>Оптимизация под мобильные системы.</p></div>
+            <div class="card" onclick="openPack('2.0')"><h3>Kosmo Level 2.0</h3><p>Второе поколение. Переход на новый движок.</p></div>
+            
+            <div class="card legacy" onclick="openPack('1.0')">
+                <div class="badge" style="background:#8e8e93">LEGACY</div>
+                <h3>Kosmo Level 1.0</h3>
+                <p>Фундамент. С чего всё начиналось.</p>
             </div>
         </div>
 
-        <h2 class="cat-title">Предварительные Паки</h2>
-        <div class="grid">
-            <div class="card pre" onclick="openPack('2.8.1')">
-                <h3>Kosmo Level 2.8.1</h3>
-                <p>Тестовая сборка модулей синхронизации.</p>
-            </div>
-            <div class="card pre" onclick="openPack('2.1')">
-                <h3>Traitor Level 2.1</h3>
-                <p>Эксперимент с измененной логикой защиты.</p>
-            </div>
-        </div>
-
-        <h2 class="cat-title">Будущее</h2>
+        <h2 class="cat-title">Next Level</h2>
         <div class="grid">
             <div class="card future">
                 <h3>Pack 3.5</h3>
-                <p>Обновление ядра Оракула и ИИ-вокала.</p>
-                <span class="date-tag">Релиз: Середина Мая 2026</span>
+                <p>Разработка новой нейросети Оракула.</p>
+                <span class="date-tag">Май 2026</span>
             </div>
         </div>
     </div>
 
     <div id="modal-overlay" onclick="closeModal()">
         <div id="pack-modal" onclick="event.stopPropagation()">
-            <h2 id="modal-title">Название</h2>
-            <p id="modal-desc">Описание</p>
+            <h2 id="modal-title"></h2>
+            <p id="modal-desc"></p>
             <div class="modal-footer">
-                <a href="#" id="modal-dl-link" class="dl-btn-main">СКАЧАТЬ ПАК</a>
+                <a href="#" id="modal-dl-link" class="dl-btn-main">СКАЧАТЬ ВЕРСИЮ</a>
                 <button onclick="closeModal()" class="close-btn">ЗАКРЫТЬ</button>
             </div>
         </div>
