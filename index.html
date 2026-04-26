@@ -3,177 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prestige 3.4 - Новый Штаб</title>
-    <style>
-        :root {
-            --bg: #000000;
-            --card: #1c1c1e;
-            --accent-green: #32d74b;
-            --accent-blue: #0a84ff;
-            --accent-purple: #bf5af2;
-            --text-main: #ffffff;
-            --text-secondary: #8e8e93;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .container { max-width: 800px; width: 100%; }
-
-        /* ОРАКУЛ БЕЗЛИМИТНЫЙ */
-        .oracle-card {
-            background: var(--card);
-            border-radius: 30px;
-            padding: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            margin-bottom: 25px;
-            position: relative;
-        }
-
-        .status-badge {
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--accent-green);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .pulse-dot {
-            width: 8px; height: 8px; background: var(--accent-green);
-            border-radius: 50%; box-shadow: 0 0 10px var(--accent-green);
-            animation: pulse 2s infinite;
-        }
-
-        #ans-box {
-            font-size: 18px;
-            line-height: 1.6;
-            min-height: 100px;
-            font-weight: 500;
-            color: #fff;
-        }
-
-        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
-        
-        .q-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #fff;
-            padding: 15px;
-            border-radius: 18px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-
-        .q-btn:hover { background: var(--accent-blue); transform: translateY(-2px); }
-
-        /* ТАБЛИЦА СВОБОДЫ */
-        .comp-table {
-            width: 100%;
-            background: var(--card);
-            border-radius: 20px;
-            border-collapse: collapse;
-            overflow: hidden;
-            margin-top: 20px;
-            font-size: 14px;
-        }
-
-        .comp-table th { padding: 15px; text-align: left; background: rgba(255,255,255,0.05); color: var(--text-secondary); font-size: 11px; text-transform: uppercase; }
-        .comp-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-
-        .tag { padding: 4px 8px; border-radius: 6px; font-weight: 800; font-size: 10px; }
-        .tag-red { color: #ff453a; background: rgba(255,69,58,0.1); }
-        .tag-green { color: #32d74b; background: rgba(50,215,75,0.1); }
-
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.5; } }
-
-    </style>
+    <title>KLL Prestige Hub</title>
+    <link rel="stylesheet" href="main-prestige.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
-<div class="container">
-    <div class="oracle-card">
-        <div class="status-badge">
-            <div class="pulse-dot"></div>
-            KLL Defender: Active / Unlimited Oracle
-        </div>
-        
-        <div id="ans-box">
-            Оракул приветствует тебя в новом Штабе. Здесь больше нет ограничений Google Sites. Система Prestige 3.4 готова к работе.
+    <div class="container">
+        <section class="oracle-section">
+            <div class="status-bar"><div class="pulse"></div> ORACLE v3.4 ACTIVE</div>
+            <div id="display">Привет, Саня! Все системы перенесены. С чего начнем?</div>
+            <div class="oracle-btns">
+                <button onclick="ask('Кто такая Люми?')">КТО ТАКАЯ ЛЮМИ?</button>
+                <button onclick="ask('Что в 3.5?')">ПЛАНЫ НА 3.5</button>
+            </div>
+        </section>
+
+        <h2 class="cat-title">Импортированные Паки</h2>
+        <div class="grid">
+            <div class="card latest">
+                <h3>Pack 3.4 (Latest)</h3>
+                <p>Финальная версия с интеграцией KLL Defender и полным переездом на GitHub.</p>
+                <a href="v3.4.zip" class="dl-btn">Скачать</a>
+            </div>
+            <div class="card">
+                <h3>Pack 2.9</h3>
+                <p>Пик "Золотой эры". Стабильность и классический набор инструментов.</p>
+                <a href="v2.9.zip" class="dl-btn">Скачать</a>
+            </div>
+            <div class="card">
+                <h3>Pack 1.0</h3>
+                <p>С чего всё начиналось. Чистый код, никакой лишней мишуры.</p>
+                <a href="v1.0.zip" class="dl-btn">Скачать</a>
+            </div>
         </div>
 
-        <div class="btn-group">
-            <button class="q-btn" onclick="ask('Что нового?')">ЧТО НОВОГО?</button>
-            <button class="q-btn" onclick="ask('Где защита?')">ГДЕ ЗАЩИТА?</button>
+        <h2 class="cat-title">Предварительные Паки</h2>
+        <div class="grid">
+            <div class="card pre">
+                <h3>Kosmo Level 2.8.1</h3>
+                <p>Тестовая сборка для проверки совместимости с новыми модулями.</p>
+                <a href="#" class="dl-btn">Доступно</a>
+            </div>
+            <div class="card pre">
+                <h3>Traitor Level 2.1</h3>
+                <p>Экспериментальный пак с измененной логикой безопасности.</p>
+                <a href="#" class="dl-btn">Доступно</a>
+            </div>
+        </div>
+
+        <h2 class="cat-title">Паки в Будущем</h2>
+        <div class="grid">
+            <div class="card future">
+                <h3>Pack 3.5</h3>
+                <p>Глобальное обновление интеллекта Оракула и новый дизайн.</p>
+                <span class="date-tag">Релиз: Середина Мая 2026</span>
+            </div>
+        </div>
+
+        <h2 class="cat-title">Истории</h2>
+        <div class="grid">
+            <div class="card story">
+                <h3>Появление Люми</h3>
+                <p>Архивная запись о том, как первый женский ИИ-вокал стал частью команды.</p>
+                <button class="dl-btn" onclick="ask('История Люми')">Читать</button>
+            </div>
         </div>
     </div>
 
-    <table class="comp-table">
-        <thead>
-            <tr>
-                <th>Функция</th>
-                <th>Google Sites</th>
-                <th>GitHub (NEW)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Лимиты ИИ</td>
-                <td><span class="tag tag-red">5 запросов</span></td>
-                <td><span class="tag tag-green">Безлимитно</span></td>
-            </tr>
-            <tr>
-                <td>Безопасность</td>
-                <td><span class="tag tag-red">Уязвимо</span></td>
-                <td><span class="tag tag-green">KLL Defender ✅</span></td>
-            </tr>
-            <tr>
-                <td>Скорость</td>
-                <td>Ограничена</td>
-                <td><b>Ultra Fast</b></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<script>
-    function ask(q) {
-        const box = document.getElementById('ans-box');
-        const db = {
-            "что нового?": "Мы переехали! Теперь Prestige — это полная свобода кода на GitHub Pages. Все паки (1.0-3.4) доступны без цензуры и ограничений.",
-            "где защита?": "KLL Defender сканирует каждый файл. Мы используем мощности GitHub для обеспечения 100% безопасности ваших данных."
-        };
-
-        box.style.opacity = "0.5";
-        setTimeout(() => {
-            box.style.opacity = "1";
-            box.innerHTML = "";
-            let text = db[q.toLowerCase()] || "Запрос обрабатывается в облаке Prestige...";
-            let i = 0;
-            function type() {
-                if (i < text.length) {
-                    box.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(type, 20);
-                }
-            }
-            type();
-        }, 500);
-    }
-</script>
-
+    <script src="brain.js"></script>
 </body>
 </html>
