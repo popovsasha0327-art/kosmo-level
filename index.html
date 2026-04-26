@@ -2,182 +2,178 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>LMSH PRESTIGE | HQ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prestige 3.4 - Новый Штаб</title>
     <style>
         :root {
-            --bg: #050507;
-            --card: rgba(28, 28, 30, 0.6);
-            --accent: #007aff;
-            --purple: #5856d6;
-            --text: #ffffff;
-            --border: rgba(255, 255, 255, 0.1);
+            --bg: #000000;
+            --card: #1c1c1e;
+            --accent-green: #32d74b;
+            --accent-blue: #0a84ff;
+            --accent-purple: #bf5af2;
+            --text-main: #ffffff;
+            --text-secondary: #8e8e93;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; }
-        body { background: var(--bg); color: var(--text); overflow-x: hidden; min-height: 100vh; }
-
-        .main-bg {
-            position: fixed; inset: 0; z-index: -1;
-            background: radial-gradient(circle at top right, #1c1c1e 0%, #050507 100%);
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* НАВИГАЦИЯ */
-        .top-nav {
-            padding: 15px 25px; display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(25px);
-            z-index: 1000; border-bottom: 1px solid var(--border);
+        .container { max-width: 800px; width: 100%; }
+
+        /* ОРАКУЛ БЕЗЛИМИТНЫЙ */
+        .oracle-card {
+            background: var(--card);
+            border-radius: 30px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            margin-bottom: 25px;
+            position: relative;
         }
 
-        .nav-right { display: flex; align-items: center; gap: 25px; }
-
-        .nav-dropdown { position: relative; display: inline-block; }
-        .drop-btn { background: none; border: none; color: var(--text); cursor: pointer; font-size: 15px; font-weight: 600; }
-        .drop-content {
-            display: none; position: absolute; right: 0; background: #1c1c1e;
-            min-width: 240px; border-radius: 18px; border: 1px solid var(--border);
-            overflow: hidden; margin-top: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        .status-badge {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent-green);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
         }
-        .nav-dropdown:hover .drop-content { display: block; }
-        .drop-content a { color: white; padding: 14px 20px; text-decoration: none; display: block; font-size: 14px; }
-        .drop-content a:hover { background: var(--accent); }
 
-        /* ЯДРО ОРАКУЛА */
-        .oracle-core { display: flex; gap: 6px; cursor: pointer; padding: 8px; border-radius: 20px; }
-        .ball { width: 12px; height: 12px; border-radius: 50%; filter: blur(1px); }
-        .b1 { background: var(--accent); animation: pulse 2s infinite; }
-        .b2 { background: var(--purple); animation: pulse 2s infinite 1s; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.3); opacity: 1; } }
-
-        /* КОНТЕНТ */
-        .store-container { padding: 30px 20px; max-width: 1100px; margin: 0 auto; }
-        .section-label { font-size: 24px; font-weight: 800; margin: 40px 0 20px; opacity: 0.9; }
-        .packs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-
-        .glass-card {
-            background: var(--card); padding: 30px; border-radius: 28px;
-            border: 1px solid var(--border); backdrop-filter: blur(15px);
-            cursor: pointer; transition: 0.4s;
+        .pulse-dot {
+            width: 8px; height: 8px; background: var(--accent-green);
+            border-radius: 50%; box-shadow: 0 0 10px var(--accent-green);
+            animation: pulse 2s infinite;
         }
-        .glass-card:hover { transform: translateY(-5px); border-color: var(--accent); }
-        .v-num { font-size: 36px; font-weight: 900; color: var(--accent); }
 
-        /* ОКНО ОРАКУЛА */
-        #ai-interface {
-            position: fixed; bottom: 25px; right: 25px; width: 360px; height: 520px;
-            background: rgba(13, 13, 15, 0.98); border-radius: 35px;
-            border: 1px solid var(--border); display: flex; flex-direction: column;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.8); z-index: 9999;
-            backdrop-filter: blur(30px); transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        #ans-box {
+            font-size: 18px;
+            line-height: 1.6;
+            min-height: 100px;
+            font-weight: 500;
+            color: #fff;
         }
-        .ai-hidden { opacity: 0; transform: translateY(40px) scale(0.9); pointer-events: none; }
+
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
         
-        .ai-header { padding: 18px 25px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        #chat-history { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-        
-        .msg { padding: 12px 18px; border-radius: 22px; font-size: 14px; max-width: 85%; }
-        .msg.ai { background: #242426; align-self: flex-start; border-bottom-left-radius: 5px; }
-        .msg.user { background: var(--accent); align-self: flex-end; border-bottom-right-radius: 5px; }
-
-        /* АНИМАЦИЯ СФЕР */
-        .oracle-typing {
-            display: flex; align-items: center; justify-content: center;
-            padding: 12px; background: rgba(255,255,255,0.05);
-            border-radius: 25px; width: 75px; height: 40px; position: relative;
+        .q-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 15px;
+            border-radius: 18px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
         }
-        .t-ball { width: 10px; height: 10px; border-radius: 50%; position: absolute; filter: blur(1.5px); }
-        .tb-1 { background: var(--accent); animation: orbit 1.4s infinite ease-in-out; }
-        .tb-2 { background: var(--purple); animation: orbit 1.4s infinite ease-in-out -0.7s; }
-        @keyframes orbit { 0%, 100% { transform: translateX(-18px); opacity: 0.5; } 50% { transform: translateX(18px); opacity: 1; } }
 
-        .ai-input-box { padding: 20px; display: flex; gap: 15px; align-items: center; border-top: 1px solid var(--border); }
-        #user-input { flex: 1; background: transparent; border: none; color: white; outline: none; }
-        .send-btn { background: var(--accent); border: none; color: white; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; }
+        .q-btn:hover { background: var(--accent-blue); transform: translateY(-2px); }
+
+        /* ТАБЛИЦА СВОБОДЫ */
+        .comp-table {
+            width: 100%;
+            background: var(--card);
+            border-radius: 20px;
+            border-collapse: collapse;
+            overflow: hidden;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .comp-table th { padding: 15px; text-align: left; background: rgba(255,255,255,0.05); color: var(--text-secondary); font-size: 11px; text-transform: uppercase; }
+        .comp-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+        .tag { padding: 4px 8px; border-radius: 6px; font-weight: 800; font-size: 10px; }
+        .tag-red { color: #ff453a; background: rgba(255,69,58,0.1); }
+        .tag-green { color: #32d74b; background: rgba(50,215,75,0.1); }
+
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.5; } }
+
     </style>
 </head>
 <body>
-    <div class="main-bg"></div>
 
-    <nav class="top-nav">
-        <div class="nav-left"><b>LMSH PRESTIGE</b></div>
-        <div class="nav-right">
-            <div class="nav-dropdown">
-                <button class="drop-btn">ПОМОЩНИКИ ▼</button>
-                <div class="drop-content">
-                    <a href="demo.html">❓ Быстрый Помощник</a>
-                    <a href="titan.html">🛠 Форма Восстановления</a>
-                </div>
-            </div>
-            <div class="oracle-core" onclick="toggleAI()">
-                <div class="ball b1"></div>
-                <div class="ball b2"></div>
-            </div>
+<div class="container">
+    <div class="oracle-card">
+        <div class="status-badge">
+            <div class="pulse-dot"></div>
+            KLL Defender: Active / Unlimited Oracle
         </div>
-    </nav>
+        
+        <div id="ans-box">
+            Оракул приветствует тебя в новом Штабе. Здесь больше нет ограничений Google Sites. Система Prestige 3.4 готова к работе.
+        </div>
 
-    <main class="store-container">
-        <h2 class="section-label">АРХИВ KOSMO LEVEL</h2>
-        <div class="packs-grid" id="main-grid">
-            <div class="glass-card"><div class="v-num">3.4</div><p>В разработке...</p></div>
-            <div class="glass-card"><div class="v-num">3.3</div><p>Stable Build</p></div>
-        </div>
-    </main>
-
-    <div id="ai-interface" class="ai-hidden">
-        <div class="ai-header">
-            <div class="oracle-core"><div class="ball b1"></div><div class="ball b2"></div></div>
-            <span style="font-weight:bold; font-size:12px;">ORACLE SYSTEM</span>
-            <div onclick="toggleAI()" style="cursor:pointer">✕</div>
-        </div>
-        <div id="chat-history">
-            <div class="msg ai">Штаб на связи. Ожидаю запрос... 🛠</div>
-        </div>
-        <div class="ai-input-box">
-            <div class="attachment">📎</div>
-            <input type="text" id="user-input" placeholder="Запрос в Штаб...">
-            <button class="send-btn" onclick="sendMessage()">↑</button>
+        <div class="btn-group">
+            <button class="q-btn" onclick="ask('Что нового?')">ЧТО НОВОГО?</button>
+            <button class="q-btn" onclick="ask('Где защита?')">ГДЕ ЗАЩИТА?</button>
         </div>
     </div>
 
-    <script>
-        function toggleAI() {
-            const ui = document.getElementById('ai-interface');
-            ui.classList.toggle('ai-hidden');
-        }
+    <table class="comp-table">
+        <thead>
+            <tr>
+                <th>Функция</th>
+                <th>Google Sites</th>
+                <th>GitHub (NEW)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Лимиты ИИ</td>
+                <td><span class="tag tag-red">5 запросов</span></td>
+                <td><span class="tag tag-green">Безлимитно</span></td>
+            </tr>
+            <tr>
+                <td>Безопасность</td>
+                <td><span class="tag tag-red">Уязвимо</span></td>
+                <td><span class="tag tag-green">KLL Defender ✅</span></td>
+            </tr>
+            <tr>
+                <td>Скорость</td>
+                <td>Ограничена</td>
+                <td><b>Ultra Fast</b></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-        async function sendMessage() {
-            const input = document.getElementById('user-input');
-            const val = input.value.trim();
-            if(!val) return;
+<script>
+    function ask(q) {
+        const box = document.getElementById('ans-box');
+        const db = {
+            "что нового?": "Мы переехали! Теперь Prestige — это полная свобода кода на GitHub Pages. Все паки (1.0-3.4) доступны без цензуры и ограничений.",
+            "где защита?": "KLL Defender сканирует каждый файл. Мы используем мощности GitHub для обеспечения 100% безопасности ваших данных."
+        };
 
-            addMsg('user', val);
-            input.value = "";
+        box.style.opacity = "0.5";
+        setTimeout(() => {
+            box.style.opacity = "1";
+            box.innerHTML = "";
+            let text = db[q.toLowerCase()] || "Запрос обрабатывается в облаке Prestige...";
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    box.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, 20);
+                }
+            }
+            type();
+        }, 500);
+    }
+</script>
 
-            const history = document.getElementById('chat-history');
-            const loader = document.createElement('div');
-            loader.className = 'oracle-typing';
-            loader.innerHTML = '<div class="t-ball tb-1"></div><div class="t-ball tb-2"></div>';
-            history.appendChild(loader);
-            history.scrollTop = history.scrollHeight;
-
-            setTimeout(() => {
-                loader.remove();
-                addMsg('ai', "Запрос принят. Анализирую данные секторов... 🛰️");
-            }, 1500);
-        }
-
-        function addMsg(type, text) {
-            const history = document.getElementById('chat-history');
-            const d = document.createElement('div');
-            d.className = `msg ${type}`;
-            d.innerText = text;
-            history.appendChild(d);
-            history.scrollTop = history.scrollHeight;
-        }
-
-        document.getElementById('user-input').addEventListener('keypress', (e) => {
-            if(e.key === 'Enter') sendMessage();
-        });
-    </script>
 </body>
 </html>
