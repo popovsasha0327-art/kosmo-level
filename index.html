@@ -3,75 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KLL Prestige Hub | Full Archive</title>
-    <link rel="stylesheet" href="main-prestige.css">
-    <link rel="manifest" href="manifest.json">
+    <title>Kosmo Level Store</title>
+    <style>
+        :root {
+            --bg: #050508;
+            --accent: #32d74b;
+            --oracle-blue: #007aff;
+            --oracle-purple: #bf5af2;
+            --assist-gold: #ffd60a;
+            --card-bg: rgba(28, 28, 30, 0.7);
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            background: var(--bg);
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* --- ЖИВОЙ ФОН --- */
+        #bg-canvas {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+        }
+
+        /* --- НАВИГАЦИЯ (CONTROL CENTER) --- */
+        .top-nav {
+            position: sticky; top: 0;
+            background: rgba(13, 13, 15, 0.8);
+            backdrop-filter: blur(25px);
+            display: flex; justify-content: space-between;
+            align-items: center;
+            padding: 12px 25px;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-left { display: flex; align-items: center; gap: 15px; }
+
+        /* ОРАКУЛ В НАВИГАЦИИ */
+        .oracle-trigger {
+            display: flex; align-items: center;
+            cursor: pointer;
+            background: rgba(255,255,255,0.05);
+            padding: 6px 12px;
+            border-radius: 20px;
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            max-width: 35px; /* Только иконка изначально */
+            border: 1px solid rgba(0, 122, 255, 0.3);
+        }
+
+        .oracle-trigger:hover {
+            max-width: 220px;
+            background: rgba(0, 122, 255, 0.15);
+            border-color: var(--oracle-blue);
+        }
+
+        .oracle-icon-mini { font-size: 18px; filter: drop-shadow(0 0 5px var(--oracle-blue)); }
+        
+        .oracle-text {
+            white-space: nowrap;
+            margin-left: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            opacity: 0;
+            transition: 0.3s;
+            color: #fff;
+        }
+        .oracle-trigger:hover .oracle-text { opacity: 1; }
+
+        /* СТРЕЛКА И ВЫПАДАЮЩЕЕ МЕНЮ */
+        .dropdown { position: relative; display: inline-block; }
+        .dropbtn {
+            background: none; border: none; color: #8e8e93; 
+            cursor: pointer; font-size: 14px; padding: 10px;
+            transition: 0.3s;
+        }
+        .dropbtn:hover { color: #fff; transform: translateY(2px); }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: rgba(28, 28, 30, 0.95);
+            backdrop-filter: blur(20px);
+            min-width: 220px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.1);
+            top: 45px; left: 0;
+            z-index: 1001;
+            padding: 8px;
+        }
+        .dropdown-content a {
+            color: #fff; padding: 12px 16px;
+            text-decoration: none; display: flex; align-items: center; gap: 10px;
+            font-size: 14px; transition: 0.2s;
+            border-radius: 12px;
+        }
+        .dropdown-content a:hover { background: rgba(255,255,255,0.1); }
+        .dropdown:hover .dropdown-content { display: block; }
+
+        .nav-right { display: flex; align-items: center; }
+        .profile-link {
+            text-decoration: none; font-size: 20px;
+            background: rgba(255,255,255,0.05);
+            width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
+        .profile-link:hover { background: rgba(255,255,255,0.2); transform: rotate(10deg); }
+
+        /* --- ГЛАВНЫЙ ТЕКСТ (ПЕРЕЛИВ) --- */
+        .gradient-text {
+            background: linear-gradient(to right, var(--oracle-blue), var(--oracle-purple), var(--assist-gold), var(--oracle-blue));
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: grad-move 5s linear infinite;
+        }
+        @keyframes grad-move { 0% { background-position: 0% center; } 100% { background-position: 300% center; } }
+
+        /* --- МОДАЛЬНОЕ ОКНО ОРАКУЛА --- */
+        .modal {
+            display: none;
+            position: fixed; z-index: 2000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(15px);
+        }
+        .modal-content {
+            background: #1c1c1e; margin: 8% auto;
+            padding: 35px; border-radius: 32px;
+            width: 90%; max-width: 550px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 50px rgba(0, 122, 255, 0.2);
+            text-align: center;
+        }
+        .close-btn { float: right; cursor: pointer; font-size: 24px; color: #444; transition: 0.3s; }
+        .close-btn:hover { color: #fff; }
+
+        .oracle-input {
+            width: 100%; padding: 18px; border-radius: 18px;
+            background: #2c2c2e; border: 1px solid #3d3d3d;
+            color: white; margin-top: 25px; outline: none;
+            font-size: 16px; box-sizing: border-box;
+        }
+        .oracle-input:focus { border-color: var(--oracle-blue); box-shadow: 0 0 15px rgba(0, 122, 255, 0.3); }
+
+        /* --- КОНТЕНТ САЙТА --- */
+        .main-container { max-width: 1000px; margin: 60px auto; padding: 20px; text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 40px; }
+        .card {
+            background: var(--card-bg); padding: 30px; border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.1); transition: 0.4s;
+            cursor: pointer; text-align: left;
+        }
+        .card:hover { transform: translateY(-10px); border-color: var(--accent); background: rgba(50, 215, 75, 0.05); }
+    </style>
 </head>
 <body>
-    <canvas id="bg-canvas"></canvas>
 
-    <nav class="top-nav">
-        <div class="nav-logo">PRESTIGE 3.4</div>
-        <div class="nav-links">
-            <a href="#oracle">Оракул</a>
-            <a href="#packs">Паки</a>
-            <a href="#history">Истории</a>
-        </div>
-    </nav>
+<canvas id="bg-canvas"></canvas>
 
-    <div class="container">
-        <section id="oracle" class="oracle-section">
-            <div class="status-bar"><div class="pulse"></div> SYSTEM STATUS: OPTIMAL</div>
-            <div id="display">Архив Kosmo Level загружен. Все версии от 1.0 до 3.4 доступны.</div>
-            <div class="oracle-btns">
-                <button onclick="ask('История Люми')">ИСТОРИЯ ЛЮМИ</button>
-                <button onclick="ask('Версии')">СПРАВКА ПО ВЕРСИЯМ</button>
-            </div>
-        </section>
-
-        <h2 id="packs" class="cat-title">Kosmo Level Archive</h2>
-        <div class="grid">
-            <div class="card latest" onclick="openPack('3.4')">
-                <div class="badge">LATEST</div>
-                <h3>Kosmo Level 3.4</h3>
-                <p>Текущая версия. Интеграция с GitHub и безлимитный ИИ.</p>
-            </div>
-
-            <div class="card" onclick="openPack('3.3')"><h3>Kosmo Level 3.3</h3><p>Улучшение протоколов связи и дизайна.</p></div>
-            <div class="card" onclick="openPack('2.9')"><h3>Kosmo Level 2.9</h3><p>Стабильная классика эпохи Google Sites.</p></div>
-            <div class="card" onclick="openPack('2.8')"><h3>Kosmo Level 2.8</h3><p>Первое появление вокальных модулей.</p></div>
-            <div class="card" onclick="openPack('2.5')"><h3>Kosmo Level 2.5</h3><p>Глобальное обновление безопасности.</p></div>
-            <div class="card" onclick="openPack('2.2')"><h3>Kosmo Level 2.2</h3><p>Оптимизация под мобильные системы.</p></div>
-            <div class="card" onclick="openPack('2.0')"><h3>Kosmo Level 2.0</h3><p>Второе поколение. Переход на новый движок.</p></div>
-            
-            <div class="card legacy" onclick="openPack('1.0')">
-                <div class="badge" style="background:#8e8e93">LEGACY</div>
-                <h3>Kosmo Level 1.0</h3>
-                <p>Фундамент. С чего всё начиналось.</p>
-            </div>
+<nav class="top-nav">
+    <div class="nav-left">
+        <div class="oracle-trigger" onclick="openOracle()">
+            <div class="oracle-icon-mini">🔵🟣</div>
+            <span class="oracle-text">Спросить Оракула</span>
         </div>
 
-        <h2 class="cat-title">Next Level</h2>
-        <div class="grid">
-            <div class="card future">
-                <h3>Pack 3.5</h3>
-                <p>Разработка новой нейросети Оракула.</p>
-                <span class="date-tag">Май 2026</span>
+        <div class="dropdown">
+            <button class="dropbtn">Помощники ▼</button>
+            <div class="dropdown-content">
+                <a href="demo.html">❓ Быстрый Помощник</a>
+                <a href="titan.html">🛡️ ЛМСХ Форма (Titan)</a>
             </div>
         </div>
     </div>
 
-    <div id="modal-overlay" onclick="closeModal()">
-        <div id="pack-modal" onclick="event.stopPropagation()">
-            <h2 id="modal-title"></h2>
-            <p id="modal-desc"></p>
-            <div class="modal-footer">
-                <a href="#" id="modal-dl-link" class="dl-btn-main">СКАЧАТЬ ВЕРСИЮ</a>
-                <button onclick="closeModal()" class="close-btn">ЗАКРЫТЬ</button>
-            </div>
+    <div class="nav-right">
+        <a href="profile.html" class="profile-link">👤</a>
+    </div>
+</nav>
+
+<div class="main-container">
+    <h1 class="gradient-text" style="font-size: 50px; letter-spacing: -1px;">System Prestige 3.4</h1>
+    <p style="color: #8e8e93; font-size: 18px;">Добро пожаловать в новый Штаб на GitHub.</p>
+
+    <div class="grid">
+        <div class="card">
+            <h2 style="margin: 0; color: var(--accent);">Kosmo Level 3.4</h2>
+            <p style="color: #8e8e93;">Полный доступ ко всем функциям и обход лимитов.</p>
+        </div>
+        <div class="card">
+            <h2 style="margin: 0; color: var(--oracle-purple);">Soul Engine</h2>
+            <p style="color: #8e8e93;">Интеллект Оракула теперь работает в облаке.</p>
         </div>
     </div>
+</div>
 
-    <script src="brain.js"></script>
+<div id="oracle-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeOracle()">&times;</span>
+        <h2 class="gradient-text" style="font-size: 28px;">Oracle Intelligence</h2>
+        <div style="height: 150px; overflow-y: auto; color: #8e8e93; margin-top: 15px;" id="chat-res">
+            Система синхронизирована. Ожидаю ввод данных...
+        </div>
+        <input type="text" class="oracle-input" placeholder="Задайте вопрос Оракулу..." onkeydown="if(event.key === 'Enter') alert('Оракул анализирует...')">
+    </div>
+</div>
+
+<script>
+    // --- МАГИЯ ФОНА (ЧАСТИЦЫ) ---
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, particles = [];
+
+    function init() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        particles = [];
+        for(let i=0; i<85; i++) {
+            particles.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.4,
+                vy: (Math.random() - 0.5) * 0.4,
+                size: Math.random() * 1.5,
+                color: Math.random() > 0.5 ? '#007aff' : '#bf5af2'
+            });
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach((p, i) => {
+            p.x += p.vx; p.y += p.vy;
+            if(p.x < 0 || p.x > width) p.vx *= -1;
+            if(p.y < 0 || p.y > height) p.vy *= -1;
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = 0.3;
+            ctx.fill();
+
+            for(let j=i+1; j<particles.length; j++) {
+                let dx = p.x - particles[j].x;
+                let dy = p.y - particles[j].y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                if(dist < 110) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = p.color;
+                    ctx.globalAlpha = (1 - (dist/110)) * 0.2;
+                    ctx.lineWidth = 0.8;
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
+                }
+            }
+        });
+        requestAnimationFrame(animate);
+    }
+
+    // МОДАЛКА
+    function openOracle() { document.getElementById('oracle-modal').style.display = 'block'; }
+    function closeOracle() { document.getElementById('oracle-modal').style.display = 'none'; }
+    window.onclick = function(e) { if(e.target == document.getElementById('oracle-modal')) closeOracle(); }
+
+    window.addEventListener('resize', init);
+    init(); animate();
+</script>
+
 </body>
 </html>
