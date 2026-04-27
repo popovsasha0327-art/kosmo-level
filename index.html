@@ -3,197 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KLL Prestige | Elite Hub</title>
+    <title>Kosmo Level Store | Prestige 3.4</title>
     <style>
         :root {
             --bg: #050508;
-            --oracle-blue: #007aff;
-            --oracle-purple: #bf5af2;
-            --assist-gold: #ffd60a;
-            --accent: #32d74b;
+            --accent: #bf5af2; /* Тот самый миллионный цвет */
+            --blue: #007aff;
+            --gold: #ffd60a;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
         body, html {
             margin: 0; padding: 0;
             background: var(--bg);
             color: white;
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: -apple-system, sans-serif;
             overflow-x: hidden;
         }
 
-        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
-
-        /* НАВИГАЦИЯ */
-        .top-nav {
-            position: sticky; top: 0;
-            background: rgba(13, 13, 15, 0.8);
-            backdrop-filter: blur(25px);
-            display: flex; justify-content: space-between;
-            align-items: center; padding: 12px 25px;
-            z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.1);
+        /* ШАПКА ПО ЧЕРТЕЖУ */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 25px;
+            background: rgba(5, 5, 8, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            box-sizing: border-box;
         }
 
-        .nav-left { display: flex; align-items: center; gap: 20px; }
-
-        /* ОРАКУЛ (ПРОГРАММНЫЙ КРУЖОК) */
-        .oracle-btn {
-            display: flex; align-items: center;
-            cursor: pointer; background: rgba(255,255,255,0.05);
-            padding: 5px 15px 5px 8px; border-radius: 30px;
-            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden; max-width: 40px;
-            border: 1px solid rgba(0, 122, 255, 0.2);
-        }
-
-        .oracle-btn:hover { max-width: 250px; background: rgba(0, 122, 255, 0.1); border-color: var(--oracle-blue); }
-
-        .oracle-logo-draw {
-            width: 24px; height: 24px;
-            background: linear-gradient(135deg, var(--oracle-blue), var(--oracle-purple));
-            border-radius: 50%; box-shadow: 0 0 10px var(--oracle-blue);
-            flex-shrink: 0;
-        }
-
-        .oracle-btn span {
-            white-space: nowrap; margin-left: 12px;
-            font-size: 13px; font-weight: 600; opacity: 0; transition: 0.3s;
-        }
-        .oracle-btn:hover span { opacity: 1; }
-
-        /* ВЫПАДАЮЩЕЕ МЕНЮ СТРЕЛКОЙ */
-        .dropdown { position: relative; }
-        .arrow-btn {
-            background: none; border: none; color: #8e8e93;
-            cursor: pointer; font-size: 16px; padding: 10px; transition: 0.3s;
-        }
-        .arrow-btn:hover { color: #fff; transform: scale(1.2); }
-
-        .dropdown-content {
-            display: none; position: absolute; top: 45px;
-            background: rgba(28, 28, 30, 0.95); backdrop-filter: blur(20px);
-            min-width: 200px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1);
-            padding: 10px; z-index: 1001;
-        }
-        .dropdown:hover .dropdown-content { display: block; }
+        .nav-left { display: flex; align-items: center; gap: 15px; }
+        .burger { font-size: 24px; cursor: pointer; }
         
-        .dropdown-content a {
-            color: #fff; text-decoration: none; display: flex; align-items: center;
-            padding: 10px; font-size: 14px; border-radius: 10px; transition: 0.2s;
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        
+        /* ЛОГОТИП С МЕНЯЮЩИМСЯ ЦВЕТОМ */
+        .oracle-logo-mini {
+            display: flex; gap: 4px; cursor: pointer;
         }
-        .dropdown-content a:hover { background: rgba(255,255,255,0.1); }
+        .dot {
+            width: 12px; height: 12px; border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+            transition: 0.3s;
+        }
+        .dot.blue { background: var(--blue); box-shadow: 0 0 10px var(--blue); }
 
-        .nav-right .profile-icon {
-            font-size: 22px; text-decoration: none; opacity: 0.7; transition: 0.3s;
-        }
-        .nav-right .profile-icon:hover { opacity: 1; transform: scale(1.1); }
-
-        /* МОДАЛКА */
-        .modal {
-            display: none; position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%; background: rgba(0,0,0,0.9);
-            backdrop-filter: blur(15px); z-index: 2000;
-        }
-        .modal-box {
-            width: 90%; max-width: 500px; margin: 10% auto;
-            background: #1c1c1e; padding: 30px; border-radius: 30px;
-            border: 1px solid #333; text-align: center;
+        /* КАРТОЧКИ ПАКОВ */
+        .main-content {
+            margin-top: 100px; padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
         }
 
-        /* ТЕКСТОВЫЙ ГРАДИЕНТ */
-        .grad-text {
-            background: linear-gradient(to right, var(--oracle-blue), var(--oracle-purple), var(--assist-gold));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            font-weight: 900;
+        .store-card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px; width: 90%; max-width: 400px;
+            margin-bottom: 20px;
+            text-align: center;
+            transition: 0.3s;
         }
+        .store-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .btn-more {
+            background: var(--accent); color: white; border: none;
+            padding: 10px 25px; border-radius: 10px; cursor: pointer;
+            margin-top: 15px; font-weight: bold;
+        }
+
+        /* НИЖНЯЯ ПАНЕЛЬ ОРАКУЛА */
+        .oracle-bottom-bar {
+            position: fixed; bottom: 20px; left: 50%;
+            transform: translateX(-50%);
+            width: 90%; max-width: 600px;
+            background: rgba(20, 20, 25, 0.9);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 10px 20px;
+            display: flex; align-items: center; gap: 15px;
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .oracle-bottom-bar.hidden { transform: translateX(-50%) translateY(150px); opacity: 0; }
+
+        .search-input {
+            background: transparent; border: none; color: white; width: 100%;
+            outline: none; font-size: 16px;
+        }
+
+        /* ВСПЛЫВАЮЩЕЕ ОКНО ЧАТА */
+        .chat-overlay {
+            position: fixed; bottom: -100%; left: 0;
+            width: 100%; height: 80%;
+            background: var(--bg);
+            border-top: 2px solid var(--accent);
+            border-radius: 30px 30px 0 0;
+            z-index: 200;
+            transition: 0.5s ease;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .chat-overlay.active { bottom: 0; }
+
+        .close-btn { font-size: 30px; float: right; cursor: pointer; color: var(--accent); }
     </style>
 </head>
 <body>
 
-<canvas id="bg"></canvas>
-
-<nav class="top-nav">
-    <div class="nav-left">
-        <div class="oracle-btn" onclick="openOracle()">
-            <div class="oracle-logo-draw"></div>
-            <span>Спросить Оракула</span>
+    <header>
+        <div class="nav-left">
+            <div class="burger">≡</div>
+            <div style="font-size: 14px; font-weight: bold; letter-spacing: 1px;">KOSMO STORE</div>
         </div>
-
-        <div class="dropdown">
-            <button class="arrow-btn">▼</button>
-            <div class="dropdown-content">
-                <a href="demo.html">❓ Быстрый Помощник</a>
-                <a href="titan.html">🛡️ ЛМСХ Форма</a>
+        <div class="nav-right">
+            <div class="oracle-logo-mini" onclick="toggleChat()">
+                <div class="dot blue"></div>
+                <div class="dot"></div>
+                <span style="font-size: 12px; margin-left: 5px;">▼</span>
             </div>
+            <div style="color: var(--gold); cursor: pointer;" title="Справка">?</div>
+            <a href="profile.html" style="text-decoration: none;">👤</a>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="store-card">
+            <h2 style="margin: 0; color: var(--accent);">Kosmo Level 3.4</h2>
+            <p style="opacity: 0.6;">Новая эра систем. Без ограничений Google.</p>
+            <button class="btn-more">ПОДРОБНЕЕ</button>
+        </div>
+
+        <div class="store-card">
+            <h2 style="margin: 0; color: #ff3b30;">Traitor Level</h2>
+            <p style="opacity: 0.6;">Экспериментальный пак для профи.</p>
+            <button class="btn-more" style="background: #ff3b30;">ПОДРОБНЕЕ</button>
         </div>
     </div>
-    <div class="nav-right">
-        <a href="profile.html" class="profile-icon">👤</a>
+
+    <div class="oracle-bottom-bar" id="bottomBar">
+        <div class="oracle-logo-mini">
+            <div class="dot blue"></div>
+            <div class="dot"></div>
+        </div>
+        <input type="text" class="search-input" placeholder="Спросить Оракула..." onfocus="toggleChat()">
+        <button style="background: none; border: none; color: var(--accent); font-size: 20px; cursor: pointer;">➤</button>
     </div>
-</nav>
 
-<div style="text-align: center; margin-top: 100px;">
-    <h1 class="grad-text" style="font-size: 60px;">PRESTIGE</h1>
-    <p style="color: #8e8e93;">Ночная смена: Архитектура входа.</p>
-</div>
-
-<div id="oracle-modal" class="modal">
-    <div class="modal-box">
-        <h2 class="grad-text">Oracle Intelligence</h2>
-        <p style="color: #666;">Система готова к приему данных.</p>
-        <input type="text" placeholder="Ваш вопрос..." style="width:100%; padding:15px; border-radius:15px; background:#2c2c2e; border:1px solid #444; color:white;">
-        <button onclick="closeOracle()" style="margin-top:20px; background:none; border:none; color:#555; cursor:pointer;">Закрыть</button>
+    <div class="chat-overlay" id="chatWindow">
+        <span class="close-btn" onclick="toggleChat()">×</span>
+        <h3 style="color: var(--accent);">Oracle Intelligence</h3>
+        <hr style="border: 0.5px solid var(--border);">
+        <p style="text-align: center; opacity: 0.4; margin-top: 50px;">Оракул готов к работе...</p>
     </div>
-</div>
 
-<script>
-    const canvas = document.getElementById('bg');
-    const ctx = canvas.getContext('2d');
-    let w, h, particles = [];
-
-    function init() {
-        w = canvas.width = window.innerWidth;
-        h = canvas.height = window.innerHeight;
-        particles = [];
-        for(let i=0; i<80; i++) {
-            particles.push({
-                x: Math.random()*w, y: Math.random()*h,
-                vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5,
-                c: Math.random() > 0.5 ? '#007aff' : '#bf5af2'
-            });
+    <script>
+        function toggleChat() {
+            const chat = document.getElementById('chatWindow');
+            const bar = document.getElementById('bottomBar');
+            chat.classList.toggle('active');
+            bar.classList.toggle('hidden');
         }
-    }
-
-    function animate() {
-        ctx.clearRect(0,0,w,h);
-        particles.forEach((p, i) => {
-            p.x += p.vx; p.y += p.vy;
-            if(p.x<0 || p.x>w) p.vx*=-1;
-            if(p.y<0 || p.y>h) p.vy*=-1;
-            ctx.fillStyle = p.c;
-            ctx.globalAlpha = 0.4;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, 1.5, 0, Math.PI*2);
-            ctx.fill();
-
-            for(let j=i+1; j<particles.length; j++) {
-                let dist = Math.hypot(p.x-particles[j].x, p.y-particles[j].y);
-                if(dist < 100) {
-                    ctx.strokeStyle = p.c;
-                    ctx.globalAlpha = 1 - (dist/100);
-                    ctx.lineWidth = 0.5;
-                    ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
-                }
-            }
-        });
-        requestAnimationFrame(animate);
-    }
-
-    function openOracle() { document.getElementById('oracle-modal').style.display='block'; }
-    function closeOracle() { document.getElementById('oracle-modal').style.display='none'; }
-
-    init(); animate();
-    window.onresize = init;
-</script>
-
+    </script>
 </body>
 </html>
