@@ -2,166 +2,49 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kosmo Level Store | Oracle AI Premier 340</title>
+    <title>Kosmo Level | 340</title>
     <link rel="stylesheet" href="main-prestige.css">
-    <style>
-        /* Стили выпадающего меню (Стрелочка) */
-        .dropdown-menu {
-            position: absolute; top: 60px; right: 80px;
-            background: rgba(15, 15, 20, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 10px; width: 220px;
-            display: none; flex-direction: column; gap: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            z-index: 1000;
-        }
-        .dropdown-menu.active { display: flex; }
-        .dropdown-item {
-            padding: 12px; border-radius: 8px; cursor: pointer;
-            transition: 0.3s; display: flex; align-items: center; gap: 10px;
-            font-size: 14px;
-        }
-        .dropdown-item:hover { background: var(--glass); color: var(--accent); }
-
-        /* Окно Справки */
-        .help-overlay {
-            position: fixed; top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            width: 90%; max-width: 500px; height: 70%;
-            background: #0a0a0f; border: 1px solid var(--border);
-            border-radius: 25px; z-index: 2000;
-            display: none; flex-direction: column;
-            opacity: 0; transition: 0.3s;
-        }
-        .help-overlay.active { display: flex; transform: translate(-50%, -50%) scale(1); opacity: 1; }
-        .help-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .help-content { padding: 20px; overflow-y: auto; flex-grow: 1; line-height: 1.6; color: var(--text-dim); }
-
-        /* Кастомный скролл */
-        .help-content::-webkit-scrollbar { width: 4px; }
-        .help-content::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
-    </style>
 </head>
 <body>
 
-    <header>
-        <div class="nav-left">
-            <div class="burger">≡</div>
-            <div style="font-size: 14px; font-weight: bold; letter-spacing: 1px;">KOSMO STORE</div>
+<header>
+    <div style="font-weight: bold; cursor:pointer">≡ KOSMO</div>
+    <div style="display: flex; gap: 20px; align-items: center;">
+        <div onclick="document.getElementById('drop').classList.toggle('active')" style="cursor:pointer; display:flex; gap:5px">
+            <div class="dot"></div><div class="dot" style="background:#007aff"></div> ▼
         </div>
-        <div class="nav-right">
-            <div class="oracle-logo-mini" style="display: flex; align-items: center; gap: 8px; cursor: pointer;" onclick="toggleDropdown()">
-                <div class="dot blue"></div>
-                <div class="dot"></div>
-                <span id="arrow" style="font-size: 10px; transition: 0.3s;">▼</span>
-            </div>
-            
-            <div class="dropdown-menu" id="oracleDropdown">
-                <div class="dropdown-item">⚡ Быстрый Помощник</div>
-                <div class="dropdown-item">📝 Форма ЛМСХ (v2.0)</div>
-                <hr style="border: 0.1px solid var(--border); width: 100%;">
-                <div class="dropdown-item" onclick="openHelp()" style="color: var(--accent);">📖 Инструкция сайта</div>
-            </div>
-
-            <div style="color: var(--gold); cursor: pointer; font-size: 20px;" onclick="openHelp()">?</div>
-            <a href="profile.html" style="text-decoration: none;">👤</a>
+        <div id="drop" style="display:none; position:absolute; top:70px; right:50px; background:#111; padding:10px; border-radius:15px; border:1px solid var(--border)">
+            <div style="padding:10px">Помощник</div>
+            <div style="padding:10px">Форма ЛМСХ</div>
         </div>
-    </header>
-
-    <main class="main-content">
-        <div class="store-card">
-            <h2 style="margin: 0; color: var(--accent);">Kosmo Level 3.4</h2>
-            <p style="opacity: 0.6;">Новая эра систем. Прямая загрузка без ограничений.</p>
-            <button class="btn-more">ПОДРОБНЕЕ</button>
-        </div>
-
-        <div class="store-card">
-            <h2 style="margin: 0; color: #ff3b30;">Traitor Level</h2>
-            <p style="opacity: 0.6;">Экспериментальный пак для продвинутых.</p>
-            <button class="btn-more" style="background: #ff3b30;">ПОДРОБНЕЕ</button>
-        </div>
-    </main>
-
-    <div class="oracle-bottom-bar" id="bottomBar">
-        <div class="oracle-logo-mini">
-            <div class="dot blue"></div>
-            <div class="dot"></div>
-        </div>
-        <input type="text" class="search-input" placeholder="Спросить Оракула..." onfocus="toggleChat()">
-        <button onclick="toggleChat()" style="background: none; border: none; color: var(--accent); font-size: 20px; cursor: pointer;">➤</button>
+        <a href="profile.html" style="text-decoration:none">👤</a>
     </div>
+</header>
 
-    <div class="chat-overlay" id="chatWindow">
-        <span class="close-btn" onclick="toggleChat()">×</span>
-        <h3 style="color: var(--accent);">Oracle AI Premier 340</h3>
-        
-        <div style="display: flex; height: 90%; gap: 20px; margin-top: 20px;">
-            <div id="chatHistory" style="width: 30%; border-right: 1px solid var(--border); padding-right: 10px;">
-                <div style="font-size: 11px; opacity: 0.4; margin-bottom: 10px;">АРХИВ ЧАТОВ</div>
-                <div id="historyLockMessage" style="display:none; color: var(--accent); font-size: 10px;">Войдите для доступа</div>
-            </div>
-            <div id="chatDisplay" style="flex-grow: 1; overflow-y: auto; padding-right: 10px;">
-                <p style="opacity: 0.3; text-align: center;">Оракул ожидает запрос...</p>
-            </div>
-        </div>
+<main style="padding: 150px 20px; display:flex; flex-direction:column; align-items:center; gap:30px">
+    <div class="store-card">
+        <h1 style="color:var(--accent-solid)">Kosmo Level 3.4</h1>
+        <button class="btn-more" style="background:var(--accent-solid); color:white; border:none; padding:10px 20px; border-radius:10px">ПОДРОБНЕЕ</button>
     </div>
+</main>
 
-    <div class="help-overlay" id="helpWindow">
-        <div class="help-header">
-            <b style="color: var(--gold);">СПРАВКА [PRESTIGE]</b>
-            <span class="close-btn" onclick="closeHelp()" style="font-size: 24px;">×</span>
+<div class="oracle-bottom-bar" id="bottomBar">
+    <div class="dot"></div>
+    <input type="text" class="search-input" placeholder="Спросить Оракула...">
+</div>
+
+<div class="chat-overlay" id="chatWindow">
+    <div onclick="document.getElementById('chatWindow').classList.remove('active'); document.getElementById('bottomBar').classList.remove('hidden')" style="float:right; cursor:pointer; font-size:30px">×</div>
+    <h2>Oracle AI Premier 340</h2>
+    <div style="display:flex; height:80%; gap:20px; margin-top:20px">
+        <div id="chatHistory" style="width:30%; border-right:1px solid var(--border); position:relative">
+            <div id="historyLockMessage" style="display:none; color:var(--accent-solid); text-align:center; padding-top:20px">ВОЙДИТЕ</div>
+            <p style="opacity:0.2">История логов...</p>
         </div>
-        <div class="help-content">
-            <h4 style="color: white;">Добро пожаловать в Штаб!</h4>
-            <p>Эта инструкция составлена <b>Oracle AI</b> для новых резидентов.</p>
-            <ul>
-                <li><b>Стор:</b> Здесь находятся актуальные Паки систем. Скачивание теперь идет напрямую, минуя запреты Google Диска.</li>
-                <li><b>Оракул:</b> Ваша связь с ИИ. Используйте нижнюю панель для мгновенного вопроса.</li>
-                <li><b>Профиль:</b> Место настройки темы и доступа к истории. Без аккаунта часть функций заблокирована блюром.</li>
-                <li><b>ЛМСХ:</b> Форма связи с инженерами через выпадающее меню у логотипа.</li>
-            </ul>
-            <p style="font-size: 12px; margin-top: 30px;"><i>Дата обновления: 2026. Эпоха 340.</i></p>
-        </div>
+        <div id="chatDisplay" style="flex-grow:1; overflow-y:auto"></div>
     </div>
+</div>
 
-    <script src="brain.js"></script>
-    <script>
-        // Логика меню стрелочки
-        function toggleDropdown() {
-            const menu = document.getElementById('oracleDropdown');
-            const arrow = document.getElementById('arrow');
-            menu.classList.toggle('active');
-            arrow.style.transform = menu.classList.contains('active') ? 'rotate(180deg)' : 'rotate(0deg)';
-        }
-
-        // Логика Справки
-        function openHelp() { 
-            document.getElementById('helpWindow').style.display = 'flex';
-            setTimeout(() => document.getElementById('helpWindow').classList.add('active'), 10);
-        }
-        function closeHelp() { 
-            document.getElementById('helpWindow').classList.remove('active');
-            setTimeout(() => document.getElementById('helpWindow').style.display = 'none', 300);
-        }
-
-        // Закрытие при клике вне меню
-        window.onclick = function(event) {
-            if (!event.target.closest('.oracle-logo-mini') && !event.target.closest('.dropdown-menu')) {
-                document.getElementById('oracleDropdown').classList.remove('active');
-                document.getElementById('arrow').style.transform = 'rotate(0deg)';
-            }
-        }
-
-        // Функция открытия чата (для кнопки и фокуса)
-        function toggleChat() {
-            const chat = document.getElementById('chatWindow');
-            const bar = document.getElementById('bottomBar');
-            chat.classList.toggle('active');
-            bar.classList.toggle('hidden');
-        }
-    </script>
+<script src="brain.js"></script>
 </body>
 </html>
