@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>L-Credits Verification | KL</title>
+    <link rel="stylesheet" href="main-prestige.css">
+    <style>
+        .form-container { max-width: 600px; margin: 120px auto; padding: 30px; background: var(--glass-heavy); border-radius: 45px; border: 1px solid var(--border); backdrop-filter: blur(40px); }
+        .warning-box { color: #ff453a; font-size: 13px; border: 1px solid #ff453a; padding: 15px; border-radius: 20px; margin-bottom: 25px; text-align: center; animation: pulse 2s infinite; }
+        .upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .file-input { background: var(--glass); border: 1px dashed var(--border); border-radius: 15px; height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; }
+        .file-input input { opacity: 0; position: absolute; width: 100%; height: 100%; cursor: pointer; }
+        textarea { width: 100%; background: var(--glass); border: 1px solid var(--border); border-radius: 20px; color: white; padding: 15px; box-sizing: border-box; resize: none; min-height: 100px; margin-bottom: 20px; }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2 style="text-align: center; color: var(--gold);">🎄 Christmas Pack Verification</h2>
+    
+    <div class="warning-box">
+        ВНИМАНИЕ: Только реальные скриншоты/фото. Нарушение = БЛОК АККАУНТА на 14 часов.
+    </div>
+
+    <div class="upload-grid" id="uploadGrid">
+        <div class="file-input"><span>📸</span><input type="file" accept="image/*" class="screenshot-input"></div>
+        <div class="file-input"><span>📸</span><input type="file" accept="image/*" class="screenshot-input"></div>
+        <div class="file-input"><span>📸</span><input type="file" accept="image/*" class="screenshot-input"></div>
+        <div class="file-input"><span>📸</span><input type="file" accept="image/*" class="screenshot-input"></div>
+        <div class="file-input"><span>📸</span><input type="file" accept="image/*" class="screenshot-input"></div>
+        <div class="file-input"><span>📸</span><input type="file" accept="image/*" class="screenshot-input"></div>
+    </div>
+
+    <textarea id="secretDescription" placeholder="Опишите, где находится каждый секрет (описание)..."></textarea>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <span style="font-size: 12px; opacity: 0.6;">Дата прохождения:</span>
+        <input type="datetime-local" id="passDate" style="background: transparent; border: 1px solid var(--border); color: white; border-radius: 10px; padding: 5px;">
+    </div>
+
+    <button onclick="submitClaim()" id="submitBtn" class="btn-more" style="width: 100%; background: var(--accent-solid);">ПОДАТЬ ЗАЯВКУ (бесплатно)(∞)</button>
+    <a href="index.html" style="display: block; text-align: center; margin-top: 20px; color: var(--text-dim); text-decoration: none; font-size: 14px;">Отменить и выйти</a>
+</div>
+
+<script>
+    async function submitClaim() {
+        const inputs = document.querySelectorAll('.screenshot-input');
+        const desc = document.getElementById('secretDescription').value;
+        const date = document.getElementById('passDate').value;
+        const btn = document.getElementById('submitBtn');
+
+        let files = [];
+        inputs.forEach(input => { if(input.files[0]) files.push(input.files[0]); });
+
+        if(files.length < 6) {
+            alert("Нужно прикрепить ровно 6 скриншотов!");
+            return;
+        }
+
+        btn.innerText = "ОТПРАВКА В ШТАБ...";
+        btn.disabled = true;
+
+        // Здесь логика конвертации в Base64 и отправки в Google Apps Script
+        // Саня, пока тестируем визуал, если всё ок - сделаем функцию отправки.
+        alert("Заявка сформирована! (Режим теста)");
+        btn.innerText = "ПОДАТЬ ЗАЯВКУ (бесплатно)(∞)";
+        btn.disabled = false;
+    }
+</script>
+
+</body>
+</html>
