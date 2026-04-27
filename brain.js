@@ -1,59 +1,82 @@
 const OracleSystem = {
-    isLoggedIn: false, // Меняй на true для теста доступа
+    isLoggedIn: false, // Переключи на true, чтобы войти в аккаунт
+    currentTier: '340', // '340', 'PRO', 'Ultra'
     scriptURL: 'https://script.google.com/macros/s/AKfycbxiXEoCIRih3N1nyIma7GkcMiodxoTEEIZ17pK8Tz6nksDLImiunYMyE5B36TQgqm1_/exec',
 
     init() {
+        this.applyTheme();
         this.setupEventListeners();
         this.checkAccess();
     },
 
     setupEventListeners() {
-        const mainInput = document.querySelector('.search-input');
-        
-        // Отправка по нажатию Enter
-        mainInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && mainInput.value.trim() !== "") {
-                this.sendMessage(mainInput.value);
-                mainInput.value = ""; 
-            }
-        });
+        const input = document.querySelector('.search-input');
+        if (input) {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && input.value.trim() !== "") {
+                    this.sendMessage(input.value);
+                    input.value = "";
+                }
+            });
+        }
     },
 
     sendMessage(text) {
-        // Открываем окно, если оно закрыто
-        document.getElementById('chatWindow').classList.add('active');
-        document.getElementById('bottomBar').classList.add('hidden');
-        
+        const chat = document.getElementById('chatWindow');
+        const bar = document.getElementById('bottomBar');
         const display = document.getElementById('chatDisplay');
-        display.innerHTML += `<div style="margin-bottom:10px; color:var(--accent)"><b>Вы:</b> ${text}</div>`;
 
-        // Магия отправки в Google Таблицу
+        if (!chat.classList.contains('active')) {
+            chat.classList.add('active');
+            bar.classList.add('hidden');
+        }
+
+        display.innerHTML += `<div style="margin-bottom:15px; color:var(--accent-solid)"><b>Вы:</b> ${text}</div>`;
+        display.scrollTop = display.scrollHeight;
+
         fetch(this.scriptURL, {
             method: 'POST',
-            mode: 'no-cors', // Важно для работы с Google Script
-            cache: 'no-cache',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                message: text, 
-                user: this.isLoggedIn ? "Резидент" : "Гость",
-                status: "Oracle AI Premier 340"
+            mode: 'no-cors',
+            body: JSON.stringify({
+                message: text,
+                user: this.isLoggedIn ? `Резидент (${this.currentTier})` : "Гость",
+                status: "340-Online"
             })
         }).then(() => {
-            display.innerHTML += `<div style="margin-bottom:15px; opacity:0.6; font-size:13px;"><i>Оракул: Данные переданы в ЛМСХ.</i></div>`;
+            display.innerHTML += `<div style="margin-bottom:20px; opacity:0.5; font-size:12px;"><i>Оракул: Данные занесены в реестр ЛМСХ.</i></div>`;
             display.scrollTop = display.scrollHeight;
-        }).catch(err => console.error("Ошибка связи:", err));
+        });
+    },
+
+    setTier(tier) {
+        if (!this.isLoggedIn) return alert("Сначала войдите в аккаунт!");
+        this.currentTier = tier;
+        this.applyTheme();
+        alert(`Протокол ${tier} активирован.`);
+    },
+
+    applyTheme() {
+        const themes = {
+            '340': '#bf5af2',
+            'PRO': '#007aff',
+            'Ultra': '#ffd60a'
+        };
+        document.documentElement.style.setProperty('--accent-solid', themes[this.currentTier]);
     },
 
     checkAccess() {
-        const historyBlock = document.getElementById('chatHistory');
-        const lockMsg = document.getElementById('historyLockMessage');
-        
+        const lock = document.getElementById('lockOverlay');
+        const history = document.getElementById('chatHistory');
+        const historyMsg = document.getElementById('historyLockMessage');
+
         if (!this.isLoggedIn) {
-            if (historyBlock) historyBlock.style.filter = "blur(8px)";
-            if (lockMsg) lockMsg.style.display = "block";
+            if (lock) lock.style.display = 'flex';
+            if (history) history.style.filter = 'blur(15px)';
+            if (historyMsg) historyMsg.style.display = 'block';
         } else {
-            if (historyBlock) historyBlock.style.filter = "none";
-            if (lockMsg) lockMsg.style.display = "none";
+            if (lock) lock.style.display = 'none';
+            if (history) history.style.filter = 'none';
+            if (historyMsg) historyMsg.style.display = 'none';
         }
     }
 };
