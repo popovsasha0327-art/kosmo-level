@@ -3,80 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    <title>KL Commander</title>
+    <title>KL Ultimate</title>
     <style>
         :root { --accent: #bf5af2; --bg: #050508; --glass: rgba(255,255,255,0.08); }
-        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; overflow: hidden; display: flex; flex-direction: column; height: 100vh; }
-        .header { padding: 15px; display: flex; align-items: center; border-bottom: 1px solid var(--glass); z-index: 10; }
-        .burger { font-size: 24px; cursor: pointer; transition: 0.3s; }
-        .sidebar { position: fixed; left: -280px; top: 0; width: 260px; height: 100%; background: #0a0a0f; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100; padding: 20px; border-right: 1px solid var(--accent); }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow: hidden; display: flex; flex-direction: column; height: 100vh; }
+        
+        .header { padding: 15px; display: flex; align-items: center; border-bottom: 1px solid var(--glass); z-index: 10; background: rgba(5,5,8,0.8); backdrop-filter: blur(10px); }
+        .burger { font-size: 24px; cursor: pointer; transition: 0.3s; z-index: 101; }
+        
+        .sidebar { position: fixed; left: -280px; top: 0; width: 280px; height: 100%; background: #0d0d14; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100; padding: 20px; border-right: 1px solid var(--accent); box-sizing: border-box; }
         .sidebar.active { left: 0; }
-        .btn-login { background: var(--accent); border: none; color: white; padding: 10px; width: 100%; border-radius: 8px; cursor: pointer; margin-top: 10px; }
         
-        #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-        .msg { max-width: 80%; padding: 12px 18px; border-radius: 18px; font-size: 14px; line-height: 1.4; animation: pop 0.3s ease-out; }
-        @keyframes pop { from { opacity: 0; transform: scale(0.9) translateY(10px); } }
-        .user { align-self: flex-end; background: var(--accent); color: white; border-bottom-right-radius: 4px; }
-        .oracle { align-self: flex-start; background: var(--glass); border: 1px solid rgba(255,255,255,0.15); border-bottom-left-radius: 4px; }
+        .lib-item { padding: 10px; margin: 5px 0; background: var(--glass); border-radius: 8px; font-size: 13px; cursor: pointer; transition: 0.2s; border: 1px solid transparent; }
+        .lib-item:hover { border-color: var(--accent); background: rgba(191,90,242,0.1); }
+        
+        .btn-action { background: var(--accent); border: none; color: white; padding: 12px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        
+        #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+        .msg { max-width: 80%; padding: 12px 18px; border-radius: 18px; font-size: 14px; line-height: 1.4; animation: pop 0.3s; }
+        @keyframes pop { from { opacity: 0; transform: scale(0.9); } }
+        .user { align-self: flex-end; background: var(--accent); border-bottom-right-radius: 4px; }
+        .oracle { align-self: flex-start; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-bottom-left-radius: 4px; }
 
-        .input-wrap { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 500px; display: flex; align-items: flex-end; gap: 10px; transition: 0.3s; }
-        input { flex: 1; background: #121217; border: 1px solid var(--glass); border-radius: 24px; padding: 14px 20px; color: white; outline: none; transition: 0.3s; height: 20px; }
-        input:focus { border-color: var(--accent); height: 45px; box-shadow: 0 0 15px rgba(191,90,242,0.2); }
-        .send-btn { background: var(--accent); border: none; border-radius: 50%; min-width: 50px; height: 50px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; position: relative; }
-        
-        .ctx-menu { position: absolute; bottom: 60px; right: 0; background: #1a1a24; border: 1px solid var(--accent); border-radius: 12px; display: none; width: 180px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
-        .ctx-item { padding: 12px; font-size: 12px; cursor: pointer; border-bottom: 1px solid var(--glass); }
-        .ctx-item:hover { background: var(--glass); }
+        .input-wrap { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 500px; display: flex; align-items: flex-end; gap: 10px; }
+        input { flex: 1; background: #1a1a24; border: 1px solid var(--glass); border-radius: 25px; padding: 14px 20px; color: white; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(191,90,242,0.2); transform: scale(1.02); }
+        .send-btn { background: var(--accent); border: none; border-radius: 50%; min-width: 50px; height: 50px; color: white; cursor: pointer; font-size: 20px; }
     </style>
 </head>
 <body>
     <div class="header">
         <div class="burger" onclick="toggleSide()">☰</div>
         <div style="margin-left:auto; text-align:right">
-            <div style="font-size:10px; color:var(--accent); font-weight:bold">PRIME DRIVE ACTIVE</div>
+            <div id="ram-label" style="font-size:10px; color:var(--accent); font-weight:bold">PRIME DRIVE ACTIVE</div>
             <div style="font-size:9px; opacity:0.5">2.4GB FREE</div>
         </div>
     </div>
 
     <div id="sidebar" class="sidebar">
-        <h3 id="userStatus">👤 Гость</h3>
-        <button class="btn-login" onclick="login()">Войти в KL ID</button>
-        <hr style="opacity:0.1; margin: 20px 0">
-        <div style="font-size:13px; opacity:0.7">📦 Паки: Classic, Dark Neon</div>
+        <h3 id="uName">👤 Гость</h3>
+        <button id="lBtn" class="btn-action" onclick="login()">Войти в KL ID</button>
+        
+        <div style="margin-top:30px">
+            <h4 style="color:var(--accent); font-size:12px; letter-spacing:1px">БИБЛИОТЕКИ (ARCHIVE)</h4>
+            <div class="lib-item" onclick="loadArch('История мамонтов')">📂 История мамонтов</div>
+            <div class="lib-item" onclick="loadArch('Логи Оракула')">📂 Логи Оракула v1.0</div>
+            <div class="lib-item" onclick="loadArch('Проект Крейсер')">📂 Проект Крейсер</div>
+        </div>
+
+        <div style="margin-top:20px">
+            <h4 style="color:var(--accent); font-size:12px; letter-spacing:1px">ПАКИ (THEMES)</h4>
+            <select onchange="changeTheme(this.value)" style="width:100%; background:#1a1a24; color:white; border:1px solid var(--glass); padding:8px; border-radius:5px">
+                <option value="#bf5af2">Classic Purple</option>
+                <option value="#00ffcc">Cyber Mint</option>
+                <option value="#ff3b30">Mars Red</option>
+            </select>
+        </div>
     </div>
 
     <div id="chat"></div>
 
     <div class="input-wrap">
         <input type="text" id="in" placeholder="Спросить Оракула..." onkeydown="if(event.key==='Enter')send()">
-        <div class="send-btn" onclick="send()" oncontextmenu="showCtx(event)">
-            ➔
-            <div id="ctx" class="ctx-menu">
-                <div class="ctx-item" onclick="fastQ('Статус ОЗУ?')">📊 Статус ОЗУ</div>
-                <div class="ctx-item" onclick="fastQ('Где мамонты?')">🦣 Мамонты?</div>
-                <div class="ctx-item" onclick="fastQ('Версия системы')">⚙️ Версия</div>
-            </div>
-        </div>
+        <button class="send-btn" onclick="send()">➔</button>
     </div>
 
     <script>
-        const chat = document.getElementById('chat'), input = document.getElementById('in'), side = document.getElementById('sidebar'), ctx = document.getElementById('ctx');
+        const chat = document.getElementById('chat'), input = document.getElementById('in'), side = document.getElementById('sidebar');
         let isLogged = false;
 
         function toggleSide() { side.classList.toggle('active'); }
+        
         function login() { 
             isLogged = true; 
-            document.getElementById('userStatus').innerText = "👤 Командир Саша";
-            addMsg("oracle", "✅ Авторизация успешна. Доступ к пакам открыт!");
+            document.getElementById('uName').innerText = "👤 Командир Саша";
+            document.getElementById('lBtn').style.display = "none";
+            addMsg("oracle", "🌐 Доступ подтвержден. Библиотеки синхронизированы. Добро пожаловать, Командир!");
             toggleSide();
         }
 
         function send() {
-            if(!isLogged) { addMsg("oracle", "⚠️ Сначала войдите в систему через меню!"); return; }
+            if(!isLogged) { addMsg("oracle", "⚠️ Доступ ограничен. Войдите в аккаунт через меню."); return; }
             let v = input.value.trim(); if(!v) return;
             addMsg("user", v);
             input.value = "";
-            setTimeout(() => addMsg("oracle", "Запрос обработан в Prime Drive. Всё чисто."), 600);
+            setTimeout(() => {
+                addMsg("oracle", "Анализ завершен. Данные сохранены в библиотеку проекта.");
+            }, 700);
         }
 
         function addMsg(t, s) { 
@@ -87,12 +100,19 @@
             chat.scrollTop = chat.scrollHeight; 
         }
 
-        function showCtx(e) { e.preventDefault(); ctx.style.display = (ctx.style.display==='block'?'none':'block'); }
-        function fastQ(q) { input.value = q; send(); ctx.style.display='none'; }
-        
+        function loadArch(name) {
+            addMsg("oracle", `📚 Загрузка архива: "${name}"...`);
+            setTimeout(() => addMsg("oracle", `Архив "${name}" пуст. Ожидание новых данных.`), 1000);
+            toggleSide();
+        }
+
+        function changeTheme(color) {
+            document.documentElement.style.setProperty('--accent', color);
+            addMsg("oracle", "🎨 Тема обновлена!");
+        }
+
         document.addEventListener('click', (e) => {
             if(!side.contains(e.target) && !e.target.classList.contains('burger')) side.classList.remove('active');
-            if(!e.target.closest('.send-btn')) ctx.style.display = 'none';
         });
     </script>
 </body>
