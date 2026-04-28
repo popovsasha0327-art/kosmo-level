@@ -3,114 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    <title>KL Commander Ultimate</title>
+    <title>KL Commander Prime</title>
     <style>
         :root { --accent: #bf5af2; --bg: #050508; --glass: rgba(255,255,255,0.08); }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow: hidden; display: flex; flex-direction: column; height: 100vh; }
-        .header { padding: 15px; display: flex; align-items: center; border-bottom: 1px solid var(--glass); background: rgba(5,5,8,0.8); backdrop-filter: blur(10px); z-index: 10; }
-        .sidebar { position: fixed; left: -280px; top: 0; width: 280px; height: 100%; background: #0d0d14; transition: 0.4s; z-index: 100; padding: 20px; border-right: 1px solid var(--accent); box-sizing: border-box; }
+        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; overflow: hidden; display: flex; flex-direction: column; height: 100vh; }
+        
+        /* Стили заголовка и Сайдбара */
+        .header { padding: 15px; display: flex; align-items: center; border-bottom: 1px solid var(--glass); background: rgba(5,5,8,0.8); backdrop-filter: blur(10px); }
+        .sidebar { position: fixed; left: -280px; top: 0; width: 280px; height: 100%; background: #0d0d14; transition: 0.4s; z-index: 100; padding: 20px; border-right: 1px solid var(--accent); }
         .sidebar.active { left: 0; }
+
+        /* Чат */
         #chat { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
         .msg { max-width: 80%; padding: 12px 18px; border-radius: 18px; font-size: 14px; animation: pop 0.3s; }
-        @keyframes pop { from { opacity: 0; transform: scale(0.9); } }
-        .user { align-self: flex-end; background: var(--accent); border-bottom-right-radius: 4px; }
-        .oracle { align-self: flex-start; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-bottom-left-radius: 4px; }
-        .input-wrap { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 500px; display: flex; gap: 10px; }
+        .oracle { align-self: flex-start; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); }
+        .user { align-self: flex-end; background: var(--accent); }
+
+        /* Всплывающее окно над полем */
+        #pop-question { position: absolute; bottom: 85px; left: 50%; transform: translateX(-50%); width: 85%; background: var(--accent); color: white; padding: 10px 15px; border-radius: 12px; font-size: 12px; display: none; box-shadow: 0 -5px 20px rgba(191,90,242,0.3); animation: slideUp 0.3s; z-index: 5; }
+        @keyframes slideUp { from { opacity: 0; bottom: 70px; } }
+
+        /* Поле ввода */
+        .input-wrap { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 500px; display: flex; gap: 10px; z-index: 10; }
         input { flex: 1; background: #1a1a24; border: 1px solid var(--glass); border-radius: 25px; padding: 14px 20px; color: white; outline: none; }
-        .send-btn { background: var(--accent); border: none; border-radius: 50%; min-width: 50px; height: 50px; color: white; cursor: pointer; font-size: 20px; transition: 0.3s; }
-        
-        /* Сценарий Модалка */
-        #scenario-win { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 600px; background: #0d0d14; border: 2px solid var(--accent); border-radius: 15px; z-index: 1000; padding: 20px; display: none; box-shadow: 0 0 50px #000; }
-        .sc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
-        textarea { width: 100%; height: 120px; background: #1a1a24; color: #fff; border: 1px solid var(--glass); border-radius: 8px; padding: 10px; resize: none; }
-        .btn-save { background: #34c759; color: white; border: none; padding: 12px; width: 100%; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        .send-btn { background: var(--accent); border: none; border-radius: 50%; min-width: 50px; height: 50px; color: white; cursor: pointer; font-size: 20px; }
+
+        .btn-link { display: block; width: 100%; padding: 10px; background: var(--accent); color: white; text-align: center; text-decoration: none; border-radius: 8px; margin-top: 10px; }
     </style>
 </head>
 <body>
     <div class="header">
         <div onclick="toggleSide()" style="cursor:pointer; font-size:24px">☰</div>
         <div style="margin-left:auto; text-align:right">
-            <div style="font-size:10px; color:var(--accent)">PRIME DRIVE: 12GB EXTEND</div>
-            <div id="status-label" style="font-size:9px; opacity:0.6">Android 14 | LineageOS 20</div>
+            <div style="font-size:10px; color:var(--accent)">KOSMO LEVEL CORE</div>
         </div>
     </div>
 
     <div id="sidebar" class="sidebar">
         <h3 id="uName">👤 Гость</h3>
-        <button id="lBtn" onclick="login()" style="width:100%; padding:10px; background:var(--accent); border:none; color:white; border-radius:8px">Войти в KL ID</button>
-        <div style="margin-top:20px">
-            <h4 style="color:var(--accent); font-size:11px">БИБЛИОТЕКИ</h4>
-            <div id="lib-list"></div>
-        </div>
+        <p id="login-msg" style="font-size: 12px; opacity: 0.6;">Для доступа к Оракулу нужно войти.</p>
+        <a href="profile.html" class="btn-link">Войти в Профиль</a>
     </div>
 
-    <div id="chat"></div>
-
-    <div id="scenario-win">
-        <div style="display:flex; justify-content:space-between">
-            <h4>🛠️ СЦЕНАРИЙ (BETA)</h4>
-            <button onclick="closeScen()" style="background:none; border:none; color:white">✕</button>
-        </div>
-        <div class="sc-grid">
-            <div><label>Вопрос:</label><textarea id="sc-q"></textarea></div>
-            <div><label>Ответ (Сова):</label><textarea id="sc-a"></textarea></div>
-        </div>
-        <button class="btn-save" onclick="saveScen()">💾 СОХРАНИТЬ В ПАМЯТЬ</button>
+    <div id="chat">
+        <div class="msg oracle">Добро пожаловать в Инженерную Империю. Ожидаю авторизации...</div>
     </div>
+
+    <div id="pop-question"><b>Ваш вопрос:</b> <span id="pop-text"></span></div>
 
     <div class="input-wrap">
         <input type="text" id="in" placeholder="Спросить Оракула...">
-        <button class="send-btn" id="sBtn" onclick="send()">➔</button>
+        <button class="send-btn" onclick="send()">➔</button>
     </div>
 
     <script>
-        const chat = document.getElementById('chat'), input = document.getElementById('in'), sBtn = document.getElementById('sBtn');
-        let isLogged = false, scenario = null, commands = {};
-
-        // Загрузка JSON команд
-        fetch('commands.json').then(r => r.json()).then(data => { commands = data; });
-
-        // Скрытая функция Сценарий (Long Press / Right Click)
-        let timer;
-        sBtn.oncontextmenu = (e) => { e.preventDefault(); openScen(); };
-        sBtn.ontouchstart = () => { timer = setTimeout(openScen, 1000); };
-        sBtn.ontouchend = () => clearTimeout(timer);
-
-        function openScen() { document.getElementById('scenario-win').style.display='block'; }
-        function closeScen() { document.getElementById('scenario-win').style.display='none'; }
-        function saveScen() {
-            scenario = { q: document.getElementById('sc-q').value, a: document.getElementById('sc-a').value };
-            addMsg("oracle", "💾 Сценарий сохранен в буфер Prime Drive.");
-            closeScen();
+        // Имитация проверки входа (в реальности проверяем localStorage)
+        const isLogged = localStorage.getItem('kl_auth') === 'true';
+        if(isLogged) {
+            document.getElementById('uName').innerText = "👤 Командир Саша";
+            document.getElementById('login-msg').innerText = "Доступ к Космо-Уровням разрешен.";
         }
 
         function toggleSide() { document.getElementById('sidebar').classList.toggle('active'); }
-        function login() { 
-            isLogged = true; document.getElementById('uName').innerText = "👤 Командир Саша";
-            document.getElementById('lBtn').style.display='none'; addMsg("oracle", "🌐 Вход выполнен. Привет, Командир!");
-        }
 
         function send() {
-            let v = input.value.trim(); if(!v || !isLogged) return;
+            if(!isLogged) {
+                alert("⚠️ Доступ заблокирован! Войдите через profile.html");
+                window.location.href = 'profile.html';
+                return;
+            }
+
+            let v = input.value.trim();
+            if(!v) return;
+
+            // Показываем всплывающее окно
+            const pop = document.getElementById('pop-question');
+            document.getElementById('pop-text').innerText = v;
+            pop.style.display = 'block';
+
             addMsg("user", v);
-            
-            // Проверка Сценария
-            if(scenario && v.includes(scenario.q)) {
-                setTimeout(() => addMsg("oracle", scenario.a), 600);
-            } 
-            // Проверка JSON команд
-            else if(v.startsWith('/') && commands[v]) {
-                setTimeout(() => addMsg("oracle", commands[v]), 500);
-            }
-            else {
-                setTimeout(() => addMsg("oracle", "Система прослушивает эфир..."), 600);
-            }
             input.value = "";
+
+            setTimeout(() => {
+                addMsg("oracle", "Запрос принят. Анализирую данные...");
+                // Скрываем окно через 3 секунды после ответа
+                setTimeout(() => { pop.style.display = 'none'; }, 3000);
+            }, 800);
         }
 
         function addMsg(t, s) {
             const d = document.createElement('div'); d.className = `msg ${t}`; d.innerText = s;
-            chat.appendChild(d); chat.scrollTop = chat.scrollHeight;
+            document.getElementById('chat').appendChild(d);
+            document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
         }
     </script>
 </body>
