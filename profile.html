@@ -2,65 +2,36 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ПРОФИЛЬ | LMSH 340</title>
-    <link rel="stylesheet" href="main-prestige.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KL Profile</title>
     <style>
-        .profile-container {
-            padding: 120px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .status-badge {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-top: 10px;
-            background: var(--accent-solid);
-            color: #000;
-        }
+        body { background: #050508; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #0d0d14; padding: 30px; border-radius: 20px; border: 1px solid #bf5af2; text-align: center; width: 300px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #1a1a24; border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; box-sizing: border-box; }
+        button { background: #bf5af2; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
-    <header>
-        <div onclick="location.href='index.html'" style="cursor:pointer">≡ К ГЛАВНОЙ</div>
-        <div id="tierName" style="font-weight:bold; letter-spacing:2px">РЕЗИДЕНТ</div>
-    </header>
-
-    <div class="profile-container">
-        <div class="store-card">
-            <div id="userAvatar" style="width:80px; height:80px; background:var(--border); border-radius:50%; margin:0 auto 20px; display:flex; align-items:center; justify-content:center; font-size:30px">👤</div>
-            <h2 id="userNameDisplay">ЗАГРУЗКА...</h2>
-            <div id="userTierBadge" class="status-badge">TIER: 340</div>
-            
-            <hr style="border:0; border-top:1px solid var(--border); margin:30px 0;">
-            
-            <p style="font-size:14px; opacity:0.6; margin-bottom:20px">Управление мощностью Оракула:</p>
-            
-            <button class="btn-more" onclick="location.href='upgrade.html'" style="width:100%; background:var(--accent-solid); color:#000">ПОВЫСИТЬ УРОВЕНЬ</button>
-            
-            <button class="btn-more" onclick="OracleSystem.logout()" style="width:100%; background:transparent; border:1px solid var(--danger); color:var(--danger); margin-top:15px">ВЫЙТИ</button>
-        </div>
+    <div class="card">
+        <h2>KL ID LOGIN</h2>
+        <input type="text" id="user" placeholder="Логин (Саня)">
+        <input type="password" id="pass" placeholder="Пароль">
+        <button onclick="doLogin()">ВОЙТИ</button>
+        <br><br>
+        <a href="index.html" style="color: grey; font-size: 12px;">Вернуться на главную</a>
     </div>
 
-    <script src="brain.js"></script>
     <script>
-        // Локальная отрисовка данных профиля
-        window.addEventListener('load', () => {
-            const name = localStorage.getItem('userName') || "Гость";
-            const tier = localStorage.getItem('userTier') || "340";
-            
-            document.getElementById('userNameDisplay').innerText = name;
-            document.getElementById('userTierBadge').innerText = `TIER: ${tier}`;
-            
-            if(tier === 'Ultra') {
-                document.getElementById('userTierBadge').style.background = '#ffd60a';
-                document.getElementById('tierName').innerText = 'ELITE RESIDENT';
+        function doLogin() {
+            const u = document.getElementById('user').value;
+            if(u === "Саня") {
+                localStorage.setItem('kl_auth', 'true');
+                alert("✅ Вход выполнен! Перенаправление...");
+                window.location.href = 'index.html';
+            } else {
+                alert("❌ Ошибка авторизации!");
             }
-        });
+        }
     </script>
 </body>
 </html>
