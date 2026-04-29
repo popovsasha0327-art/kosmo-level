@@ -3,122 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    <title>KL Elite - Эпицентр</title>
+    <title>KL Elite - Эпицентр (Hacker Edition)</title>
     <style>
         :root { --accent: #bf5af2; --bg: #050508; --glass: rgba(255,255,255,0.08); --card: #0d0d14; }
         body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; overflow: hidden; height: 100vh; display: flex; flex-direction: column; transition: 0.3s; }
         
-        /* Паки Космо-Уровней */
-        .hub { padding: 20px; flex: 1; overflow-y: auto; }
+        /* Хаб */
+        .hub { padding: 20px; flex: 1; overflow-y: auto; transition: 0.5s; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
         .pack { background: var(--card); border: 1px solid var(--glass); border-radius: 15px; padding: 20px; text-align: center; border-bottom: 3px solid var(--accent); }
 
-        /* Секция Чата */
-        #chat-zone { flex: 1; display: none; flex-direction: column; background: var(--bg); overflow-y: auto; padding: 20px; padding-bottom: 150px; }
-        .msg { max-width: 80%; padding: 12px; border-radius: 15px; margin-bottom: 10px; font-size: 14px; }
-        .user { align-self: flex-end; background: var(--accent); color: white; }
-        .oracle { align-self: flex-start; background: var(--glass); border: 1px solid var(--accent); }
+        /* Чат */
+        #chat-zone { flex: 1; display: none; flex-direction: column; background: var(--bg); overflow-y: auto; padding: 20px; padding-bottom: 160px; }
+        .msg { max-width: 80%; padding: 12px; border-radius: 15px; margin-bottom: 10px; font-size: 14px; position: relative; }
+        .user { align-self: flex-end; background: var(--accent); border-bottom-right-radius: 2px; }
+        .oracle { align-self: flex-start; background: var(--glass); border: 1px solid var(--accent); border-bottom-left-radius: 2px; }
 
-        /* ВСПЛЫВАЮЩЕЕ ОКНО (Вылетает из-под поля) */
+        /* Всплывающая Катапульта */
         #pop-window { 
             position: fixed; bottom: -100px; left: 5%; width: 90%; 
             background: var(--accent); color: white; padding: 15px; 
             border-radius: 15px 15px 0 0; z-index: 100;
-            transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.6);
             font-weight: bold; font-size: 13px;
         }
-        #pop-window.active { bottom: 80px; } /* Позиция над полем ввода */
+        #pop-window.active { bottom: 85px; }
 
         /* Панель ввода */
         .ui-bottom { position: fixed; bottom: 0; left: 0; width: 100%; background: #0d0d14; padding: 15px 0; z-index: 101; border-top: 1px solid var(--glass); }
         .input-wrap { width: 90%; margin: 0 auto; display: flex; gap: 10px; }
-        input { flex: 1; background: #1a1a24; border: 1px solid var(--glass); border-radius: 25px; padding: 15px; color: white; outline: none; }
-        .btn { background: var(--accent); border: none; width: 50px; height: 50px; border-radius: 50%; color: white; cursor: pointer; }
+        input { flex: 1; background: #1a1a24; border: 1px solid var(--glass); border-radius: 25px; padding: 15px; color: white; outline: none; transition: 0.3s; }
+        .btn { background: var(--accent); border: none; width: 50px; height: 50px; border-radius: 50%; color: white; cursor: pointer; transition: 0.3s; }
 
-        /* Хакерский режим */
-        .hacker-glow { text-shadow: 0 0 10px #00ff41; }
+        /* Окно Сценариев (6 страниц) */
+        #scen-box { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; background: var(--card); border: 2px solid var(--accent); padding: 20px; border-radius: 20px; display: none; z-index: 200; box-shadow: 0 0 50px rgba(0,0,0,0.9); }
+        .pg-btn { background: var(--glass); border: 1px solid var(--accent); color: white; padding: 5px 10px; border-radius: 5px; margin-right: 5px; font-size: 10px; cursor: pointer; }
+        .pg-active { background: var(--accent); }
     </style>
 </head>
 <body>
 
     <div id="hub-page" class="hub">
-        <h2 id="title">KL ЭПИЦЕНТР</h2>
+        <h2 id="h-title">KL EMPIRE <span style="font-size: 10px; opacity: 0.5;">v2.0</span></h2>
         <div class="grid">
-            <div class="pack" onclick="startChat('Космо Пак')">🌌<br>Космо</div>
-            <div class="pack" onclick="startChat('YouTube Пак')">🎬<br>YouTube</div>
-            <div class="pack" onclick="startChat('Инженерный')">⚙️<br>Инженер</div>
-            <div class="pack" onclick="startChat('Архив')">📁<br>Архив</div>
+            <div class="pack" onclick="openP('🌌 Космо Пак')">🌌<br>Космо</div>
+            <div class="pack" onclick="openP('🎬 YouTube Пак')">🎬<br>YouTube</div>
+            <div class="pack" onclick="openP('⚙️ Инженерный')">⚙️<br>Инженер</div>
+            <div class="pack" onclick="openP('📁 Архив')">📁<br>Архив</div>
         </div>
     </div>
 
     <div id="chat-zone"></div>
-
-    <div id="pop-window">Вопрос: <span id="pop-text"></span></div>
+    <div id="pop-window">🚀 В Эпицентр: <span id="pop-text"></span></div>
 
     <div class="ui-bottom">
         <div class="input-wrap">
             <input type="text" id="main-in" placeholder="Спросить Оракула...">
-            <button class="btn" onclick="fire()">➔</button>
+            <button class="btn" id="s-btn" onclick="fire()">➔</button>
         </div>
     </div>
 
-    <script>
-        const chatZone = document.getElementById('chat-zone');
-        const pop = document.getElementById('pop-window');
-        const popText = document.getElementById('pop-text');
-        const input = document.getElementById('main-in');
+    <div id="scen-box">
+        <div id="pg-nav" style="margin-bottom: 10px;">
+            <button class="pg-btn pg-active" onclick="setPg(1)">Стр 1</button>
+            <button class="pg-btn" onclick="setPg(2)">Стр 2</button>
+            <button class="pg-btn" onclick="setPg(3)">Стр 3</button>
+            <button class="pg-btn" onclick="setPg(4)">Стр 4</button>
+            <button class="pg-btn" onclick="setPg(5)">Стр 5</button>
+            <button class="pg-btn" onclick="setPg(6)">Стр 6</button>
+        </div>
+        <h4 id="pg-name">Сценарий: Страница 1</h4>
+        <input type="text" id="sc-q" style="width:100%; margin-bottom:10px;" placeholder="Ключевое слово">
+        <textarea id="sc-a" style="width:100%; height:80px; background:#1a1a24; border:none; color:white; border-radius:10px; padding:10px;" placeholder="Ответ Совы..."></textarea>
+        <button onclick="saveS()" style="width:100%; padding:12px; background:var(--accent); color:white; border:none; border-radius:10px; margin-top:10px; font-weight:bold;">ПРОШИТЬ</button>
+        <button onclick="closeS()" style="width:100%; background:none; border:none; color:grey; margin-top:10px;">ЗАКРЫТЬ</button>
+    </div>
 
-        function startChat(name) {
+    <script>
+        let proMode = false;
+        let curPg = 1;
+        let scData = JSON.parse(localStorage.getItem('kl_scens') || '{}');
+
+        function openP(n) {
             document.getElementById('hub-page').style.display = 'none';
-            chatZone.style.display = 'flex';
-            addMsg('oracle', `Активирован ${name}. Жду приказа, Командир.`);
+            document.getElementById('chat-zone').style.display = 'flex';
+            addMsg('oracle', `Бро, ${n} активирован. Жду команд.`);
+        }
+
+        // Вызов редактора сценариев (через долгое нажатие кнопки)
+        const btn = document.getElementById('s-btn');
+        let timer;
+        btn.oncontextmenu = (e) => { e.preventDefault(); openS(); };
+        btn.ontouchstart = () => { timer = setTimeout(openS, 1000); };
+        btn.ontouchend = () => clearTimeout(timer);
+
+        function openS() { document.getElementById('scen-box').style.display = 'block'; }
+        function closeS() { document.getElementById('scen-box').style.display = 'none'; }
+        function setPg(p) { 
+            curPg = p; 
+            document.querySelectorAll('.pg-btn').forEach((b, i) => b.className = (i+1 === p) ? 'pg-btn pg-active' : 'pg-btn');
+            document.getElementById('pg-name').innerText = `Сценарий: Страница ${p}`;
+            document.getElementById('sc-q').value = scData[p]?.q || '';
+            document.getElementById('sc-a').value = scData[p]?.a || '';
+        }
+        function saveS() {
+            scData[curPg] = { q: document.getElementById('sc-q').value, a: document.getElementById('sc-a').value };
+            localStorage.setItem('kl_scens', JSON.stringify(scData));
+            alert("💾 Память обновлена!");
         }
 
         function fire() {
-            let val = input.value.trim();
-            if(!val) return;
+            const inp = document.getElementById('main-in');
+            let v = inp.value.trim();
+            if(!v) return;
 
-            // Команда ХАКЕРА
-            if(val === "//add") {
+            // Профимод Логика
+            if(v === "//") {
+                proMode = true;
                 document.documentElement.style.setProperty('--accent', '#00ff41');
-                document.getElementById('title').classList.add('hacker-glow');
-                addMsg('oracle', "🟢 СИСТЕМА ПЕРЕШЛА В ХАКЕРСКИЙ РЕЖИМ.");
-                input.value = "";
-                return;
+                addMsg('oracle', "🟢 PROFIMODE: ON. Дизайн перекрашен.");
+                inp.value = ""; return;
+            }
+            if(v === "exit" && proMode) {
+                proMode = false;
+                document.documentElement.style.setProperty('--accent', '#bf5af2');
+                addMsg('oracle', "🟣 PROFIMODE: OFF. Фиолетовый щит активен.");
+                inp.value = ""; return;
             }
 
-            // 1. Показываем всплывашку (выезжает снизу)
-            popText.innerText = val;
-            pop.classList.add('active');
-
-            // 2. Добавляем в чат
-            addMsg('user', val);
-            input.value = "";
-
-            // 3. Ответ Оракула (Рандом из 4 вариантов)
-            const answers = [
-                "Данные всосаны в Эпицентр. Чисто.",
-                "Сова подтверждает: мамонтов нет.",
-                "Запрос прошит в 12 ГБ памяти.",
-                "Сценарий выполнен. Ожидаю."
-            ];
+            // Обработка
+            document.getElementById('pop-text').innerText = v;
+            document.getElementById('pop-window').classList.add('active');
+            addMsg('user', v);
+            inp.value = "";
 
             setTimeout(() => {
-                const rand = answers[Math.floor(Math.random() * answers.length)];
-                addMsg('oracle', rand);
-                
-                // 4. Прячем всплывашку через 3 сек
-                setTimeout(() => { pop.classList.remove('active'); }, 3000);
-            }, 1000);
+                let ans = "Обработано в Эпицентре.";
+                const rands = ["Бро, это база.", "Сова на связи. Чисто.", "Данные в Гнезде.", "Принято, Командир."];
+                ans = rands[Math.floor(Math.random()*4)];
+
+                // Проверка всех 6 страниц сценариев
+                for(let key in scData) {
+                    if(v.toLowerCase().includes(scData[key].q.toLowerCase()) && scData[key].q !== "") {
+                        ans = scData[key].a; break;
+                    }
+                }
+
+                addMsg('oracle', ans);
+                setTimeout(() => { document.getElementById('pop-window').classList.remove('active'); }, 2500);
+            }, 800);
         }
 
-        function addMsg(type, text) {
-            const m = document.createElement('div');
-            m.className = `msg ${type}`;
-            m.innerText = text;
-            chatZone.appendChild(m);
-            chatZone.scrollTop = chatZone.scrollHeight;
+        function addMsg(t, s) {
+            const d = document.createElement('div'); d.className = `msg ${t}`; d.innerText = s;
+            const zone = document.getElementById('chat-zone');
+            zone.appendChild(d); zone.scrollTop = zone.scrollHeight;
         }
     </script>
 </body>
