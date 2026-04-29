@@ -3,163 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    <title>KL Empire - Epicenter</title>
+    <title>KL Elite - Эпицентр</title>
     <style>
         :root { --accent: #bf5af2; --bg: #050508; --glass: rgba(255,255,255,0.08); --card: #0d0d14; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; overflow-x: hidden; height: 100vh; display: flex; flex-direction: column; }
+        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; overflow: hidden; height: 100vh; display: flex; flex-direction: column; transition: 0.3s; }
         
-        /* Паки и Категории */
-        .hub-container { padding: 20px; flex: 1; overflow-y: auto; padding-bottom: 120px; }
-        .section-title { color: var(--accent); font-size: 14px; letter-spacing: 2px; margin: 20px 0 10px; }
-        .packs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .pack-card { background: var(--card); border: 1px solid var(--glass); border-radius: 15px; padding: 15px; text-align: center; transition: 0.3s; }
-        .pack-card:active { transform: scale(0.95); border-color: var(--accent); }
-        .pack-icon { font-size: 30px; margin-bottom: 10px; }
+        /* Паки Космо-Уровней */
+        .hub { padding: 20px; flex: 1; overflow-y: auto; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .pack { background: var(--card); border: 1px solid var(--glass); border-radius: 15px; padding: 20px; text-align: center; border-bottom: 3px solid var(--accent); }
 
-        /* Оракул и Чат */
-        #chat-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 100; display: none; flex-direction: column; }
-        #chat-content { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .msg { max-width: 85%; padding: 12px; border-radius: 15px; font-size: 14px; }
-        .user { align-self: flex-end; background: var(--accent); }
-        .oracle { align-self: flex-start; background: var(--glass); border: 1px solid var(--glass); }
+        /* Секция Чата */
+        #chat-zone { flex: 1; display: none; flex-direction: column; background: var(--bg); overflow-y: auto; padding: 20px; padding-bottom: 150px; }
+        .msg { max-width: 80%; padding: 12px; border-radius: 15px; margin-bottom: 10px; font-size: 14px; }
+        .user { align-self: flex-end; background: var(--accent); color: white; }
+        .oracle { align-self: flex-start; background: var(--glass); border: 1px solid var(--accent); }
 
-        /* Всплывающее окно вопроса */
-        #pop-question { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); width: 85%; background: var(--accent); padding: 12px; border-radius: 12px; display: none; z-index: 1000; box-shadow: 0 0 30px rgba(191,90,242,0.4); }
+        /* ВСПЛЫВАЮЩЕЕ ОКНО (Вылетает из-под поля) */
+        #pop-window { 
+            position: fixed; bottom: -100px; left: 5%; width: 90%; 
+            background: var(--accent); color: white; padding: 15px; 
+            border-radius: 15px 15px 0 0; z-index: 100;
+            transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+            font-weight: bold; font-size: 13px;
+        }
+        #pop-window.active { bottom: 80px; } /* Позиция над полем ввода */
 
-        /* Ввод */
-        .input-area { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 92%; display: flex; gap: 10px; z-index: 1001; }
-        input { flex: 1; background: #1a1a24; border: 1px solid var(--glass); border-radius: 25px; padding: 15px 20px; color: white; outline: none; }
-        .send-btn { background: var(--accent); border: none; width: 55px; height: 55px; border-radius: 50%; color: white; font-size: 22px; cursor: pointer; }
+        /* Панель ввода */
+        .ui-bottom { position: fixed; bottom: 0; left: 0; width: 100%; background: #0d0d14; padding: 15px 0; z-index: 101; border-top: 1px solid var(--glass); }
+        .input-wrap { width: 90%; margin: 0 auto; display: flex; gap: 10px; }
+        input { flex: 1; background: #1a1a24; border: 1px solid var(--glass); border-radius: 25px; padding: 15px; color: white; outline: none; }
+        .btn { background: var(--accent); border: none; width: 50px; height: 50px; border-radius: 50%; color: white; cursor: pointer; }
 
-        /* Модалка Сценария */
-        #scen-win { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; background: var(--card); border: 2px solid var(--accent); padding: 20px; border-radius: 20px; display: none; z-index: 2000; }
-        
-        .blur-lock { filter: blur(8px); pointer-events: none; }
-        .lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 500; display: flex; justify-content: center; align-items: center; text-align: center; }
+        /* Хакерский режим */
+        .hacker-glow { text-shadow: 0 0 10px #00ff41; }
     </style>
 </head>
 <body>
 
-    <div id="lock" class="lock-screen">
-        <div style="padding: 20px;">
-            <div style="font-size: 50px;">🔒</div>
-            <h2>ЭПИЦЕНТР ЗАБЛОКИРОВАН</h2>
-            <p style="opacity: 0.6;">Для доступа к пакам и Оракулу выполните вход</p>
-            <a href="profile.html" style="color: var(--accent); text-decoration: none; font-weight: bold;">ПЕРЕЙТИ В ПРОФИЛЬ</a>
+    <div id="hub-page" class="hub">
+        <h2 id="title">KL ЭПИЦЕНТР</h2>
+        <div class="grid">
+            <div class="pack" onclick="startChat('Космо Пак')">🌌<br>Космо</div>
+            <div class="pack" onclick="startChat('YouTube Пак')">🎬<br>YouTube</div>
+            <div class="pack" onclick="startChat('Инженерный')">⚙️<br>Инженер</div>
+            <div class="pack" onclick="startChat('Архив')">📁<br>Архив</div>
         </div>
     </div>
 
-    <div id="main-content" class="hub-container blur-lock">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h1 style="font-size: 20px;">KL EMPIRE</h1>
-            <div id="user-badge" style="background: var(--accent); padding: 5px 12px; border-radius: 20px; font-size: 12px;">Гость</div>
+    <div id="chat-zone"></div>
+
+    <div id="pop-window">Вопрос: <span id="pop-text"></span></div>
+
+    <div class="ui-bottom">
+        <div class="input-wrap">
+            <input type="text" id="main-in" placeholder="Спросить Оракула...">
+            <button class="btn" onclick="fire()">➔</button>
         </div>
-
-        <div class="section-title">КАТЕГОРИИ ПАКОВ</div>
-        <div class="packs-grid">
-            <div class="pack-card" onclick="openOracle('Инженерный Пак')">
-                <div class="pack-icon">⚙️</div>
-                <div>Инженерный</div>
-            </div>
-            <div class="pack-card" onclick="openOracle('Космо Пак')">
-                <div class="pack-icon">🌌</div>
-                <div>Космо-Уровень</div>
-            </div>
-            <div class="pack-card" onclick="openOracle('YouTube Пак')">
-                <div class="pack-icon">🎬</div>
-                <div>Империя Ютуба</div>
-            </div>
-            <div class="pack-card" onclick="openOracle('Архив')">
-                <div class="pack-icon">📁</div>
-                <div>Библиотека</div>
-            </div>
-        </div>
-    </div>
-
-    <div id="chat-overlay">
-        <div style="padding: 15px; border-bottom: 1px solid var(--glass); display: flex; align-items: center;">
-            <button onclick="closeOracle()" style="background: none; border: none; color: white; font-size: 20px;">←</button>
-            <div id="active-pack-name" style="margin-left: 15px; font-weight: bold;">Оракул</div>
-        </div>
-        <div id="chat-content"></div>
-    </div>
-
-    <div id="pop-question"><b>Вопрос:</b> <span id="pop-txt">...</span></div>
-
-    <div class="input-area" id="input-ui" style="display: none;">
-        <input type="text" id="user-in" placeholder="Спросить Оракула...">
-        <button class="send-btn" id="sBtn" onclick="processSend()">➔</button>
-    </div>
-
-    <div id="scen-win">
-        <h3>🛠️ СЦЕНАРИЙ (BETA)</h3>
-        <textarea id="sc-q" style="width:100%; height:60px; background:#1a1a24; color:white; border-radius:10px; padding:10px;" placeholder="Вопрос..."></textarea>
-        <textarea id="sc-a" style="width:100%; height:60px; background:#1a1a24; color:white; border-radius:10px; padding:10px; margin-top:10px;" placeholder="Ответ Совы..."></textarea>
-        <button onclick="saveScen()" style="width:100%; margin-top:10px; padding:10px; background:#34c759; border:none; color:white; border-radius:10px;">СОХРАНИТЬ</button>
-        <button onclick="document.getElementById('scen-win').style.display='none'" style="width:100%; margin-top:5px; padding:5px; background:none; color:grey; border:none;">ОТМЕНА</button>
     </div>
 
     <script>
-        const isLogged = localStorage.getItem('kl_auth') === 'true';
-        let scenario = JSON.parse(localStorage.getItem('kl_scen') || 'null');
+        const chatZone = document.getElementById('chat-zone');
+        const pop = document.getElementById('pop-window');
+        const popText = document.getElementById('pop-text');
+        const input = document.getElementById('main-in');
 
-        if(isLogged) {
-            document.getElementById('lock').style.display = 'none';
-            document.getElementById('main-content').classList.remove('blur-lock');
-            document.getElementById('user-badge').innerText = "Саня";
-            document.getElementById('input-ui').style.display = 'flex';
+        function startChat(name) {
+            document.getElementById('hub-page').style.display = 'none';
+            chatZone.style.display = 'flex';
+            addMsg('oracle', `Активирован ${name}. Жду приказа, Командир.`);
         }
 
-        function openOracle(pack) {
-            document.getElementById('chat-overlay').style.display = 'flex';
-            document.getElementById('active-pack-name').innerText = pack;
-            addMsg("oracle", `Пак "${pack}" активирован. Я готов, Командир.`);
-        }
+        function fire() {
+            let val = input.value.trim();
+            if(!val) return;
 
-        function closeOracle() { document.getElementById('chat-overlay').style.display = 'none'; }
+            // Команда ХАКЕРА
+            if(val === "//add") {
+                document.documentElement.style.setProperty('--accent', '#00ff41');
+                document.getElementById('title').classList.add('hacker-glow');
+                addMsg('oracle', "🟢 СИСТЕМА ПЕРЕШЛА В ХАКЕРСКИЙ РЕЖИМ.");
+                input.value = "";
+                return;
+            }
 
-        // Скрытый сценарий (Зажатие кнопки)
-        let timer;
-        const sBtn = document.getElementById('sBtn');
-        sBtn.oncontextmenu = (e) => { e.preventDefault(); openScen(); };
-        sBtn.ontouchstart = () => { timer = setTimeout(openScen, 1000); };
-        sBtn.ontouchend = () => clearTimeout(timer);
+            // 1. Показываем всплывашку (выезжает снизу)
+            popText.innerText = val;
+            pop.classList.add('active');
 
-        function openScen() { document.getElementById('scen-win').style.display='block'; }
-        function saveScen() {
-            scenario = { q: document.getElementById('sc-q').value, a: document.getElementById('sc-a').value };
-            localStorage.setItem('kl_scen', JSON.stringify(scenario));
-            alert("💾 Сценарий прошит в память!");
-            document.getElementById('scen-win').style.display='none';
-        }
+            // 2. Добавляем в чат
+            addMsg('user', val);
+            input.value = "";
 
-        function processSend() {
-            const inp = document.getElementById('user-in');
-            let v = inp.value.trim();
-            if(!v) return;
-
-            // Всплывающее окно
-            const pop = document.getElementById('pop-question');
-            document.getElementById('pop-txt').innerText = v;
-            pop.style.display = 'block';
-
-            addMsg("user", v);
-            inp.value = "";
+            // 3. Ответ Оракула (Рандом из 4 вариантов)
+            const answers = [
+                "Данные всосаны в Эпицентр. Чисто.",
+                "Сова подтверждает: мамонтов нет.",
+                "Запрос прошит в 12 ГБ памяти.",
+                "Сценарий выполнен. Ожидаю."
+            ];
 
             setTimeout(() => {
-                if(scenario && v.includes(scenario.q)) {
-                    addMsg("oracle", scenario.a);
-                } else {
-                    addMsg("oracle", "Данные обработаны в Эпицентре.");
-                }
-                setTimeout(() => { pop.style.display = 'none'; }, 2500);
-            }, 800);
+                const rand = answers[Math.floor(Math.random() * answers.length)];
+                addMsg('oracle', rand);
+                
+                // 4. Прячем всплывашку через 3 сек
+                setTimeout(() => { pop.classList.remove('active'); }, 3000);
+            }, 1000);
         }
 
-        function addMsg(t, s) {
-            const d = document.createElement('div'); d.className = `msg ${t}`; d.innerText = s;
-            document.getElementById('chat-content').appendChild(d);
-            document.getElementById('chat-content').scrollTop = document.getElementById('chat-content').scrollHeight;
+        function addMsg(type, text) {
+            const m = document.createElement('div');
+            m.className = `msg ${type}`;
+            m.innerText = text;
+            chatZone.appendChild(m);
+            chatZone.scrollTop = chatZone.scrollHeight;
         }
     </script>
 </body>
