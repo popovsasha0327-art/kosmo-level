@@ -1,15 +1,23 @@
 {
-  "short_name": "KosmoStore",
-  "name": "Kosmo Level Store",
+  "name": "Oracle",
+  "short_name": "Oracle",
+  "description": "Интеллектуальный интерфейс управления Эпицентром",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#bf5af2",
+  "orientation": "portrait",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "logo.png",
       "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "start_url": "/kosmo-level/index.html",
-  "display": "standalone",
-  "theme_color": "#007aff",
-  "background_color": "#ffffff"
+  ]
 }
