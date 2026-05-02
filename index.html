@@ -2,17 +2,166 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Oracle AI Pro | Эпицентр</title>
     <style>
-        body { background: #0a0a0a; color: #00ff41; font-family: 'Courier New', monospace; text-align: center; }
-        .logo-spheres { width: 150px; filter: drop-shadow(0 0 10px #00d4ff); margin-top: 20px; }
-        .terminal-header { font-size: 24px; text-shadow: 0 0 5px #00ff41; margin-bottom: 30px; }
-        /* Здесь будет наш неоновый стиль Oracle AI */
+        :root { 
+            --oracle-main: #e60ced; 
+            --oracle-soft: rgba(230, 12, 237, 0.2);
+            --ios-bg: #000000; 
+            --ios-gray: #1c1c1e; 
+            --ios-text: #ffffff; 
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
+        body { background: var(--ios-bg); color: var(--ios-text); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
+            background: rgba(15, 0, 20, 0.95); backdrop-filter: blur(25px);
+            z-index: 1000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-right: 1px solid var(--oracle-main); padding-top: 60px;
+        }
+        .sidebar.active { left: 0; }
+        .sidebar-item { 
+            padding: 15px 20px; color: var(--ios-text); border-bottom: 0.5px solid #333;
+            display: flex; align-items: center; gap: 12px; cursor: pointer;
+        }
+        .sidebar-item:active { background: var(--oracle-main); }
+
+        /* HEADER */
+        .chat-header { 
+            padding: 15px; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--oracle-main);
+            z-index: 900;
+        }
+        .menu-btn { cursor: pointer; display: flex; flex-direction: column; gap: 5px; }
+        .menu-btn span { width: 22px; height: 2px; background: var(--oracle-main); border-radius: 2px; }
+
+        /* ЧАТ */
+        .chat-main { flex: 1; overflow-y: auto; padding: 20px 15px; display: flex; flex-direction: column; gap: 12px; }
+        .message { padding: 12px 16px; border-radius: 20px; font-size: 16px; max-width: 80%; animation: msgPop 0.3s forwards; }
+        @keyframes msgPop { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        
+        .incoming { background: var(--ios-gray); align-self: flex-start; border-bottom-left-radius: 4px; border: 0.5px solid #333; }
+        .outgoing { 
+            background: var(--oracle-main); align-self: flex-end; border-bottom-right-radius: 4px; 
+            box-shadow: 0 0 15px var(--oracle-soft); 
+        }
+
+        /* HINTS */
+        .suggestions-area { padding: 15px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; border-top: 0.5px solid #222; }
+        .hint-btn { 
+            background: #000; border: 1px solid var(--oracle-main); color: var(--ios-text); 
+            padding: 10px 18px; border-radius: 20px; font-size: 14px; cursor: pointer;
+        }
+
+        /* INPUT */
+        .input-bar { padding: 10px 15px 30px; display: flex; gap: 10px; border-top: 1px solid var(--oracle-main); align-items: center; }
+        .input-bar input { flex: 1; background: #1c1c1e; border: 1px solid #333; border-radius: 25px; padding: 12px 20px; color: white; outline: none; }
+        .input-bar input:focus { border-color: var(--oracle-main); }
+        
+        .send-btn { background: none; border: none; cursor: pointer; }
+        .send-btn svg { fill: var(--oracle-main); filter: drop-shadow(0 0 5px var(--oracle-main)); }
+
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; }
+        .overlay.active { display: block; }
     </style>
 </head>
 <body>
-    <img src="logo.png" class="logo-spheres" alt="Oracle Logo">
-    <div class="terminal-header">СИСТЕМА ОРАКУЛ АКТИВИРОВАНА [PRO]</div>
-    <!-- Сюда вставим окно входа и поиск паков -->
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-item" onclick="openLogin()">👤 Личный кабинет</div>
+        <div class="sidebar-item">💬 История чатов</div>
+        <div class="sidebar-item">⚙️ Настройки ИИ</div>
+        <div class="sidebar-item" style="color: #ff453a;">🔴 Выход</div>
+    </div>
+
+    <header class="chat-header">
+        <div class="menu-btn" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+        <div style="text-align:center">
+            <b style="display:block; color: var(--oracle-main); letter-spacing: 1.5px;">ORACLE AI PRO</b>
+            <span id="status" style="font-size:11px; color:#8e8e93">ядро активно</span>
+        </div>
+        <div style="width:40px"></div>
+    </header>
+
+    <main class="chat-main" id="chat-box">
+        <div class="message incoming">Система Oracle переведена на неоновый режим. Цвет #e60ced подтвержден. 🟣</div>
+    </main>
+
+    <div class="suggestions-area" id="hints-box"></div>
+
+    <div class="input-bar">
+        <input type="text" id="user-in" placeholder="Команда для Оракула...">
+        <button class="send-btn" onclick="manualSend()">
+            <svg width="28" height="28" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+        </button>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const hintsBox = document.getElementById('hints-box');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        function toggleMenu() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        const flow = {
+            start: [
+                { text: "📦 Репозиторий паков", next: "packs" },
+                { text: "🛰 Проверка связи", next: "net" }
+            ],
+            packs: {
+                reply: "Доступ к 10 версиям Kosmo Level открыт. Использую новый канал связи. 📡",
+                hints: [{ text: "🚀 Загрузить 3.3", next: "p33" }, { text: "🔙 Назад", next: "start" }]
+            },
+            p33: { reply: "Пакет 3.3 Preview подготовлен к отправке. ⏳", hints: [{ text: "🔙 Ок", next: "start" }] },
+            net: { reply: "Сигнал идеальный. Ребрендинг завершен успешно. 🟣", hints: [{ text: "🔙 Ок", next: "start" }] }
+        };
+
+        function renderHints(key) {
+            hintsBox.innerHTML = "";
+            (key === 'start' ? flow.start : flow[key].hints).forEach(item => {
+                const b = document.createElement('div');
+                b.className = "hint-btn";
+                b.innerText = item.text;
+                b.onclick = () => handleChoice(item.text, item.next);
+                hintsBox.appendChild(b);
+            });
+        }
+
+        function handleChoice(text, nextKey) {
+            addMsg(text, 'outgoing');
+            setTimeout(() => {
+                addMsg(flow[nextKey].reply, 'incoming');
+                renderHints(nextKey);
+            }, 600);
+        }
+
+        function addMsg(text, type) {
+            const d = document.createElement('div');
+            d.className = `message ${type}`;
+            d.innerText = text;
+            chatBox.appendChild(d);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function manualSend() {
+            const inp = document.getElementById('user-in');
+            if(inp.value.trim()) {
+                addMsg(inp.value, 'outgoing');
+                inp.value = "";
+                setTimeout(() => addMsg("Команда в обработке... 🟣", 'incoming'), 600);
+            }
+        }
+
+        renderHints('start');
+    </script>
 </body>
 </html>
