@@ -2,212 +2,179 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Oracle AI Pro | Эпицентр</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Oracle AI Pro - Official HQ</title>
     <style>
-        :root { 
-            --oracle-main: #e60ced; 
-            --oracle-soft: rgba(230, 12, 237, 0.15);
-            --ios-bg: #000000; 
-            --ios-gray: #1c1c1e; 
-            --ios-text: #ffffff; 
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-        body { background: var(--ios-bg); color: var(--ios-text); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-
-        /* SIDEBAR (МЕНЮ) */
-        .sidebar {
-            position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
-            background: rgba(15, 0, 25, 0.98); backdrop-filter: blur(25px);
-            z-index: 1000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-right: 1px solid var(--oracle-main); padding-top: 60px;
-        }
-        .sidebar.active { left: 0; }
-        .sidebar-item { 
-            padding: 15px 20px; color: var(--ios-text); border-bottom: 0.5px solid #333;
-            display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.2s;
-        }
-        .sidebar-item:active { background: var(--oracle-main); }
-
-        /* HEADER */
-        .chat-header { 
-            padding: 15px; display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--oracle-main);
-            z-index: 900;
-        }
-        .menu-btn { cursor: pointer; display: flex; flex-direction: column; gap: 5px; padding: 5px; }
-        .menu-btn span { width: 22px; height: 2px; background: var(--oracle-main); border-radius: 2px; transition: 0.3s; }
-
-        /* ЧАТ */
-        .chat-main { flex: 1; overflow-y: auto; padding: 20px 15px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
-        .message { 
-            padding: 12px 16px; border-radius: 20px; font-size: 16px; max-width: 85%; line-height: 1.4; 
-            animation: msgPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        @keyframes msgPop { from { opacity: 0; transform: scale(0.9) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        .incoming { background: var(--ios-gray); align-self: flex-start; border-bottom-left-radius: 4px; border: 0.5px solid #333; }
-        .outgoing { 
-            background: var(--oracle-main); align-self: flex-end; border-bottom-right-radius: 4px; 
-            box-shadow: 0 0 15px var(--oracle-soft); 
+        :root {
+            --bg: #050507;
+            --card: rgba(20, 20, 25, 0.95);
+            --oracle-main: #e60ced;
+            --oracle-glow: rgba(230, 12, 237, 0.3);
+            --blue: #007aff;
+            --text: #ffffff;
+            --border: rgba(255, 255, 255, 0.08);
         }
 
-        /* КНОПКИ ПОДСКАЗОК */
-        .suggestions-area { 
-            padding: 15px; background: #000; border-top: 0.5px solid #222;
-            display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh;
         }
-        .hint-btn { 
-            background: #000; border: 1px solid var(--oracle-main); color: var(--ios-text); 
-            padding: 10px 18px; border-radius: 20px; font-size: 14px; cursor: pointer; transition: 0.2s;
+
+        /* КОНТЕЙНЕР ОРАКУЛА */
+        .oracle-container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 15px var(--oracle-glow);
+            backdrop-filter: blur(20px);
         }
-        .hint-btn:active { transform: scale(0.95); background: var(--oracle-main); }
 
-        /* ПАНЕЛЬ ВВОДА */
-        .input-bar { padding: 10px 15px 35px; display: flex; gap: 12px; background: #000; border-top: 1px solid var(--oracle-main); align-items: center; }
-        .input-bar input { flex: 1; background: #1c1c1e; border: 1px solid #333; border-radius: 25px; padding: 12px 20px; color: white; outline: none; transition: 0.3s; }
-        .input-bar input:focus { border-color: var(--oracle-main); box-shadow: 0 0 10px var(--oracle-soft); }
-        
-        .send-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .send-btn svg { fill: var(--oracle-main); filter: drop-shadow(0 0 5px var(--oracle-main)); }
-        .send-btn:active { transform: scale(0.85) rotate(-10deg); }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-        /* ОВЕРЛЕЙ */
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; }
-        .overlay.active { display: block; }
+        .status-tag {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--oracle-main);
+            font-weight: 900;
+        }
+
+        /* ОКНО ОТВЕТА */
+        #display {
+            font-size: 16px;
+            line-height: 1.6;
+            min-height: 120px;
+            margin-bottom: 20px;
+            color: #f2f2f7;
+            border-left: 3px solid var(--oracle-main);
+            padding-left: 15px;
+        }
+
+        /* КНОПКИ УПРАВЛЕНИЯ */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 15px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            background: var(--oracle-main);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--oracle-glow);
+        }
+
+        /* КНОПКА +? (РАССМОТРЕНИЕ) */
+        .btn-plus {
+            grid-column: span 2;
+            background: linear-gradient(90deg, var(--blue), var(--oracle-main));
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* ФАТАЛЬНАЯ ОШИБКА ДЛЯ МАМОНТОВ */
+        .error-msg {
+            color: #ff453a;
+            font-weight: bold;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-item" onclick="openLogin()">👤 Личный кабинет</div>
-        <div class="sidebar-item">💬 История чатов</div>
-        <div class="sidebar-item">⚙️ Настройки ИИ</div>
-        <div class="sidebar-item" style="color: #ff453a;">🔴 Выход</div>
-    </div>
-
-    <header class="chat-header">
-        <div class="menu-btn" onclick="toggleMenu()">
-            <span></span><span></span><span></span>
+    <div class="oracle-container">
+        <div class="header">
+            <div class="status-tag" id="status">Oracle System: Loading...</div>
+            <div style="font-size: 12px; color: #444;">v3.4 PRO</div>
         </div>
-        <div style="text-align:center">
-            <b style="display:block; color: var(--oracle-main); letter-spacing: 1.5px; font-size: 18px;">ORACLE AI PRO</b>
-            <span id="status" style="font-size:11px; color:#8e8e93">канал связи активен</span>
+
+        <div id="display">Инициализация нейросети... Ожидание подтверждения oracle.ai</div>
+
+        <div class="grid" id="controls" style="display: none;">
+            <button class="btn" onclick="ask('status')">Статус Ядра</button>
+            <button class="btn" onclick="ask('update')">План Обновлений</button>
+            <button class="btn" onclick="ask('security')">KLL Defender</button>
+            <button class="btn" onclick="ask('about')">О создателе</button>
+            <button class="btn btn-plus" onclick="requestAccess()">+? ПРЕДЛОЖИТЬ КОД</button>
         </div>
-        <div style="width:40px"></div>
-    </header>
-
-    <main class="chat-main" id="chat-box">
-        <div class="message incoming">Протокол Эпицентра запущен. Приветствую, Командир Саня. Система синхронизирована с внешним хранилищем. 🔗</div>
-    </main>
-
-    <div class="suggestions-area" id="hints-box"></div>
-
-    <div class="input-bar">
-        <input type="text" id="user-in" placeholder="Запрос к Оракулу..." autocomplete="off">
-        <button class="send-btn" onclick="manualSend()">
-            <svg width="30" height="30" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
-        </button>
     </div>
 
     <script>
-        const chatBox = document.getElementById('chat-box');
-        const hintsBox = document.getElementById('hints-box');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
+        const display = document.getElementById('display');
         const status = document.getElementById('status');
-        const userInput = document.getElementById('user-in');
+        const controls = document.getElementById('controls');
 
-        // ТВОЙ URL ИЗ GOOGLE APPS SCRIPT
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxr9JksxMuIHOJqUYSloOQaoKm4Q-P-nQltFJ2JpFXQA1X3jPHydhJv-bDkfuYLZ6uhJA/exec';
+        // ТВОЯ КРИТИЧЕСКАЯ ПРОВЕРКА (startup in 0.1)
+        let ai_core_active = false;
+        
+        // Имитация поиска oracle.ai. В реальности здесь будет запрос к твоему файлу.
+        // Если там будет "Привет как дела" - проверка не пройдет!
+        setTimeout(() => {
+            const mock_file_content = "startup_ok_key_2000%"; // Это то, что должно быть в oracle.ai
+            
+            if (mock_file_content === "startup_ok_key_2000%") {
+                ai_core_active = true;
+                status.innerText = "Oracle System: Online";
+                status.style.color = "#32d74b";
+                controls.style.display = "grid";
+                typeText("Система Oracle AI Pro успешно запущена. Добро пожаловать в Штаб, Командир. Лимиты Google Sites аннулированы.");
+            } else {
+                status.innerText = "CRITICAL ERROR";
+                display.innerHTML = "<span class='error-msg'>ОШИБКА ЗАПУСКА: oracle.ai поврежден или имитирован мамонтом. Система заблокирована.</span>";
+            }
+        }, 100);
 
-        function toggleMenu() {
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
+        function typeText(text) {
+            display.innerText = "";
+            let i = 0;
+            let interval = setInterval(() => {
+                if (i < text.length) {
+                    display.innerText += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(interval);
+                }
+            }, 25);
         }
 
-        // Отправка по Enter
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') manualSend();
-        });
-
-        const flow = {
-            start: [
-                { text: "📦 Репозиторий паков", next: "packs" },
-                { text: "🛰 Проверка связи", next: "net" }
-            ],
-            packs: {
-                reply: "Доступ к 10 версиям Kosmo Level открыт. Использую новый канал связи GitHub. 📡",
-                hints: [
-                    { text: "🚀 Загрузить 3.3", next: "p33" }, 
-                    { text: "🔙 Назад", next: "start" }
-                ]
-            },
-            p33: { reply: "Пакет 3.3 Preview подготовлен. Начинаю дешифровку... ⏳", hints: [{ text: "🔙 Ок", next: "start" }] },
-            net: { reply: "Связь с базой данных Google стабильна. 🟣", hints: [{ text: "🔙 Ок", next: "start" }] }
+        const responses = {
+            'status': "Ядро работает на 2000% мощности. Проводник G-Sites синхронизирован. Мамонты под наблюдением.",
+            'update': "Релиз 3.4 намечен на середину мая. В планах: полный переезд на GitHub и внедрение живого голоса.",
+            'security': "KLL Defender активен. Попытки создания fish_control.fgg пресечены на корневом уровне.",
+            'about': "Саня — Главный Архитектор. Его код не имеет границ. Мы — Prestige, мы — будущее."
         };
 
-        function renderHints(key) {
-            hintsBox.innerHTML = "";
-            const items = key === 'start' ? flow.start : flow[key].hints;
-            items.forEach(item => {
-                const b = document.createElement('div');
-                b.className = "hint-btn";
-                b.innerText = item.text;
-                b.onclick = () => handleChoice(item.text, item.next);
-                hintsBox.appendChild(b);
-            });
+        function ask(type) {
+            typeText(responses[type]);
         }
 
-        function handleChoice(text, nextKey) {
-            addMsg(text, 'outgoing');
-            status.innerText = "обработка...";
-            setTimeout(() => {
-                status.innerText = "ядро активно";
-                addMsg(flow[nextKey].reply, 'incoming');
-                renderHints(nextKey);
-            }, 600);
+        function requestAccess() {
+            typeText("РЕЖИМ РАССМОТРЕНИЯ (+?): Пожалуйста, свяжитесь с Саней. Подготовьте обоснование изменений и документацию к коду.");
         }
-
-        function addMsg(text, type) {
-            const d = document.createElement('div');
-            d.className = `message ${type}`;
-            d.innerText = text;
-            chatBox.appendChild(d);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        async function manualSend() {
-            const msg = userInput.value.trim();
-            if(msg) {
-                addMsg(msg, 'outgoing');
-                userInput.value = "";
-                status.innerText = "синхронизация...";
-
-                try {
-                    await fetch(SCRIPT_URL, {
-                        method: 'POST',
-                        mode: 'no-cors', 
-                        body: JSON.stringify({ user: "Саня", message: msg })
-                    });
-                    setTimeout(() => {
-                        status.innerText = "ядро активно";
-                        addMsg("Запись внесена в Эпицентр. 🟣", 'incoming');
-                    }, 600);
-                } catch (err) {
-                    console.error("Ошибка:", err);
-                    status.innerText = "сбой связи";
-                }
-            }
-        }
-
-        function openLogin() {
-            toggleMenu();
-            addMsg("Инициализация модуля авторизации... Доступ ограничен. 👤", 'incoming');
-        }
-
-        renderHints('start');
     </script>
 </body>
 </html>
