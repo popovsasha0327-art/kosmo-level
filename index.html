@@ -3,178 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Oracle AI Pro - Official HQ</title>
+    <title>Oracle AI 1.0 - Worldpack HQ</title>
     <style>
         :root {
-            --bg: #050507;
-            --card: rgba(20, 20, 25, 0.95);
-            --oracle-main: #e60ced;
-            --oracle-glow: rgba(230, 12, 237, 0.3);
+            --bg: #030305;
+            --card: rgba(15, 15, 20, 0.98);
+            --oracle: #e60ced;
             --blue: #007aff;
             --text: #ffffff;
-            --border: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
         body {
             background: var(--bg);
             color: var(--text);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0; padding: 20px;
+            font-family: -apple-system, sans-serif;
+            margin: 0; padding: 15px;
             display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh;
         }
 
-        /* КОНТЕЙНЕР ОРАКУЛА */
-        .oracle-container {
-            width: 100%;
-            max-width: 500px;
+        .oracle-box {
+            width: 100%; max-width: 450px;
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 28px;
-            padding: 25px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 15px var(--oracle-glow);
-            backdrop-filter: blur(20px);
+            border-radius: 24px; padding: 20px;
+            box-shadow: 0 10px 40px rgba(230, 12, 237, 0.2);
+            backdrop-filter: blur(15px);
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+        #status-bar { font-size: 10px; color: var(--oracle); font-weight: 800; margin-bottom: 15px; text-transform: uppercase; }
+
+        #log { 
+            font-size: 14px; line-height: 1.5; min-height: 100px; 
+            border-left: 2px solid var(--oracle); padding-left: 12px; margin-bottom: 20px;
         }
 
-        .status-tag {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--oracle-main);
-            font-weight: 900;
+        /* КНОПКИ ПАКОВ */
+        .pack-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; }
+        
+        .pack-btn {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+            color: white; padding: 12px; border-radius: 12px; font-size: 11px;
+            text-align: left; cursor: pointer; transition: 0.2s;
         }
 
-        /* ОКНО ОТВЕТА */
-        #display {
-            font-size: 16px;
-            line-height: 1.6;
-            min-height: 120px;
-            margin-bottom: 20px;
-            color: #f2f2f7;
-            border-left: 3px solid var(--oracle-main);
-            padding-left: 15px;
+        .pack-btn:hover { background: var(--oracle); border-color: var(--oracle); }
+
+        /* КНОПКА СКАЧИВАНИЯ ПОД СООБЩЕНИЕМ */
+        #download-zone { margin-top: 10px; display: none; }
+        .dl-link {
+            display: inline-block; background: var(--blue); color: white;
+            text-decoration: none; padding: 10px 20px; border-radius: 10px;
+            font-weight: bold; font-size: 13px; animation: slideIn 0.3s ease;
         }
 
-        /* КНОПКИ УПРАВЛЕНИЯ */
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border);
-            color: white;
-            padding: 15px;
-            border-radius: 16px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            text-transform: uppercase;
-        }
-
-        .btn:hover {
-            background: var(--oracle-main);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px var(--oracle-glow);
-        }
-
-        /* КНОПКА +? (РАССМОТРЕНИЕ) */
-        .btn-plus {
-            grid-column: span 2;
-            background: linear-gradient(90deg, var(--blue), var(--oracle-main));
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        /* ФАТАЛЬНАЯ ОШИБКА ДЛЯ МАМОНТОВ */
-        .error-msg {
-            color: #ff453a;
-            font-weight: bold;
-            text-align: center;
-        }
+        @keyframes slideIn { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div class="oracle-container">
-        <div class="header">
-            <div class="status-tag" id="status">Oracle System: Loading...</div>
-            <div style="font-size: 12px; color: #444;">v3.4 PRO</div>
+<div class="oracle-box">
+    <div id="status-bar">Connecting to oracle.ai...</div>
+    <div id="log">Ожидание авторизации ядра...</div>
+    
+    <div id="interface" style="display: none;">
+        <div class="pack-list">
+            <button class="pack-btn" onclick="getPack('1.0')">📦 Pack 1.0</button>
+            <button class="pack-btn" onclick="getPack('2.0')">📦 Pack 2.0</button>
+            <button class="pack-btn" onclick="getPack('2.2')">📦 Pack 2.2</button>
+            <button class="pack-btn" onclick="getPack('2.5')">📦 Pack 2.5</button>
+            <button class="pack-btn" onclick="getPack('2.8')">📦 Pack 2.8</button>
+            <button class="pack-btn" onclick="getPack('3.0')">📦 Pack 3.0</button>
+            <button class="pack-btn" onclick="getPack('3.1')">📦 Pack 3.1</button>
+            <button class="pack-btn" onclick="getPack('3.2')">📦 Pack 3.2</button>
+            <button class="pack-btn" onclick="getPack('3.3')">📦 Pack 3.3</button>
         </div>
-
-        <div id="display">Инициализация нейросети... Ожидание подтверждения oracle.ai</div>
-
-        <div class="grid" id="controls" style="display: none;">
-            <button class="btn" onclick="ask('status')">Статус Ядра</button>
-            <button class="btn" onclick="ask('update')">План Обновлений</button>
-            <button class="btn" onclick="ask('security')">KLL Defender</button>
-            <button class="btn" onclick="ask('about')">О создателе</button>
-            <button class="btn btn-plus" onclick="requestAccess()">+? ПРЕДЛОЖИТЬ КОД</button>
-        </div>
+        <div id="download-zone"></div>
     </div>
+</div>
 
-    <script>
-        const display = document.getElementById('display');
-        const status = document.getElementById('status');
-        const controls = document.getElementById('controls');
+<script>
+    const log = document.getElementById('log');
+    const statusBar = document.getElementById('status-bar');
+    const dlZone = document.getElementById('download-zone');
 
-        // ТВОЯ КРИТИЧЕСКАЯ ПРОВЕРКА (startup in 0.1)
-        let ai_core_active = false;
+    // ПРОВЕРКА ОРАКУЛА
+    setTimeout(() => {
+        // Здесь твоя логика проверки oracle.ai
+        const coreKey = "startup_ok_key_2000%"; 
         
-        // Имитация поиска oracle.ai. В реальности здесь будет запрос к твоему файлу.
-        // Если там будет "Привет как дела" - проверка не пройдет!
-        setTimeout(() => {
-            const mock_file_content = "startup_ok_key_2000%"; // Это то, что должно быть в oracle.ai
-            
-            if (mock_file_content === "startup_ok_key_2000%") {
-                ai_core_active = true;
-                status.innerText = "Oracle System: Online";
-                status.style.color = "#32d74b";
-                controls.style.display = "grid";
-                typeText("Система Oracle AI Pro успешно запущена. Добро пожаловать в Штаб, Командир. Лимиты Google Sites аннулированы.");
-            } else {
-                status.innerText = "CRITICAL ERROR";
-                display.innerHTML = "<span class='error-msg'>ОШИБКА ЗАПУСКА: oracle.ai поврежден или имитирован мамонтом. Система заблокирована.</span>";
-            }
-        }, 100);
-
-        function typeText(text) {
-            display.innerText = "";
-            let i = 0;
-            let interval = setInterval(() => {
-                if (i < text.length) {
-                    display.innerText += text.charAt(i);
-                    i++;
-                } else {
-                    clearInterval(interval);
-                }
-            }, 25);
+        if(coreKey === "startup_ok_key_2000%") {
+            statusBar.innerText = "Oracle AI 1.0: Active";
+            log.innerText = "Авторизация пройдена. Доступ к .worldpack открыт. Выберите версию для загрузки.";
+            document.getElementById('interface').style.display = "block";
+        } else {
+            log.innerHTML = "<span style='color:red'>КРИТИЧЕСКАЯ ОШИБКА: Доступ запрещен системным администратором.</span>";
         }
+    }, 150);
 
-        const responses = {
-            'status': "Ядро работает на 2000% мощности. Проводник G-Sites синхронизирован. Мамонты под наблюдением.",
-            'update': "Релиз 3.4 намечен на середину мая. В планах: полный переезд на GitHub и внедрение живого голоса.",
-            'security': "KLL Defender активен. Попытки создания fish_control.fgg пресечены на корневом уровне.",
-            'about': "Саня — Главный Архитектор. Его код не имеет границ. Мы — Prestige, мы — будущее."
-        };
+    function getPack(ver) {
+        log.innerText = "Генерация ссылки для Kosmo Level " + ver + ".worldpack...";
+        dlZone.style.display = "block";
+        // В href укажи путь, где лежат файлы в твоем репозитории
+        dlZone.innerHTML = `
+            <div style="font-size:11px; margin-bottom:5px; color:#888;">Файл готов:</div>
+            <a href="packs/Kosmo_Level_${ver}.worldpack" class="dl-link" download>⬇️ Скачать v${ver} (.worldpack)</a>
+        `;
+    }
+</script>
 
-        function ask(type) {
-            typeText(responses[type]);
-        }
-
-        function requestAccess() {
-            typeText("РЕЖИМ РАССМОТРЕНИЯ (+?): Пожалуйста, свяжитесь с Саней. Подготовьте обоснование изменений и документацию к коду.");
-        }
-    </script>
 </body>
 </html>
