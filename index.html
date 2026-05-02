@@ -157,11 +157,17 @@
             if(inp.value.trim()) {
                 addMsg(inp.value, 'outgoing');
                 inp.value = "";
-                setTimeout(() => addMsg("Команда в обработке... 🟣", 'incoming'), 600);
+                setTimeout(() => addMsg("Подождите... Не понял запроса", 'incoming'), 600);
             }
         }
 
         renderHints('start');
+// Слушатель нажатия клавиш в поле ввода
+document.getElementById('user-in').addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        manualSend();
+    }
+});
     </script>
 </body>
 </html>
