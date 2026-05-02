@@ -3,110 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Oracle AI 1.0: Knowledge Core</title>
+    <title>Oracle AI 1.1: Prestige HQ</title>
     <style>
         :root {
-            --bg: #020204;
-            --card: rgba(10, 10, 15, 0.95);
+            --bg: #010103;
+            --card: rgba(8, 8, 12, 0.98);
             --oracle: #e60ced;
-            --blue: #007aff;
+            --oracle-dark: rgba(230, 12, 237, 0.15);
             --text: #ffffff;
-            --border: rgba(255, 255, 255, 0.07);
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow: rgba(230, 12, 237, 0.4);
         }
+
+        * { box-sizing: border-box; }
 
         body {
             background: var(--bg); color: var(--text);
             font-family: -apple-system, sans-serif; margin: 0; padding: 10px;
-            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+            display: flex; justify-content: center; align-items: center; /* ЦЕНТРИРОВАНИЕ */
+            min-height: 100vh; overflow-x: hidden;
         }
 
-        .oracle-terminal {
-            width: 95%; max-width: 500px; background: var(--card);
-            border: 1px solid var(--border); border-radius: 30px;
-            padding: 20px; box-shadow: 0 0 30px var(--oracle);
+        /* АДАПТИВНЫЙ И УВЕЛИЧИВАЮЩИЙСЯ КОНТЕЙНЕР */
+        .oracle-interface {
+            width: 100%; max-width: 550px; 
+            background: var(--card);
+            border: 1px solid var(--border); border-radius: 35px;
+            padding: 25px; 
+            box-shadow: 0 0 40px var(--shadow);
+            transition: height 0.3s ease, transform 0.3s ease; /* АНИМАЦИЯ УВЕЛИЧЕНИЯ */
             display: flex; flex-direction: column; gap: 15px;
         }
 
-        #chat-window {
-            height: 250px; overflow-y: auto;
-            border-bottom: 1px solid var(--border);
-            padding: 10px; font-size: 14px; display: flex; flex-direction: column; gap: 10px;
+        .header-tag {
+            font-size: 11px; color: var(--oracle); font-weight: 900; 
+            text-align: center; text-transform: uppercase; letter-spacing: 2px;
+            animation: neonPulse 1.5s infinite alternate; /* АНИМАЦИЯ ПУЛЬСАЦИИ */
         }
 
-        .msg { padding: 8px 12px; border-radius: 12px; max-width: 85%; }
-        .ai { background: rgba(230, 12, 237, 0.1); border-left: 3px solid var(--oracle); align-self: flex-start; }
-        .user { background: var(--blue); align-self: flex-end; }
-
-        .input-area { display: flex; gap: 10px; }
-        input {
-            flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-            border-radius: 15px; padding: 12px; color: white; outline: none;
+        /* ЧАТ БЕЗ ЖЕСТКОЙ ВЫСОТЫ */
+        #chat {
+            font-size: 14px; line-height: 1.6; color: #f0f0f0;
+            border-left: 2px solid var(--oracle); padding-left: 15px;
+            display: flex; flex-direction: column; gap: 12px;
+            transition: height 0.3s ease;
         }
 
-        .pack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
-        .pack-btn { background: #1a1a1c; border: 1px solid var(--border); color: #888; font-size: 9px; padding: 8px; border-radius: 8px; cursor: pointer; }
+        .msg-ai { animation: textTyping 0.5s ease-out forwards; position: relative; }
+        .msg-ai span { background: var(--oracle-dark); padding: 5px 10px; border-radius: 8px; }
+
+        /* ЗОНА ЗАГРУЗКИ */
+        #download-bar { display: none; margin-top: 10px; text-align: center; }
+        .dl-btn {
+            background: #007aff; color: white; text-decoration: none;
+            padding: 12px 25px; border-radius: 12px; font-weight: 800; font-size: 13px;
+            box-shadow: 0 5px 15px rgba(0, 122, 255, 0.3); transition: 0.2s;
+        }
+        .dl-btn:hover { background: #0056b3; transform: scale(1.05); }
+
+        /* КНОПКИ УВЕЛИЧЕННЫЕ И С АНИМАЦИЕЙ */
+        .quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .quick-btn {
+            background: #141416; border: 1px solid var(--border); color: #999;
+            font-size: 11px; font-weight: bold; padding: 12px; border-radius: 12px;
+            cursor: pointer; transition: 0.3s;
+        }
+        .quick-btn:hover { border-color: var(--oracle); color: white; transform: translateY(-3px); box-shadow: 0 3px 10px var(--shadow); }
+
+        /* ПОДВАЛ ДЛЯ МАМОНТОВ */
+        .footer-warning {
+            font-size: 9px; color: #555; text-align: center;
+            margin-top: 20px; border-top: 1px solid var(--border); padding-top: 10px;
+        }
+
+        /* АНИМАЦИИ */
+        @keyframes neonPulse { from { text-shadow: 0 0 5px var(--oracle); opacity: 0.8; } to { text-shadow: 0 0 15px var(--oracle); opacity: 1; } }
+        @keyframes textTyping { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
     </style>
 </head>
 <body>
 
-<div class="oracle-terminal">
-    <div style="font-size: 10px; color: var(--oracle); font-weight: bold; text-align: center;">ORACLE AI 1.0 • KNOWLEDGE CORE</div>
+<div class="oracle-interface">
+    <div class="header-tag">Oracle AI 1.1 • Prestige HQ</div>
     
-    <div id="chat-window">
-        <div class="msg ai">Система авторизована. Я — Оракул, хранитель знаний Kosmo Level и Town Worker. Что ты хочешь узнать, Командир?</div>
+    <div id="chat">
+        <div class="msg-ai"><span>Авторизация Kosmo Level подтверждена. Я готов к работе. Что тебе нужно, Командир?</span></div>
     </div>
 
-    <div class="input-area">
-        <input type="text" id="user-input" placeholder="Спроси о проекте или версии..." onkeypress="if(event.key==='Enter') sendMsg()">
-        <button onclick="sendMsg()" style="background:var(--oracle); border:none; border-radius:50%; width:40px; color:white; cursor:pointer;">➔</button>
+    <div id="download-bar">
+        </div>
+
+    <div class="quick-grid">
+        <button class="quick-btn" onclick="ask('1.0')">📦 Pack 1.0</button>
+        <button class="quick-btn" onclick="ask('3.3')">📦 Pack 3.3</button>
+        <button class="quick-btn" onclick="ask('RTW')">💡 О проекте</button>
     </div>
 
-    <div class="pack-grid">
-        <button class="pack-btn" onclick="ask('1.0')">v1.0</button>
-        <button class="pack-btn" onclick="ask('3.3')">v3.3</button>
-        <button class="pack-btn" onclick="ask('RTW')">RTW</button>
+    <div class="footer-warning">
+        ИИ Ошибается. Если это часто то вы используете Версию ИИ для Мамонтов. Срочно уходите!
     </div>
 </div>
 
 <script>
-    const chat = document.getElementById('chat-window');
-    const input = document.getElementById('user-input');
+    const chat = document.getElementById('chat');
+    const dlBar = document.getElementById('download-bar');
 
-    // БАЗА ЗНАНИЙ (БИБЛИЯ ИИ)
     const bible = {
-        "rtw": "RTW (Release Town Worker) — это легендарная фиолетовая линейка сайтов. Она была завершена и запечатана после запуска Оракула.",
-        "stw": "STW (Service Town Worker) — сервисная линейка версий от 1.0 до 6.0. Настоящие рабочие лошадки системы.",
-        "ptw": "PTW (Paris Town Worker) — финальный релиз, венец архитектуры сайтов.",
-        "3.3": "Kosmo Level 3.3.worldpack — самая актуальная версия контента. Включает последние фиксы и защиту KLL.",
+        "1.0": "Генерация ссылки для Kosmo Level 1.0.worldpack. Файл доступен ниже.",
+        "3.3": "Генерация ссылки для Kosmo Level 3.3.worldpack. Это самая актуальная версия.",
+        "rtw": "RTW, STW и PTW — это этапы развития нашей инфраструктуры. Подробности в Архиве.",
         "привет": "Привет! Если ты не мамонт, то добро пожаловать. Если мамонт — твой код 'привет как дела' здесь не сработает.",
-        "оракул": "Я — AI 1.0, первая версия ИИ, созданная Саней для управления Эпицентром и выдачи .worldpack."
     };
 
-    function sendMsg() {
-        const text = input.value.toLowerCase();
-        if(!text) return;
+    function ask(type) {
+        chat.innerHTML = ""; // Очищаем для эффекта
+        let response = "Запрос обрабатывается... Данные не найдены.";
+        for (let key in bible) {
+            if (type.toLowerCase().includes(key)) { response = bible[key]; break; }
+        }
+        
+        // Эффект "печати"
+        addMsg(response);
 
-        addMsg(input.value, 'user');
-        input.value = "";
-
-        setTimeout(() => {
-            let response = "Информации по данному запросу нет в Архивах. Возможно, это мамонтская дезинформация.";
-            for (let key in bible) {
-                if (text.includes(key)) { response = bible[key]; break; }
-            }
-            addMsg(response, 'ai');
-        }, 500);
+        // Управление кнопкой Скачать
+        if(type === '1.0' || type === '3.3') {
+            dlBar.style.display = "block";
+            // В href укажи путь к файлам на GitHub, например "packs/Kosmo_Level_3.3.worldpack"
+            dlBar.innerHTML = `<a href="packs/Kosmo_Level_${type}.worldpack" class="dl-btn" download>⬇️ Скачать v${type}</a>`;
+        } else {
+            dlBar.style.display = "none";
+        }
     }
 
-    function addMsg(text, type) {
+    function addMsg(text) {
         const d = document.createElement('div');
-        d.className = 'msg ' + type;
-        d.innerText = text;
+        d.className = 'msg-ai';
+        d.innerHTML = `<span>${text}</span>`;
         chat.appendChild(d);
-        chat.scrollTop = chat.scrollHeight;
     }
-
-    function ask(val) { input.value = val; sendMsg(); }
 </script>
 
 </body>
