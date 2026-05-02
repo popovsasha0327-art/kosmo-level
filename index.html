@@ -7,25 +7,25 @@
     <style>
         :root { 
             --oracle-main: #e60ced; 
-            --oracle-soft: rgba(230, 12, 237, 0.2);
+            --oracle-soft: rgba(230, 12, 237, 0.15);
             --ios-bg: #000000; 
             --ios-gray: #1c1c1e; 
             --ios-text: #ffffff; 
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
         body { background: var(--ios-bg); color: var(--ios-text); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
 
-        /* SIDEBAR */
+        /* SIDEBAR (МЕНЮ) */
         .sidebar {
             position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
-            background: rgba(15, 0, 20, 0.95); backdrop-filter: blur(25px);
+            background: rgba(15, 0, 25, 0.98); backdrop-filter: blur(25px);
             z-index: 1000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border-right: 1px solid var(--oracle-main); padding-top: 60px;
         }
         .sidebar.active { left: 0; }
         .sidebar-item { 
             padding: 15px 20px; color: var(--ios-text); border-bottom: 0.5px solid #333;
-            display: flex; align-items: center; gap: 12px; cursor: pointer;
+            display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.2s;
         }
         .sidebar-item:active { background: var(--oracle-main); }
 
@@ -35,35 +35,43 @@
             background: rgba(0,0,0,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--oracle-main);
             z-index: 900;
         }
-        .menu-btn { cursor: pointer; display: flex; flex-direction: column; gap: 5px; }
-        .menu-btn span { width: 22px; height: 2px; background: var(--oracle-main); border-radius: 2px; }
+        .menu-btn { cursor: pointer; display: flex; flex-direction: column; gap: 5px; padding: 5px; }
+        .menu-btn span { width: 22px; height: 2px; background: var(--oracle-main); border-radius: 2px; transition: 0.3s; }
 
         /* ЧАТ */
-        .chat-main { flex: 1; overflow-y: auto; padding: 20px 15px; display: flex; flex-direction: column; gap: 12px; }
-        .message { padding: 12px 16px; border-radius: 20px; font-size: 16px; max-width: 80%; animation: msgPop 0.3s forwards; }
-        @keyframes msgPop { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-        
+        .chat-main { flex: 1; overflow-y: auto; padding: 20px 15px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+        .message { 
+            padding: 12px 16px; border-radius: 20px; font-size: 16px; max-width: 85%; line-height: 1.4; 
+            animation: msgPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes msgPop { from { opacity: 0; transform: scale(0.9) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         .incoming { background: var(--ios-gray); align-self: flex-start; border-bottom-left-radius: 4px; border: 0.5px solid #333; }
         .outgoing { 
             background: var(--oracle-main); align-self: flex-end; border-bottom-right-radius: 4px; 
             box-shadow: 0 0 15px var(--oracle-soft); 
         }
 
-        /* HINTS */
-        .suggestions-area { padding: 15px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; border-top: 0.5px solid #222; }
+        /* КНОПКИ ПОДСКАЗОК */
+        .suggestions-area { 
+            padding: 15px; background: #000; border-top: 0.5px solid #222;
+            display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+        }
         .hint-btn { 
             background: #000; border: 1px solid var(--oracle-main); color: var(--ios-text); 
-            padding: 10px 18px; border-radius: 20px; font-size: 14px; cursor: pointer;
+            padding: 10px 18px; border-radius: 20px; font-size: 14px; cursor: pointer; transition: 0.2s;
         }
+        .hint-btn:active { transform: scale(0.95); background: var(--oracle-main); }
 
-        /* INPUT */
-        .input-bar { padding: 10px 15px 30px; display: flex; gap: 10px; border-top: 1px solid var(--oracle-main); align-items: center; }
-        .input-bar input { flex: 1; background: #1c1c1e; border: 1px solid #333; border-radius: 25px; padding: 12px 20px; color: white; outline: none; }
-        .input-bar input:focus { border-color: var(--oracle-main); }
+        /* ПАНЕЛЬ ВВОДА */
+        .input-bar { padding: 10px 15px 35px; display: flex; gap: 12px; background: #000; border-top: 1px solid var(--oracle-main); align-items: center; }
+        .input-bar input { flex: 1; background: #1c1c1e; border: 1px solid #333; border-radius: 25px; padding: 12px 20px; color: white; outline: none; transition: 0.3s; }
+        .input-bar input:focus { border-color: var(--oracle-main); box-shadow: 0 0 10px var(--oracle-soft); }
         
-        .send-btn { background: none; border: none; cursor: pointer; }
+        .send-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         .send-btn svg { fill: var(--oracle-main); filter: drop-shadow(0 0 5px var(--oracle-main)); }
+        .send-btn:active { transform: scale(0.85) rotate(-10deg); }
 
+        /* ОВЕРЛЕЙ */
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 999; }
         .overlay.active { display: block; }
     </style>
@@ -80,24 +88,26 @@
     </div>
 
     <header class="chat-header">
-        <div class="menu-btn" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+        <div class="menu-btn" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
         <div style="text-align:center">
-            <b style="display:block; color: var(--oracle-main); letter-spacing: 1.5px;">ORACLE AI PRO</b>
-            <span id="status" style="font-size:11px; color:#8e8e93">ядро активно</span>
+            <b style="display:block; color: var(--oracle-main); letter-spacing: 1.5px; font-size: 18px;">ORACLE AI PRO</b>
+            <span id="status" style="font-size:11px; color:#8e8e93">канал связи активен</span>
         </div>
         <div style="width:40px"></div>
     </header>
 
     <main class="chat-main" id="chat-box">
-        <div class="message incoming">Система Oracle переведена на неоновый режим. Цвет #e60ced подтвержден. 🟣</div>
+        <div class="message incoming">Протокол Эпицентра запущен. Приветствую, Командир Саня. Система синхронизирована с внешним хранилищем. 🔗</div>
     </main>
 
     <div class="suggestions-area" id="hints-box"></div>
 
     <div class="input-bar">
-        <input type="text" id="user-in" placeholder="Команда для Оракула...">
+        <input type="text" id="user-in" placeholder="Запрос к Оракулу..." autocomplete="off">
         <button class="send-btn" onclick="manualSend()">
-            <svg width="28" height="28" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+            <svg width="30" height="30" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
         </button>
     </div>
 
@@ -106,11 +116,21 @@
         const hintsBox = document.getElementById('hints-box');
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
+        const status = document.getElementById('status');
+        const userInput = document.getElementById('user-in');
+
+        // ТВОЙ URL ИЗ GOOGLE APPS SCRIPT
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxr9JksxMuIHOJqUYSloOQaoKm4Q-P-nQltFJ2JpFXQA1X3jPHydhJv-bDkfuYLZ6uhJA/exec';
 
         function toggleMenu() {
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+
+        // Отправка по Enter
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') manualSend();
+        });
 
         const flow = {
             start: [
@@ -118,16 +138,20 @@
                 { text: "🛰 Проверка связи", next: "net" }
             ],
             packs: {
-                reply: "Доступ к 10 версиям Kosmo Level открыт. Использую новый канал связи. 📡",
-                hints: [{ text: "🚀 Загрузить 3.3", next: "p33" }, { text: "🔙 Назад", next: "start" }]
+                reply: "Доступ к 10 версиям Kosmo Level открыт. Использую новый канал связи GitHub. 📡",
+                hints: [
+                    { text: "🚀 Загрузить 3.3", next: "p33" }, 
+                    { text: "🔙 Назад", next: "start" }
+                ]
             },
-            p33: { reply: "Пакет 3.3 Preview подготовлен к отправке. ⏳", hints: [{ text: "🔙 Ок", next: "start" }] },
-            net: { reply: "Сигнал идеальный. Ребрендинг завершен успешно. 🟣", hints: [{ text: "🔙 Ок", next: "start" }] }
+            p33: { reply: "Пакет 3.3 Preview подготовлен. Начинаю дешифровку... ⏳", hints: [{ text: "🔙 Ок", next: "start" }] },
+            net: { reply: "Связь с базой данных Google стабильна. 🟣", hints: [{ text: "🔙 Ок", next: "start" }] }
         };
 
         function renderHints(key) {
             hintsBox.innerHTML = "";
-            (key === 'start' ? flow.start : flow[key].hints).forEach(item => {
+            const items = key === 'start' ? flow.start : flow[key].hints;
+            items.forEach(item => {
                 const b = document.createElement('div');
                 b.className = "hint-btn";
                 b.innerText = item.text;
@@ -138,7 +162,9 @@
 
         function handleChoice(text, nextKey) {
             addMsg(text, 'outgoing');
+            status.innerText = "обработка...";
             setTimeout(() => {
+                status.innerText = "ядро активно";
                 addMsg(flow[nextKey].reply, 'incoming');
                 renderHints(nextKey);
             }, 600);
@@ -152,22 +178,36 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        function manualSend() {
-            const inp = document.getElementById('user-in');
-            if(inp.value.trim()) {
-                addMsg(inp.value, 'outgoing');
-                inp.value = "";
-                setTimeout(() => addMsg("Подождите... Не понял запроса", 'incoming'), 600);
+        async function manualSend() {
+            const msg = userInput.value.trim();
+            if(msg) {
+                addMsg(msg, 'outgoing');
+                userInput.value = "";
+                status.innerText = "синхронизация...";
+
+                try {
+                    await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors', 
+                        body: JSON.stringify({ user: "Саня", message: msg })
+                    });
+                    setTimeout(() => {
+                        status.innerText = "ядро активно";
+                        addMsg("Запись внесена в Эпицентр. 🟣", 'incoming');
+                    }, 600);
+                } catch (err) {
+                    console.error("Ошибка:", err);
+                    status.innerText = "сбой связи";
+                }
             }
         }
 
+        function openLogin() {
+            toggleMenu();
+            addMsg("Инициализация модуля авторизации... Доступ ограничен. 👤", 'incoming');
+        }
+
         renderHints('start');
-// Слушатель нажатия клавиш в поле ввода
-document.getElementById('user-in').addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        manualSend();
-    }
-});
     </script>
 </body>
 </html>
