@@ -3,144 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Oracle AI 1.1: Prestige HQ</title>
+    <title>Oracle AI 1.1 - Prestige Final</title>
     <style>
         :root {
             --bg: #010103;
-            --card: rgba(8, 8, 12, 0.98);
+            --card: rgba(10, 10, 15, 0.98);
             --oracle: #e60ced;
-            --oracle-dark: rgba(230, 12, 237, 0.15);
+            --blue: #007aff;
             --text: #ffffff;
             --border: rgba(255, 255, 255, 0.08);
-            --shadow: rgba(230, 12, 237, 0.4);
         }
 
         * { box-sizing: border-box; }
 
         body {
             background: var(--bg); color: var(--text);
-            font-family: -apple-system, sans-serif; margin: 0; padding: 10px;
-            display: flex; justify-content: center; align-items: center; /* ЦЕНТРИРОВАНИЕ */
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0; padding: 15px;
+            display: flex; justify-content: center; align-items: center;
             min-height: 100vh; overflow-x: hidden;
         }
 
-        /* АДАПТИВНЫЙ И УВЕЛИЧИВАЮЩИЙСЯ КОНТЕЙНЕР */
         .oracle-interface {
-            width: 100%; max-width: 550px; 
-            background: var(--card);
-            border: 1px solid var(--border); border-radius: 35px;
-            padding: 25px; 
-            box-shadow: 0 0 40px var(--shadow);
-            transition: height 0.3s ease, transform 0.3s ease; /* АНИМАЦИЯ УВЕЛИЧЕНИЯ */
-            display: flex; flex-direction: column; gap: 15px;
+            width: 100%; max-width: 500px;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 35px; padding: 30px;
+            box-shadow: 0 0 50px rgba(230, 12, 237, 0.2);
+            display: flex; flex-direction: column; gap: 20px;
+            animation: emerge 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1);
         }
 
-        .header-tag {
-            font-size: 11px; color: var(--oracle); font-weight: 900; 
-            text-align: center; text-transform: uppercase; letter-spacing: 2px;
-            animation: neonPulse 1.5s infinite alternate; /* АНИМАЦИЯ ПУЛЬСАЦИИ */
+        .header {
+            font-size: 10px; color: var(--oracle); font-weight: 900;
+            text-align: center; text-transform: uppercase; letter-spacing: 3px;
         }
 
-        /* ЧАТ БЕЗ ЖЕСТКОЙ ВЫСОТЫ */
-        #chat {
-            font-size: 14px; line-height: 1.6; color: #f0f0f0;
-            border-left: 2px solid var(--oracle); padding-left: 15px;
-            display: flex; flex-direction: column; gap: 12px;
-            transition: height 0.3s ease;
+        #display {
+            font-size: 16px; line-height: 1.6; min-height: 70px;
+            border-left: 3px solid var(--oracle); padding-left: 20px;
+            transition: all 0.3s;
         }
 
-        .msg-ai { animation: textTyping 0.5s ease-out forwards; position: relative; }
-        .msg-ai span { background: var(--oracle-dark); padding: 5px 10px; border-radius: 8px; }
-
-        /* ЗОНА ЗАГРУЗКИ */
-        #download-bar { display: none; margin-top: 10px; text-align: center; }
+        .dl-zone { text-align: center; display: none; margin-top: 10px; }
         .dl-btn {
-            background: #007aff; color: white; text-decoration: none;
-            padding: 12px 25px; border-radius: 12px; font-weight: 800; font-size: 13px;
-            box-shadow: 0 5px 15px rgba(0, 122, 255, 0.3); transition: 0.2s;
+            display: inline-block; background: var(--blue); color: white;
+            text-decoration: none; padding: 16px 32px; border-radius: 18px;
+            font-weight: 800; font-size: 15px; box-shadow: 0 10px 25px rgba(0, 122, 255, 0.4);
+            animation: slideUp 0.4s ease-out; transition: 0.2s;
         }
-        .dl-btn:hover { background: #0056b3; transform: scale(1.05); }
+        .dl-btn:hover { transform: scale(1.03); filter: brightness(1.1); }
 
-        /* КНОПКИ УВЕЛИЧЕННЫЕ И С АНИМАЦИЕЙ */
-        .quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .quick-btn {
-            background: #141416; border: 1px solid var(--border); color: #999;
-            font-size: 11px; font-weight: bold; padding: 12px; border-radius: 12px;
-            cursor: pointer; transition: 0.3s;
+        .input-group {
+            display: flex; gap: 10px; background: rgba(255,255,255,0.05);
+            border-radius: 20px; padding: 5px 5px 5px 15px; border: 1px solid var(--border);
         }
-        .quick-btn:hover { border-color: var(--oracle); color: white; transform: translateY(-3px); box-shadow: 0 3px 10px var(--shadow); }
-
-        /* ПОДВАЛ ДЛЯ МАМОНТОВ */
-        .footer-warning {
-            font-size: 9px; color: #555; text-align: center;
-            margin-top: 20px; border-top: 1px solid var(--border); padding-top: 10px;
+        input { flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 15px; }
+        .send-btn {
+            background: var(--oracle); border: none; border-radius: 15px;
+            width: 45px; height: 45px; color: white; cursor: pointer; font-size: 18px;
         }
 
-        /* АНИМАЦИИ */
-        @keyframes neonPulse { from { text-shadow: 0 0 5px var(--oracle); opacity: 0.8; } to { text-shadow: 0 0 15px var(--oracle); opacity: 1; } }
-        @keyframes textTyping { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .footer {
+            font-size: 10px; color: #444; text-align: center;
+            border-top: 1px solid var(--border); padding-top: 15px; line-height: 1.4;
+        }
 
+        @keyframes emerge { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
 <div class="oracle-interface">
-    <div class="header-tag">Oracle AI 1.1 • Prestige HQ</div>
+    <div class="header">Oracle AI 1.1 • Knowledge Core</div>
     
-    <div id="chat">
-        <div class="msg-ai"><span>Авторизация Kosmo Level подтверждена. Я готов к работе. Что тебе нужно, Командир?</span></div>
+    <div id="display">
+        Статус: Авторизован. Ядро Prestige активно. Напиши номер версии (например, "3.3") или команду.
     </div>
 
-    <div id="download-bar">
-        </div>
+    <div id="dl-zone" class="dl-zone"></div>
 
-    <div class="quick-grid">
-        <button class="quick-btn" onclick="ask('1.0')">📦 Pack 1.0</button>
-        <button class="quick-btn" onclick="ask('3.3')">📦 Pack 3.3</button>
-        <button class="quick-btn" onclick="ask('RTW')">💡 О проекте</button>
+    <div class="input-group">
+        <input type="text" id="ai-input" placeholder="Команда для Оракула..." onkeypress="if(event.key==='Enter') process()">
+        <button class="send-btn" onclick="process()">➔</button>
     </div>
 
-    <div class="footer-warning">
-        ИИ Ошибается. Если это часто то вы используете Версию ИИ для Мамонтов. Срочно уходите!
+    <div class="footer">
+        ИИ Ошибается. Если это часто, то вы используете Версию ИИ для Мамонтов. Срочно уходите!
     </div>
 </div>
 
 <script>
-    const chat = document.getElementById('chat');
-    const dlBar = document.getElementById('download-bar');
+    const display = document.getElementById('display');
+    const dlZone = document.getElementById('dl-zone');
+    const input = document.getElementById('ai-input');
 
-    const bible = {
-        "1.0": "Генерация ссылки для Kosmo Level 1.0.worldpack. Файл доступен ниже.",
-        "3.3": "Генерация ссылки для Kosmo Level 3.3.worldpack. Это самая актуальная версия.",
-        "rtw": "RTW, STW и PTW — это этапы развития нашей инфраструктуры. Подробности в Архиве.",
-        "привет": "Привет! Если ты не мамонт, то добро пожаловать. Если мамонт — твой код 'привет как дела' здесь не сработает.",
-    };
+    const packs = ["1.0", "2.0", "2.1", "2.2", "2.5", "2.8", "2.9", "3.0", "3.1", "3.2", "3.3"];
 
-    function ask(type) {
-        chat.innerHTML = ""; // Очищаем для эффекта
-        let response = "Запрос обрабатывается... Данные не найдены.";
-        for (let key in bible) {
-            if (type.toLowerCase().includes(key)) { response = bible[key]; break; }
+    function process() {
+        const val = input.value.toLowerCase();
+        if(!val) return;
+
+        let found = false;
+        dlZone.style.display = "none";
+
+        packs.forEach(v => {
+            if(val.includes(v)) {
+                let msg = `Запрос обработан. Генерирую ссылку на оригинальный Kosmo Level ${v}.worldpack.`;
+                if(v === "2.1") msg = "Внимание! Обнаружен Дополнительный Уровень Предателя 2.1. Доступ открыт.";
+                
+                display.innerText = msg;
+                dlZone.style.display = "block";
+                dlZone.innerHTML = `<a href="packs/Kosmo_Level_${v}.worldpack" class="dl-btn" download>⬇️ СКАЧАТЬ v${v} ORIGINAL</a>`;
+                found = true;
+            }
+        });
+
+        if(!found) {
+            if(val.includes("привет")) {
+                display.innerText = "Привет, Командир. Оракул готов к выдаче мировых паков. Просто назови версию.";
+            } else if(val.includes("rtw")) {
+                display.innerText = "Линейка RTW закрыта. Будущее за .worldpack и Oracle AI 2.0.";
+            } else {
+                display.innerText = "Информации по запросу нет. Возможно, данные были стерты мамонтами.";
+            }
         }
         
-        // Эффект "печати"
-        addMsg(response);
-
-        // Управление кнопкой Скачать
-        if(type === '1.0' || type === '3.3') {
-            dlBar.style.display = "block";
-            // В href укажи путь к файлам на GitHub, например "packs/Kosmo_Level_3.3.worldpack"
-            dlBar.innerHTML = `<a href="packs/Kosmo_Level_${type}.worldpack" class="dl-btn" download>⬇️ Скачать v${type}</a>`;
-        } else {
-            dlBar.style.display = "none";
-        }
-    }
-
-    function addMsg(text) {
-        const d = document.createElement('div');
-        d.className = 'msg-ai';
-        d.innerHTML = `<span>${text}</span>`;
-        chat.appendChild(d);
+        input.value = "";
     }
 </script>
 
