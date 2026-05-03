@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Oracle AI 1.1 | Prestige HQ</title>
-    
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#02b6ed">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    
+    <meta name="theme-color" content="#010103">
     <style>
         :root {
             --bg: #010103;
@@ -20,147 +17,48 @@
             --grad: linear-gradient(90deg, #02b6ed 0%, #e60ced 100%);
         }
 
-        html, body {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            overflow: hidden; /* Блокировка скролла всей страницы */
-            background: var(--bg);
-            color: var(--text);
-            font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
+        /* КАСТОМНЫЙ СКРОЛЛБАР */
+        ::-webkit-scrollbar { width: 4px; background: transparent; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { 
+            background: rgba(255, 255, 255, 0.1); 
+            border-radius: 10px; 
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
+        ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: radial-gradient(circle at top right, rgba(230, 12, 237, 0.05), transparent),
-                        radial-gradient(circle at bottom left, rgba(2, 182, 237, 0.05), transparent);
-        }
+        html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: -apple-system, sans-serif; }
+        body { display: flex; justify-content: center; align-items: center; background: radial-gradient(circle at top right, rgba(230, 12, 237, 0.05), transparent), radial-gradient(circle at bottom left, rgba(2, 182, 237, 0.05), transparent); }
 
-        .oracle-container {
-            width: 95%;
-            max-width: 450px;
-            height: 90vh;
-            background: var(--card);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid var(--border);
-            border-radius: 40px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-            position: relative;
-            overflow: hidden;
-            animation: boot 0.6s ease-out;
-        }
+        .oracle-container { width: 95%; max-width: 450px; height: 90vh; background: var(--card); backdrop-filter: blur(25px); border: 1px solid var(--border); border-radius: 40px; display: flex; flex-direction: column; position: relative; overflow: hidden; animation: boot 0.6s ease-out; }
 
-        .header {
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
-            flex-shrink: 0;
-        }
+        .top-nav { position: absolute; top: 20px; right: 20px; z-index: 10; }
+        .toggle-mode-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); color: var(--cyan); padding: 8px 12px; border-radius: 12px; font-size: 10px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
 
-        .logo {
-            font-weight: 900;
-            font-size: 18px;
-            letter-spacing: 3px;
-            background: var(--grad);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-        }
+        .header { padding: 25px 20px 15px; text-align: center; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+        .logo { font-weight: 900; font-size: 18px; letter-spacing: 3px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
 
-        #chat-flow {
-            flex-grow: 1;
-            overflow-y: auto; /* Скролл разрешен только внутри чата */
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            scroll-behavior: smooth;
-        }
+        #chat-mode, #direct-mode { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
+        #direct-mode { display: none; padding: 20px; overflow-y: auto; scrollbar-gutter: stable; }
 
-        #chat-flow::-webkit-scrollbar { width: 4px; }
-        #chat-flow::-webkit-scrollbar-thumb { background: var(--grad); border-radius: 10px; }
+        .section-title { font-size: 11px; font-weight: 900; color: var(--cyan); text-transform: uppercase; margin: 20px 0 10px; letter-spacing: 1px; border-left: 3px solid var(--purple); padding-left: 10px; }
 
-        .msg {
-            padding: 14px 18px;
-            border-radius: 20px;
-            font-size: 14px;
-            line-height: 1.5;
-            max-width: 85%;
-            animation: slideIn 0.3s ease;
-        }
+        .packs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .item-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 12px; border-radius: 18px; transition: 0.3s; }
+        .item-card:hover { border-color: var(--cyan); background: rgba(2, 182, 237, 0.05); }
+        .item-name { font-size: 13px; font-weight: 700; margin-bottom: 8px; line-height: 1.2; }
 
+        .download-btn { display: inline-block; padding: 8px 12px; background: #fff; color: #000; text-decoration: none; border-radius: 8px; font-weight: 900; font-size: 9px; text-transform: uppercase; transition: 0.2s; text-align: center; width: calc(100% - 24px); cursor: pointer; border: none; }
+        .download-btn:active { transform: scale(0.9); }
+
+        #chat-flow { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; }
+        .msg { padding: 14px 18px; border-radius: 20px; font-size: 14px; max-width: 85%; animation: slideIn 0.3s ease; line-height: 1.4; }
         .ai-msg { background: rgba(255, 255, 255, 0.05); align-self: flex-start; border: 1px solid var(--border); }
-        .user-msg { background: var(--grad); align-self: flex-end; box-shadow: 0 4px 15px rgba(2, 182, 237, 0.2); }
+        .user-msg { background: var(--grad); align-self: flex-end; }
 
-        .download-btn {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 12px 20px;
-            background: #fff;
-            color: #000;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 900;
-            font-size: 11px;
-            text-align: center;
-            transition: 0.3s;
-            text-transform: uppercase;
-        }
-        .download-btn:active { transform: scale(0.95); }
-
-        .settings-bar {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.2);
-            flex-shrink: 0;
-        }
-
-        .theme-btn {
-            width: 30px; height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid rgba(255,255,255,0.1);
-            transition: 0.2s;
-        }
-        .theme-btn:active { transform: scale(0.9); }
-        .t-prestige { background: linear-gradient(135deg, #02b6ed, #e60ced); }
-        .t-storm { background: linear-gradient(135deg, #004e92, #000428); }
-        .t-toxic { background: linear-gradient(135deg, #8e2de2, #4a00e0); }
-
-        .input-box {
-            padding: 20px;
-            display: flex;
-            gap: 10px;
-            background: rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-
-        input {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 12px;
-            color: white;
-            outline: none;
-        }
-
-        .send-btn {
-            background: var(--grad);
-            border: none;
-            border-radius: 15px;
-            width: 50px;
-            color: white;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .send-btn:active { transform: scale(0.85); }
+        .input-box { padding: 20px; display: flex; gap: 10px; background: rgba(0,0,0,0.2); }
+        input { flex: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); border-radius: 15px; padding: 12px; color: white; outline: none; }
+        .send-btn { background: var(--grad); border: none; border-radius: 15px; width: 50px; color: white; cursor: pointer; font-size: 18px; }
 
         @keyframes boot { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -169,86 +67,98 @@
 <body>
 
 <div class="oracle-container">
-    <div class="header">
-        <div class="logo">Oracle AI 1.1</div>
-    </div>
-
-    <div class="settings-bar">
-        <div class="theme-btn t-prestige" onclick="setTheme('prestige')"></div>
-        <div class="theme-btn t-storm" onclick="setTheme('storm')"></div>
-        <div class="theme-btn t-toxic" onclick="setTheme('toxic')"></div>
-    </div>
+    <div class="top-nav"><button class="toggle-mode-btn" onclick="toggleMode()" id="mode-label">Режим: Паки</button></div>
+    <div class="header"><div class="logo">Oracle AI 1.1</div></div>
     
-    <div id="chat-flow">
-        <div class="msg ai-msg">
-            Система Prestige активна. <br>
-            Доступны все версии: от 1.0 до 3.3 Insider.
+    <div id="chat-mode">
+        <div id="chat-flow">
+            <div class="msg ai-msg">Оракул активен. Все архивы Prestige HQ загружены. Какую версию ищем?</div>
+        </div>
+        <div class="input-box">
+            <input type="text" id="user-in" placeholder="Например: 3.3 Beta" onkeypress="if(event.key==='Enter') send()">
+            <button class="send-btn" onclick="send()">➔</button>
         </div>
     </div>
 
-    <div class="input-box">
-        <input type="text" id="user-in" placeholder="Например: 3.1" onkeypress="if(event.key==='Enter') send()">
-        <button class="send-btn" onclick="send()">➔</button>
+    <div id="direct-mode">
+        <div class="section-title">Игры</div>
+        <div class="item-card">
+            <div class="item-name">A Better Place 1.3.6</div>
+            <a href="https://drive.google.com/file/d/1U9Ok7ThAGnOsQ_IM3gTX-UmDNBJ2qBno/view?usp=sharing" class="download-btn" target="_blank">Скачать .xapk</a>
+        </div>
+
+        <div class="section-title">Паки Kosmo Level</div>
+        <div class="packs-grid" id="packs-list"></div>
+
+        <div class="section-title">Preview & Beta</div>
+        <div class="packs-grid">
+            <div class="item-card"><div class="item-name">Kosmo Level 3.3 Beta</div><a href="packs/Kosmo_Level_3.3_Beta.worldpack" class="download-btn" download>Скачать</a></div>
+            <div class="item-card"><div class="item-name">KL Halloween Full</div><a href="packs/Kosmo_Level_Halloween_Full.worldpack" class="download-btn" download>Скачать</a></div>
+            <div class="item-card"><div class="item-name">Traitor Level 2.1</div><a href="packs/Traitor_Level_2.1.worldpack" class="download-btn" download>Скачать</a></div>
+            <div class="item-card"><div class="item-name">Traitor Level 2.0</div><a href="packs/Traitor_Level_2.0.worldpack" class="download-btn" download>Скачать</a></div>
+        </div>
+
+        <div class="section-title">Запланировано</div>
+        <div class="item-card"><div class="item-name">Kosmo Level 3.4</div><a href="#" class="download-btn" style="background: var(--grad); color: white;">Предрегистрация</a></div>
+
+        <div class="section-title">Архив Истории</div>
+        <div class="item-card"><div class="item-name">Как Люми попала Сюда</div><a href="#" class="download-btn" style="background: var(--purple); color: white;">Читать</a></div>
     </div>
 </div>
 
 <script>
-    // Защита контента
-    document.addEventListener('contextmenu', e => e.preventDefault());
+    const versions = ["1.0", "2.0", "2.2", "2.5", "2.8", "2.9", "3.0", "3.1", "3.2", "3.3"];
+    let isChat = true;
 
-    // Регистрация Service Worker (нужен для PWA)
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('PWA Service Worker готов'))
-                .catch(err => console.log('Ошибка SW:', err));
+    function toggleMode() {
+        isChat = !isChat;
+        document.getElementById('chat-mode').style.display = isChat ? 'flex' : 'none';
+        document.getElementById('direct-mode').style.display = isChat ? 'none' : 'block';
+        document.getElementById('mode-label').innerText = isChat ? 'Режим: Паки' : 'Режим: Оракул';
+        if(!isChat) renderPacks();
+    }
+
+    function renderPacks() {
+        const list = document.getElementById('packs-list');
+        list.innerHTML = "";
+        versions.forEach(v => {
+            const fileName = `Kosmo_Level_${v}.worldpack`;
+            list.innerHTML += `
+                <div class="item-card">
+                    <div class="item-name">Kosmo Level ${v}</div>
+                    <a href="packs/${fileName}" class="download-btn" download="${fileName}">Скачать</a>
+                </div>`;
         });
     }
 
     function send() {
         const inp = document.getElementById('user-in');
-        if(!inp.value) return;
+        const val = inp.value.trim(); if(!val) return;
+        addMsg(val, 'user-msg'); inp.value = "";
         
-        addMsg(inp.value, 'user-msg');
-        const val = inp.value.trim();
-        inp.value = "";
-
         setTimeout(() => {
-            const versions = ["1.0", "2.0", "2.1", "2.2", "2.5", "2.8", "2.9", "3.0", "3.1", "3.2", "3.3"];
-            if(versions.includes(val)) {
-                addMsg(`Версия ${val} найдена в архиве. Генерирую ссылку на worldpack...`, 'ai-msg', val);
+            const lowerVal = val.toLowerCase();
+            if(lowerVal === "3.3 beta") {
+                addMsg(`Билд 3.3 Beta найден. Это последняя версия с классическими квадратными щитами в 11 мире.`, 'ai-msg', "3.3_Beta");
+            } else if(versions.includes(val)) {
+                addMsg(`Билд ${val} найден в архиве Prestige HQ. Ссылка на worldpack готова.`, 'ai-msg', val);
+            } else if(lowerVal.includes("люми")) {
+                addMsg(`Данные о Люми защищены протоколом Prestige. Подробности в разделе "Истории".`, 'ai-msg');
             } else {
-                addMsg('Ошибка: Данная версия отсутствует. Мамонты такое не делали.', 'ai-msg');
+                addMsg('Ошибка: Данная версия отсутствует. Попробуйте 3.3 Beta или 2.5.', 'ai-msg');
             }
         }, 400);
     }
 
     function addMsg(text, type, ver = null) {
         const chat = document.getElementById('chat-flow');
-        const d = document.createElement('div');
-        d.className = 'msg ' + type;
-        d.innerHTML = text;
-        
+        const d = document.createElement('div'); d.className = 'msg ' + type; d.innerHTML = text;
         if(ver) {
-            const btn = document.createElement('a');
-            btn.className = 'download-btn';
-            btn.href = `packs/Kosmo_Level_${ver}.worldpack`;
-            btn.innerText = `⬇️ СКАЧАТЬ BUILD ${ver}`;
-            btn.setAttribute('download', '');
-            d.appendChild(btn);
+            const fileName = ver === "3.3_Beta" ? `Kosmo_Level_3.3_Beta.worldpack` : `Kosmo_Level_${ver}.worldpack`;
+            d.innerHTML += `<br><a href="packs/${fileName}" class="download-btn" style="margin-top:10px; width:auto;" download="${fileName}">Скачать ${ver.replace('_', ' ')}</a>`;
         }
-
-        chat.appendChild(d);
-        chat.scrollTop = chat.scrollHeight;
-    }
-
-    function setTheme(theme) {
-        const root = document.documentElement;
-        if(theme === 'prestige') root.style.setProperty('--grad', 'linear-gradient(90deg, #02b6ed 0%, #e60ced 100%)');
-        if(theme === 'storm') root.style.setProperty('--grad', 'linear-gradient(90deg, #004e92 0%, #000428 100%)');
-        if(theme === 'toxic') root.style.setProperty('--grad', 'linear-gradient(90deg, #8e2de2 0%, #4a00e0 100%)');
+        chat.appendChild(d); chat.scrollTop = chat.scrollHeight;
     }
 </script>
-
 </body>
 </html>
