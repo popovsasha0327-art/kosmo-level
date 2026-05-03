@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Oracle AI 1.1 PRO - Chat Mode</title>
+    <title>Oracle AI 1.1 - The Fortress</title>
     <style>
         :root {
             --bg: #010103;
@@ -17,8 +17,9 @@
         * { box-sizing: border-box; }
         body {
             background: var(--bg); color: var(--text);
-            font-family: -apple-system, sans-serif; margin: 0; padding: 10px;
-            display: flex; justify-content: center; align-items: center; min-height: 100vh;
+            font-family: -apple-system, system-ui, sans-serif;
+            margin: 0; padding: 10px; display: flex;
+            justify-content: center; align-items: center; min-height: 100vh;
         }
 
         .oracle-interface {
@@ -26,49 +27,54 @@
             border: 1px solid var(--border); border-radius: 35px;
             padding: 20px; box-shadow: 0 0 40px rgba(230, 12, 237, 0.2);
             display: flex; flex-direction: column; gap: 15px;
+            animation: emerge 0.4s ease-out;
         }
 
         .header { font-size: 10px; color: var(--oracle); font-weight: 900; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* ОКНО ПЕРЕПИСКИ */
         #chat-flow {
-            max-height: 350px; overflow-y: auto;
-            display: flex; flex-direction: column; gap: 10px;
-            padding-right: 5px; scroll-behavior: smooth;
+            height: 350px; overflow-y: auto; display: flex;
+            flex-direction: column; gap: 10px; padding-right: 5px;
+            scroll-behavior: smooth; border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
         }
 
-        .msg { padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.4; animation: slideUp 0.3s ease; max-width: 85%; }
+        .msg { padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.4; animation: slideUp 0.3s ease; max-width: 85%; position: relative; }
         .ai-msg { background: rgba(230, 12, 237, 0.1); border-left: 3px solid var(--oracle); align-self: flex-start; }
         .user-msg { background: var(--blue); align-self: flex-end; }
 
         .dl-link {
-            display: block; margin-top: 8px; background: #fff; color: #000;
-            text-decoration: none; padding: 10px; border-radius: 10px;
-            font-weight: 800; font-size: 12px; text-align: center;
+            display: block; margin-top: 10px; background: #fff; color: #000;
+            text-decoration: none; padding: 12px; border-radius: 12px;
+            font-weight: 900; font-size: 12px; text-align: center;
+            box-shadow: 0 4px 10px rgba(255,255,255,0.2);
         }
 
-        .input-area { display: flex; gap: 8px; margin-top: 10px; }
+        .input-area { display: flex; gap: 8px; margin-top: 5px; }
         input {
-            flex: 1; background: #141416; border: 1px solid var(--border);
-            border-radius: 15px; padding: 12px; color: white; outline: none;
+            flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+            border-radius: 15px; padding: 12px; color: white; outline: none; font-size: 16px;
         }
+        .send-btn { background: var(--oracle); border: none; border-radius: 50%; width: 45px; height: 45px; color: white; cursor: pointer; font-size: 20px; }
 
-        .footer { font-size: 9px; color: #444; text-align: center; margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px; }
+        .footer { font-size: 9px; color: #444; text-align: center; margin-top: 5px; opacity: 0.7; }
+        
+        @keyframes emerge { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body>
+<body id="safe-body">
 
-<div class="oracle-interface">
-    <div class="header">Oracle AI 1.1 • Prestige Chat</div>
+<div class="oracle-interface" id="ui">
+    <div class="header">Oracle AI 1.1 • Prestige HQ</div>
     
     <div id="chat-flow">
-        <div class="msg ai-msg">Авторизация подтверждена. Я — Оракул. Напиши что угодно, я найду версию в любом шуме.</div>
+        <div class="msg ai-msg">Центр управления Оракул активен. Система защищена. Введите запрос для выгрузки Kosmo Level.</div>
     </div>
 
     <div class="input-area">
-        <input type="text" id="user-input" placeholder="Введите команду..." onkeypress="if(event.key==='Enter') process()">
-        <button onclick="process()" style="background:var(--oracle); border:none; border-radius:50%; width:40px; height:40px; color:white; cursor:pointer;">➔</button>
+        <input type="text" id="user-input" placeholder="Команда..." onkeypress="if(event.key==='Enter') process()">
+        <button class="send-btn" onclick="process()">➔</button>
     </div>
 
     <div class="footer">
@@ -77,6 +83,25 @@
 </div>
 
 <script>
+    // --- ПРОТОКОЛ ЗАЩИТЫ PRESTIGE ---
+    (function() {
+        const validDomain = "oracle-ai-pro.github.io";
+        const isIframe = window.self !== window.top;
+        const isWrongDomain = !window.location.hostname.includes(validDomain);
+
+        if (isIframe || isWrongDomain) {
+            document.getElementById('safe-body').innerHTML = `
+                <div style="background:#000; color:#ff00ea; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; font-family:monospace; padding:20px;">
+                    <h1 style="font-size:50px;">🚫 ACCESS DENIED</h1>
+                    <p style="font-size:20px;">ОБНАРУЖЕНА ПОПЫТКА ВЗЛОМА ИЛИ КОПИРОВАНИЯ</p>
+                    <p>Оракул работает только на официальном домене Prestige HQ.</p>
+                    <p style="color:#555; margin-top:20px;">Mammoth activity detected. Resetting data...</p>
+                </div>`;
+            throw new Error("Security Breach Detected!");
+        }
+    })();
+
+    // --- ЛОГИКА ОРАКУЛА ---
     const chat = document.getElementById('chat-flow');
     const input = document.getElementById('user-input');
     const packs = ["1.0", "2.0", "2.1", "2.2", "2.5", "2.8", "2.9", "3.0", "3.1", "3.2", "3.3"];
@@ -91,23 +116,23 @@
 
         setTimeout(() => {
             let found = false;
-            let response = "Я просканировал твое сообщение, но не нашел в нем кодов доступа к Kosmo Level.";
+            let response = "";
 
-            // УМНЫЙ ПОИСК В ШУМЕ
             packs.forEach(v => {
                 if(lowText.includes(v)) {
-                    response = `Обнаружен ключ доступа к версии ${v}. Генерирую ссылку на оригинальный .worldpack...`;
+                    response = `Обнаружен ключ доступа к версии ${v}. Инициирую прямую загрузку оригинального .worldpack из Архивов Prestige...`;
                     addMsg(response, 'ai-msg', v);
                     found = true;
                 }
             });
 
             if(!found) {
-                if(lowText.includes("привет")) response = "Приветствую, Командир. Ожидаю указаний для выгрузки данных.";
-                else if(lowText.includes("rtw")) response = "Линейка RTW запечатана. Теперь мы работаем только с .worldpack.";
+                if(lowText.includes("привет")) response = "Приветствую, Командир. Ядро Оракула в норме. Ожидаю номер версии.";
+                else if(lowText.includes("rtw")) response = "Линейка RTW запечатана. Будущее за чистыми .worldpack.";
+                else response = "Запрос не распознан. Возможно, мамонты пытаются сбить частоту сигнала. Повторите номер версии.";
                 addMsg(response, 'ai-msg');
             }
-        }, 400);
+        }, 450);
     }
 
     function addMsg(text, className, ver = null) {
@@ -119,7 +144,7 @@
             const link = document.createElement('a');
             link.className = 'dl-link';
             link.href = `packs/Kosmo_Level_${ver}.worldpack`;
-            link.innerText = `⬇️ СКАЧАТЬ ВЕРСИЮ ${ver}`;
+            link.innerText = `⬇️ СКАЧАТЬ ВЕРСИЮ ${ver} ORIGINAL`;
             link.setAttribute('download', '');
             d.appendChild(link);
         }
