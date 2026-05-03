@@ -17,7 +17,6 @@
             --grad: linear-gradient(90deg, #02b6ed 0%, #e60ced 100%);
         }
 
-        /* КАСТОМНЫЙ СКРОЛЛБАР (Dark Vibe) */
         ::-webkit-scrollbar { width: 4px; background: transparent; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { 
@@ -52,15 +51,17 @@
         .download-btn:active { transform: scale(0.9); }
 
         #chat-flow { flex-grow: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; }
-        .msg { padding: 14px 18px; border-radius: 20px; font-size: 14px; max-width: 85%; animation: slideIn 0.3s ease; line-height: 1.4; }
-        .ai-msg { background: rgba(255, 255, 255, 0.05); align-self: flex-start; border: 1px solid var(--border); }
+        .msg { padding: 14px 18px; border-radius: 20px; font-size: 14px; max-width: 85%; animation: slideIn 0.3s ease; line-height: 1.4; position: relative; }
+        .ai-msg { background: rgba(255, 255, 255, 0.05); align-self: flex-start; border: 1px solid var(--border); padding-right: 40px; }
         .user-msg { background: var(--grad); align-self: flex-end; }
+
+        .speak-btn { position: absolute; right: 10px; top: 12px; background: none; border: none; color: var(--cyan); cursor: pointer; font-size: 16px; opacity: 0.6; transition: 0.3s; }
+        .speak-btn:hover { opacity: 1; color: var(--purple); transform: scale(1.1); }
 
         .input-box { padding: 20px; display: flex; gap: 10px; background: rgba(0,0,0,0.2); }
         input { flex: 1; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border); border-radius: 15px; padding: 12px; color: white; outline: none; }
         .send-btn { background: var(--grad); border: none; border-radius: 15px; width: 50px; color: white; cursor: pointer; font-size: 18px; }
 
-        /* Модальное окно истории */
         #story-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:1000; overflow-y:auto; padding:20px; box-sizing:border-box; backdrop-filter: blur(10px); }
         .story-content { max-width:500px; margin: 40px auto; background:var(--card); border:1px solid var(--purple); border-radius:35px; padding:30px; position:relative; box-shadow: 0 0 30px rgba(230, 12, 237, 0.2); }
         .close-story { position:absolute; top:20px; right:20px; background:none; border:none; color:var(--purple); font-size:24px; cursor:pointer; }
@@ -77,10 +78,13 @@
     
     <div id="chat-mode">
         <div id="chat-flow">
-            <div class="msg ai-msg">Оракул активен. Память инициализирована. Снежинка и Хахми в системе. Какую версию ищем?</div>
+            <div class="msg ai-msg">
+                Оракул активен. Снежинка и Хахми в системе. Какую версию ищем?
+                <button class="speak-btn" onclick="speakText('Оракул активен. Снежинка и Хахми в системе. Какую версию ищем?')">🔊</button>
+            </div>
         </div>
         <div class="input-box">
-            <input type="text" id="user-in" placeholder="Например: 3.3 Beta" onkeypress="if(event.key==='Enter') send()">
+            <input type="text" id="user-in" placeholder="Спроси про 3.3 Beta или Люми..." onkeypress="if(event.key==='Enter') send()">
             <button class="send-btn" onclick="send()">➔</button>
         </div>
     </div>
@@ -100,7 +104,6 @@
             <div class="item-card"><div class="item-name">Kosmo Level 3.3 Beta</div><a href="packs/Kosmo_Level_3.3_Beta.worldpack" class="download-btn" download>Скачать</a></div>
             <div class="item-card"><div class="item-name">KL Halloween Full</div><a href="packs/Kosmo_Level_Halloween_Full.worldpack" class="download-btn" download>Скачать</a></div>
             <div class="item-card"><div class="item-name">Traitor Level 2.1</div><a href="packs/Traitor_Level_2.1.worldpack" class="download-btn" download>Скачать</a></div>
-            <div class="item-card"><div class="item-name">Traitor Level 2.0</div><a href="packs/Traitor_Level_2.0.worldpack" class="download-btn" download>Скачать</a></div>
         </div>
 
         <div class="section-title">Архив Истории</div>
@@ -155,20 +158,29 @@
             if(low === "3.3 beta") {
                 addMsg(`Билд 3.3 Beta найден. Последняя версия с квадратными щитами в 11 мире.`, 'ai-msg', "3.3_Beta");
             } else if(versions.includes(val)) {
-                addMsg(`Билд ${val} найден в архива Prestige HQ.`, 'ai-msg', val);
+                addMsg(`Билд ${val} найден в архивах Prestige HQ.`, 'ai-msg', val);
             } else if(low.includes("люм") || low.includes("21 август")) {
-                addMsg(`Архив от 21.08.2024: Вторжение Люми в измерение. Она обожгла левую руку... Хотите прочесть?`, 'ai-msg');
+                addMsg(`Архив от 21.08.2024: Вторжение Люми. Она обожгла руку и думала, что это сон...`, 'ai-msg');
             } else if(low.includes("снежин")) {
-                addMsg(`Снежинка — женский вокал. Хахми — мужской вокал. Системы активны.`, 'ai-msg');
+                addMsg(`Снежинка — это женский вокал. Она в системе вместе с Хахми.`, 'ai-msg');
             } else {
-                addMsg('Ошибка: Версия не найдена. Попробуйте 3.3 Beta или 2.5.', 'ai-msg');
+                addMsg('Ошибка: Данные не найдены. Попробуйте ввести номер версии.', 'ai-msg');
             }
         }, 400);
     }
 
     function addMsg(text, type, ver = null) {
         const chat = document.getElementById('chat-flow');
-        const d = document.createElement('div'); d.className = 'msg ' + type; d.innerHTML = text;
+        const d = document.createElement('div'); d.className = 'msg ' + type;
+        
+        let content = `<span>${text}</span>`;
+        if(type === 'ai-msg') {
+            // Очищаем текст от кавычек для корректной работы озвучки
+            const cleanText = text.replace(/'/g, "").replace(/"/g, "");
+            content += `<button class="speak-btn" onclick="speakText('${cleanText}')">🔊</button>`;
+        }
+        
+        d.innerHTML = content;
         if(ver) {
             const fileName = ver === "3.3_Beta" ? `Kosmo_Level_3.3_Beta.worldpack` : `Kosmo_Level_${ver}.worldpack`;
             d.innerHTML += `<br><a href="packs/${fileName}" class="download-btn" style="margin-top:10px; width:auto;" download="${fileName}">Скачать ${ver.replace('_', ' ')}</a>`;
@@ -176,8 +188,18 @@
         chat.appendChild(d); chat.scrollTop = chat.scrollHeight;
     }
 
+    function speakText(text) {
+        window.speechSynthesis.cancel();
+        const msg = new SpeechSynthesisUtterance();
+        msg.text = text;
+        msg.lang = 'ru-RU';
+        msg.pitch = 1.3; // Высокий тон для Снежинки
+        msg.rate = 1.0;
+        window.speechSynthesis.speak(msg);
+    }
+
     function showStory() {
-        const story = `Это было 21 Августа 2024 года. Люми спала, было 3:23. В 3:15 закончила Фиолетовая Кошка свою лабораторию. И полетела искать 4 рандомных крепко спящих Котят.<br><br>Это город Кошкин-Хвост. Фиолетовая кошка с 2020 года строила нору на глубине 200 м под землей. Полиция искала её 5 месяцев и забила.<br><br>Люми ничего не рассказали, а друзьям хоть что-то. Проснувшись в мрачном лабиринте, она тихо спросила: “Эта комната стала светлее, или мне кажется?”. Задев что-то оранжевое, она обожгла левую руку. Она шла дальше с мыслью, что это всё Сон! Но это не сон.`;
+        const story = `Это было 21 Августа 2024 года. Люми спала, было 3:23. В 3:15 закончила Фиолетовая Кошка свою лабораторию... Она строила её 4 года на глубине 200 метров. <br><br>Люми проснулась в лабиринте, коснулась чего-то оранжевого и обожгла левую руку. Она шла дальше с мыслью, что это Сон! Но это не сон.`;
         document.getElementById('story-text').innerHTML = story;
         document.getElementById('story-modal').style.display = 'block';
     }
