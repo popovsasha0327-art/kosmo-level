@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Oracle AI 1.1 - Prestige Final</title>
+    <title>Oracle AI 1.1 PRO - Chat Mode</title>
     <style>
         :root {
             --bg: #010103;
@@ -15,121 +15,117 @@
         }
 
         * { box-sizing: border-box; }
-
         body {
             background: var(--bg); color: var(--text);
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            margin: 0; padding: 15px;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; overflow-x: hidden;
+            font-family: -apple-system, sans-serif; margin: 0; padding: 10px;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
         }
 
         .oracle-interface {
-            width: 100%; max-width: 500px;
-            background: var(--card); border: 1px solid var(--border);
-            border-radius: 35px; padding: 30px;
-            box-shadow: 0 0 50px rgba(230, 12, 237, 0.2);
-            display: flex; flex-direction: column; gap: 20px;
-            animation: emerge 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            width: 100%; max-width: 500px; background: var(--card);
+            border: 1px solid var(--border); border-radius: 35px;
+            padding: 20px; box-shadow: 0 0 40px rgba(230, 12, 237, 0.2);
+            display: flex; flex-direction: column; gap: 15px;
         }
 
-        .header {
-            font-size: 10px; color: var(--oracle); font-weight: 900;
-            text-align: center; text-transform: uppercase; letter-spacing: 3px;
+        .header { font-size: 10px; color: var(--oracle); font-weight: 900; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* ОКНО ПЕРЕПИСКИ */
+        #chat-flow {
+            max-height: 350px; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 10px;
+            padding-right: 5px; scroll-behavior: smooth;
         }
 
-        #display {
-            font-size: 16px; line-height: 1.6; min-height: 70px;
-            border-left: 3px solid var(--oracle); padding-left: 20px;
-            transition: all 0.3s;
+        .msg { padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.4; animation: slideUp 0.3s ease; max-width: 85%; }
+        .ai-msg { background: rgba(230, 12, 237, 0.1); border-left: 3px solid var(--oracle); align-self: flex-start; }
+        .user-msg { background: var(--blue); align-self: flex-end; }
+
+        .dl-link {
+            display: block; margin-top: 8px; background: #fff; color: #000;
+            text-decoration: none; padding: 10px; border-radius: 10px;
+            font-weight: 800; font-size: 12px; text-align: center;
         }
 
-        .dl-zone { text-align: center; display: none; margin-top: 10px; }
-        .dl-btn {
-            display: inline-block; background: var(--blue); color: white;
-            text-decoration: none; padding: 16px 32px; border-radius: 18px;
-            font-weight: 800; font-size: 15px; box-shadow: 0 10px 25px rgba(0, 122, 255, 0.4);
-            animation: slideUp 0.4s ease-out; transition: 0.2s;
-        }
-        .dl-btn:hover { transform: scale(1.03); filter: brightness(1.1); }
-
-        .input-group {
-            display: flex; gap: 10px; background: rgba(255,255,255,0.05);
-            border-radius: 20px; padding: 5px 5px 5px 15px; border: 1px solid var(--border);
-        }
-        input { flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 15px; }
-        .send-btn {
-            background: var(--oracle); border: none; border-radius: 15px;
-            width: 45px; height: 45px; color: white; cursor: pointer; font-size: 18px;
+        .input-area { display: flex; gap: 8px; margin-top: 10px; }
+        input {
+            flex: 1; background: #141416; border: 1px solid var(--border);
+            border-radius: 15px; padding: 12px; color: white; outline: none;
         }
 
-        .footer {
-            font-size: 10px; color: #444; text-align: center;
-            border-top: 1px solid var(--border); padding-top: 15px; line-height: 1.4;
-        }
-
-        @keyframes emerge { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .footer { font-size: 9px; color: #444; text-align: center; margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
 <div class="oracle-interface">
-    <div class="header">Oracle AI 1.1 • Knowledge Core</div>
+    <div class="header">Oracle AI 1.1 • Prestige Chat</div>
     
-    <div id="display">
-        Статус: Авторизован. Ядро Prestige активно. Напиши номер версии (например, "3.3") или команду.
+    <div id="chat-flow">
+        <div class="msg ai-msg">Авторизация подтверждена. Я — Оракул. Напиши что угодно, я найду версию в любом шуме.</div>
     </div>
 
-    <div id="dl-zone" class="dl-zone"></div>
-
-    <div class="input-group">
-        <input type="text" id="ai-input" placeholder="Команда для Оракула..." onkeypress="if(event.key==='Enter') process()">
-        <button class="send-btn" onclick="process()">➔</button>
+    <div class="input-area">
+        <input type="text" id="user-input" placeholder="Введите команду..." onkeypress="if(event.key==='Enter') process()">
+        <button onclick="process()" style="background:var(--oracle); border:none; border-radius:50%; width:40px; height:40px; color:white; cursor:pointer;">➔</button>
     </div>
 
     <div class="footer">
-        ИИ Ошибается. Если это часто, то вы используете Версию ИИ для Мамонтов. Срочно уходите!
+        ИИ Ошибается. Если это часто то вы используете Версию ИИ для Мамонтов. Срочно уходите!
     </div>
 </div>
 
 <script>
-    const display = document.getElementById('display');
-    const dlZone = document.getElementById('dl-zone');
-    const input = document.getElementById('ai-input');
-
+    const chat = document.getElementById('chat-flow');
+    const input = document.getElementById('user-input');
     const packs = ["1.0", "2.0", "2.1", "2.2", "2.5", "2.8", "2.9", "3.0", "3.1", "3.2", "3.3"];
 
     function process() {
-        const val = input.value.toLowerCase();
-        if(!val) return;
+        const text = input.value;
+        if(!text) return;
 
-        let found = false;
-        dlZone.style.display = "none";
-
-        packs.forEach(v => {
-            if(val.includes(v)) {
-                let msg = `Запрос обработан. Генерирую ссылку на оригинальный Kosmo Level ${v}.worldpack.`;
-                if(v === "2.1") msg = "Внимание! Обнаружен Дополнительный Уровень Предателя 2.1. Доступ открыт.";
-                
-                display.innerText = msg;
-                dlZone.style.display = "block";
-                dlZone.innerHTML = `<a href="packs/Kosmo_Level_${v}.worldpack" class="dl-btn" download>⬇️ СКАЧАТЬ v${v} ORIGINAL</a>`;
-                found = true;
-            }
-        });
-
-        if(!found) {
-            if(val.includes("привет")) {
-                display.innerText = "Привет, Командир. Оракул готов к выдаче мировых паков. Просто назови версию.";
-            } else if(val.includes("rtw")) {
-                display.innerText = "Линейка RTW закрыта. Будущее за .worldpack и Oracle AI 2.0.";
-            } else {
-                display.innerText = "Информации по запросу нет. Возможно, данные были стерты мамонтами.";
-            }
-        }
-        
+        addMsg(text, 'user-msg');
+        const lowText = text.toLowerCase();
         input.value = "";
+
+        setTimeout(() => {
+            let found = false;
+            let response = "Я просканировал твое сообщение, но не нашел в нем кодов доступа к Kosmo Level.";
+
+            // УМНЫЙ ПОИСК В ШУМЕ
+            packs.forEach(v => {
+                if(lowText.includes(v)) {
+                    response = `Обнаружен ключ доступа к версии ${v}. Генерирую ссылку на оригинальный .worldpack...`;
+                    addMsg(response, 'ai-msg', v);
+                    found = true;
+                }
+            });
+
+            if(!found) {
+                if(lowText.includes("привет")) response = "Приветствую, Командир. Ожидаю указаний для выгрузки данных.";
+                else if(lowText.includes("rtw")) response = "Линейка RTW запечатана. Теперь мы работаем только с .worldpack.";
+                addMsg(response, 'ai-msg');
+            }
+        }, 400);
+    }
+
+    function addMsg(text, className, ver = null) {
+        const d = document.createElement('div');
+        d.className = 'msg ' + className;
+        d.innerText = text;
+        
+        if(ver) {
+            const link = document.createElement('a');
+            link.className = 'dl-link';
+            link.href = `packs/Kosmo_Level_${ver}.worldpack`;
+            link.innerText = `⬇️ СКАЧАТЬ ВЕРСИЮ ${ver}`;
+            link.setAttribute('download', '');
+            d.appendChild(link);
+        }
+
+        chat.appendChild(d);
+        chat.scrollTop = chat.scrollHeight;
     }
 </script>
 
